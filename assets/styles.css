@@ -716,16 +716,16 @@ button {
 }
 
 .follower-info-selects .select {
-  width: 128px;
-  min-width: 128px;
+  width: auto;
+  min-width: max-content;
   padding-left: 9px;
-  padding-right: 9px;
+  padding-right: 28px;
   font-size: 13px;
 }
 
 .talent-search-fixed .follower-info-selects .select {
-  width: 118px;
-  min-width: 118px;
+  width: auto;
+  min-width: max-content;
   font-size: 12px;
 }
 
@@ -767,7 +767,7 @@ button {
   padding: 0 12px;
   background: #f8fafc;
   color: #1f2937;
-  font-weight: 700;
+  font-weight: 400;
   cursor: pointer;
 }
 
@@ -789,7 +789,8 @@ button {
   padding: 0 18px;
   color: var(--brand);
   background: #fff;
-  font-weight: 800;
+  font-size: 15px;
+  font-weight: 400;
   white-space: nowrap;
   cursor: pointer;
 }
@@ -1995,6 +1996,19 @@ h3 {
   margin-top: 14px;
 }
 
+.field.with-counter label {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.field-counter {
+  margin-left: auto;
+  color: var(--muted);
+  font-weight: 600;
+}
+
 .publish-page-stack {
   display: grid;
   gap: 16px;
@@ -2032,6 +2046,41 @@ h3 {
 .publish-platform-tab.active {
   border-color: rgba(217, 70, 143, 0.2);
   background: rgba(217, 70, 143, 0.08);
+}
+
+.range-popover-field {
+  position: relative;
+}
+
+.range-display {
+  width: 100%;
+  justify-content: flex-start;
+  text-align: left;
+  color: var(--ink);
+  background: #fff;
+}
+
+.range-popover {
+  position: absolute;
+  left: 0;
+  top: calc(100% + 8px);
+  z-index: 20;
+  width: min(360px, calc(100vw - 72px));
+  padding: 12px;
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  background: #fff;
+  box-shadow: var(--shadow);
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(-4px);
+  transition: 0.16s ease;
+}
+
+.range-popover-field.open .range-popover {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
 }
 
 .publish-platform-tab img {
@@ -2412,6 +2461,13 @@ tr:last-child td {
 
 .avatar-button img {
   display: block;
+}
+
+.country-one {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  white-space: nowrap;
 }
 
 .row-title strong,
@@ -3246,6 +3302,11 @@ tr:last-child td {
   overflow-y: auto;
 }
 
+.modal-body {
+  flex: 0 1 auto;
+  max-height: calc(100vh - 210px);
+}
+
 .modal-foot,
 .drawer-foot {
   padding: 16px 20px;
@@ -3289,6 +3350,13 @@ tr:last-child td {
 
 .timeline-item p {
   margin: 2px 0 0;
+  color: var(--muted);
+  line-height: 1.5;
+}
+
+.timeline-time {
+  display: block;
+  margin-top: 2px;
   color: var(--muted);
   line-height: 1.5;
 }

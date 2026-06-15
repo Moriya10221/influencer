@@ -21,7 +21,7 @@ const state = {
     countries: ["新加坡", "马来西亚", "泰国", "越南", "印度尼西亚", "菲律宾"],
     areas: ["东南亚"],
     productName: "MINISO 香氛系列",
-    productLink: "https://www.miniso.com/",
+    productLink: "",
     productDesc: "新品香氛系列，适合生活方式与美妆垂类内容。",
     activePlatform: "TikTok",
     creatorTypes: ["美妆", "生活方式"],
@@ -42,11 +42,11 @@ const state = {
     matchedCreators: ["Mika Studio", "Nova Plays"],
     platformConfigs: {
       TikTok: {
-        creatorCount: "12",
+        creatorCount: "",
         followerMinK: "50",
         followerMaxK: "200",
         creatorTypes: ["美妆", "生活方式"],
-        cooperationTypes: ["全片", "插片"],
+        cooperationTypes: ["全片"],
         contentRequirement: "强调前 10 秒产品露出与核心卖点口播，支持生活方式场景化种草。",
         platformBudget: "3000",
         unitPriceMin: "100",
@@ -55,11 +55,11 @@ const state = {
         settlementCycle: "按7天实际曝光量结算",
       },
       YouTube: {
-        creatorCount: "8",
+        creatorCount: "",
         followerMinK: "20",
         followerMaxK: "100",
         creatorTypes: ["测评", "科技数码"],
-        cooperationTypes: ["长视频", "Shorts"],
+        cooperationTypes: ["长视频"],
         contentRequirement: "适合测评/开箱内容，需保留产品功能点拆解与购买引导。",
         platformBudget: "5000",
         unitPriceMin: "300",
@@ -1827,27 +1827,34 @@ function promotionEmptyState() {
 
 function talentRows(source = creators) {
   const q = state.query.trim().toLowerCase();
+  const countryFlagMap = { US: "🇺🇸", UK: "🇬🇧", JP: "🇯🇵", CN: "🇨🇳", TH: "🇹🇭", MY: "🇲🇾", ID: "🇮🇩" };
+  const countryView = (value = "") => {
+    const code = String(value).split("/")[0]?.trim() || "-";
+    return `<span class="country-one">${countryFlagMap[code] || "🏳️"} ${code}</span>`;
+  };
   return source
     .filter((row) => !q || JSON.stringify(row).toLowerCase().includes(q))
     .map(
       (row) => `
       <tr>
+        <td><input type="checkbox" aria-label="选择 ${row.name}" /></td>
         <td>
           <div class="row-title">
-            <img src="${row.avatar || assets.creatorPreview}" alt="" />
+            <button class="avatar-button" data-action="drawer-creator" data-name="${row.name}" aria-label="查看 ${row.name} 达人档案">
+              <img src="${row.avatar || assets.creatorPreview}" alt="" />
+            </button>
             <span><strong>${row.name}</strong><small>${row.platform} · ${row.category}</small></span>
           </div>
         </td>
+        <td>${countryView(row.country)}</td>
         <td>${row.gender}</td>
         <td>${row.fans}</td>
         <td>${row.age}</td>
         <td>${row.recent}</td>
         <td>${row.avgViews}</td>
-        <td>${row.country}</td>
         <td>${row.price || "-"}</td>
         <td>
           <div class="actions">
-            <button class="link-button" data-action="drawer-creator" data-name="${row.name}">查看</button>
             <button class="link-button" data-action="toast" data-message="已收藏 ${row.name}">收藏</button>
             <button class="link-button" data-action="modal-invite">邀请</button>
           </div>
@@ -2219,7 +2226,7 @@ function renderPublishOnePageForm() {
         </div>
       </div>
       <div class="form-grid">
-        ${field("活动名称", `<input class="input" placeholder="请输入活动名称" value="${draft.campaignName || ""}" data-publish-field="campaignName" />`, true)}
+        ${field("活动名称", `<input class="input" maxlength="200" placeholder="请输入活动名称" value="${draft.campaignName || ""}" data-publish-field="campaignName" />`, true, "with-counter")}
         ${field(
           "推广平台",
           `
@@ -2426,8 +2433,8 @@ function renderPublishOnePageForm() {
         </div>
       </div>
       <div class="form-grid">
-        ${field("达人报名时间", `<input class="input" value="${draft.registrationRange || ""}" placeholder="2026-06-11 ~ 2026-06-20" data-publish-field="registrationRange" />`)}
         ${field("项目截至日期", `<input class="input" value="${draft.projectDeadline || ""}" placeholder="2026-06-30" data-publish-field="projectDeadline" />`, true)}
+        ${field("达人报名时间", `<input class="input" value="${draft.registrationRange || ""}" placeholder="2026-06-11 ~ 2026-06-20" data-publish-field="registrationRange" />`)}
         ${field("期望效果", `<select class="select" data-publish-field="expectedEffect"><option value="曝光" ${draft.expectedEffect === "曝光" ? "selected" : ""}>曝光</option><option value="点击" ${draft.expectedEffect === "点击" ? "selected" : ""}>点击</option><option value="转化" ${draft.expectedEffect === "转化" ? "selected" : ""}>转化</option></select>`, true)}
         ${field("预估效果", `<input class="input" value="${draft.estimatedEffect || ""}" placeholder="80K" data-publish-field="estimatedEffect" />`)}
         ${field("参考链接", `<input class="input" placeholder="请输入素材、脚本或参考内容链接" value="${draft.requirementLink || ""}" data-publish-field="requirementLink" />`, false, "full")}
@@ -2587,7 +2594,7 @@ function publishForm(inModal = true) {
     step === 0
       ? `
         <div class="form-grid">
-          ${field("活动名称", `<input class="input" placeholder="请输入活动名称" value="${draft.campaignName || ""}" data-publish-field="campaignName" />`, true)}
+          ${field("活动名称", `<input class="input" maxlength="200" placeholder="请输入活动名称" value="${draft.campaignName || ""}" data-publish-field="campaignName" />`, true, "with-counter")}
           ${field(
             "推广平台",
             `
@@ -2664,7 +2671,6 @@ function publishForm(inModal = true) {
           ${field("产品描述", `<textarea class="textarea" placeholder="请输入产品描述" data-publish-field="productDesc">${draft.productDesc || ""}</textarea>`, false, "full")}
           ${field("产品图片 / 附件", `<button class="ghost-button" data-action="toast" data-message="文件已加入上传队列">+ 上传文件</button><small class="muted">支持 PDF、PNG、JPG、JPEG，10M 以内</small>`, false, "full")}
         </div>
-        <div class="note-box publish-step-note">已选择 ${draft.platforms.length} 个平台，下一步需要分别配置各平台的达人要求与投放预算。</div>
       `
       : step === 1
         ? `
@@ -2686,15 +2692,20 @@ function publishForm(inModal = true) {
               <div class="form-grid">
                 ${field(
                   "达人粉丝数量",
-                  `<div class="money-range">
-                    <input class="input" placeholder="最低(K)" value="${activeConfig.followerMinK || ""}" data-platform-field="followerMinK" />
-                    <span class="money-range-sep">—</span>
-                    <input class="input" placeholder="最高(K)" value="${activeConfig.followerMaxK || ""}" data-platform-field="followerMaxK" />
-                    <span class="money-suffix">K</span>
+                  `<div class="range-popover-field ${draft.followerPopoverOpen ? "open" : ""}">
+                    <button class="input range-display" data-action="toggle-publish-followers" type="button">${activeConfig.followerMinK && activeConfig.followerMaxK ? `${activeConfig.followerMinK}K - ${activeConfig.followerMaxK}K` : "请选择粉丝数量范围"}</button>
+                    <div class="range-popover">
+                      <div class="money-range">
+                        <input class="input" placeholder="最低(K)" value="${activeConfig.followerMinK || ""}" data-platform-field="followerMinK" />
+                        <span class="money-range-sep">—</span>
+                        <input class="input" placeholder="最高(K)" value="${activeConfig.followerMaxK || ""}" data-platform-field="followerMaxK" />
+                        <span class="money-suffix">K</span>
+                      </div>
+                    </div>
                   </div>`,
                   true,
                 )}
-                ${field("合作达人数量", `<input class="input" placeholder="请输入期望合作的创作者数量" value="${activeConfig.creatorCount || ""}" data-platform-field="creatorCount" />`, true)}
+                ${field("合作达人数量", `<input class="input" placeholder="请填写合作达人数量" value="${activeConfig.creatorCount || ""}" data-platform-field="creatorCount" />`, true)}
                 ${field(
                   "达人标签",
                   `
@@ -2725,12 +2736,10 @@ function publishForm(inModal = true) {
                 )}
                 ${field(
                   "合作类型",
-                  `<div class="chips platform-config-chips">${cooperationTypeOptions
-                    .map(
-                      (item) =>
-                        `<button class="chip ${(activeConfig.cooperationTypes || []).includes(item) ? "active" : ""}" data-action="toggle-platform-cooperation-type" data-value="${encodeURIComponent(item)}">${item}</button>`,
-                    )
-                    .join("")}</div>`,
+                  `<select class="select" data-platform-field="cooperationTypeSingle">
+                    <option value="">请选择合作类型</option>
+                    ${cooperationTypeOptions.map((item) => `<option value="${item}" ${(activeConfig.cooperationTypes || [])[0] === item ? "selected" : ""}>${item}</option>`).join("")}
+                  </select>`,
                   true,
                   "full",
                 )}
@@ -2751,8 +2760,8 @@ function publishForm(inModal = true) {
                 </div>
               </div>
               <div class="form-grid">
-                ${field("达人报名时间", `<input class="input" value="${draft.registrationRange || ""}" data-publish-field="registrationRange" />`)}
                 ${field("项目截至日期", `<input class="input" value="${draft.projectDeadline || ""}" data-publish-field="projectDeadline" />`, true)}
+                ${field("达人报名时间", `<input class="input" value="${draft.registrationRange || ""}" data-publish-field="registrationRange" />`)}
                 ${field("期望效果", `<select class="select" data-publish-field="expectedEffect"><option value="曝光" ${draft.expectedEffect === "曝光" ? "selected" : ""}>曝光</option><option value="点击" ${draft.expectedEffect === "点击" ? "selected" : ""}>点击</option><option value="转化" ${draft.expectedEffect === "转化" ? "selected" : ""}>转化</option></select>`, true)}
                 ${field("预估效果", `<input class="input" value="${draft.estimatedEffect || ""}" data-publish-field="estimatedEffect" />`)}
               </div>
@@ -2934,9 +2943,10 @@ function publishControls(inModal = true) {
 }
 
 function field(label, control, required = false, extra = "") {
+  const counter = extra.split(" ").includes("with-counter") ? `<span class="field-counter">${String(state.publishDraft.campaignName || "").length}/200</span>` : "";
   return `
     <div class="field ${extra}">
-      <label>${required ? `<span class="required">*</span> ` : ""}${label}</label>
+      <label>${required ? `<span class="required">*</span> ` : ""}${label}${counter}</label>
       ${control}
     </div>
   `;
@@ -3070,7 +3080,7 @@ function renderTalentManagement() {
             <tbody>
               ${creators
                 .map(
-                  (row) => `<tr><td><strong>${row.name}</strong><br /><span class="muted">${row.platform}</span></td><td>${row.category}</td><td>${row.fans}</td><td>${row.avgViews}</td><td>${row.engagement}</td><td>${status(row.contract, row.contract === "已收藏" ? "success" : "pending")}</td><td><button class="link-button" data-action="modal-invite">邀请</button></td></tr>`,
+                  (row) => `<tr><td><strong>${row.name}</strong><br /><span class="muted">${row.platform}</span></td><td>${row.category}</td><td>${row.fans}</td><td>${row.avgViews}</td><td>${row.engagement}</td><td>${status(row.contract, row.contract === "已收藏" ? "success" : "pending")}</td><td><div class="actions"><button class="link-button" data-action="toast" data-message="${row.contract === "已收藏" ? "已在收藏列表中" : `已收藏 ${row.name}`}">${row.contract === "已收藏" ? "已收藏" : "收藏"}</button><button class="link-button" data-action="modal-invite">邀请</button></div></td></tr>`,
                 )
                 .join("")}
             </tbody>
@@ -3336,7 +3346,7 @@ function renderTalentSearch() {
       <div class="table-head"><h2>达人列表</h2><button class="primary-button" data-action="modal-invite">批量邀请</button></div>
       <div class="table-wrap talent-list-scroll">
         <table>
-          <thead><tr><th>达人列表</th><th>受众性别</th><th>粉丝数</th><th>受众年龄</th><th>最近发布视频</th><th>平均曝光量</th><th>受众国家</th><th>报价</th><th>操作</th></tr></thead>
+          <thead><tr><th><input type="checkbox" aria-label="全选达人" /></th><th>达人信息</th><th>国家/地区</th><th>受众性别</th><th>粉丝数</th><th>受众年龄</th><th>最近发布视频</th><th>平均曝光量</th><th>报价</th><th>操作</th></tr></thead>
           <tbody>${talentRows(filteredCreators)}</tbody>
         </table>
       </div>
@@ -5280,9 +5290,21 @@ function openAdminFulfillmentDrawer(campaignName = "", creatorId = "") {
         <div class="timeline admin-fulfillment-timeline" style="margin-top:16px">
           ${timelineItems
             .map(
-              (item, index) => `
-              <div class="timeline-item ${index === timelineItems.length - 1 ? "current" : ""}"><span class="timeline-dot"></span><div><strong>${item.title}</strong><p>${item.desc}</p></div></div>
-            `,
+              (item, index) => {
+                const match = String(item.desc || "").match(/^(\d{4}-\d{2}-\d{2}\s+\d{2}:\d{2})\s*(.*)$/);
+                const time = match ? match[1] : "";
+                const detail = match ? match[2] : item.desc;
+                return `
+                <div class="timeline-item ${index === timelineItems.length - 1 ? "current" : ""}">
+                  <span class="timeline-dot"></span>
+                  <div>
+                    <strong>${item.title}</strong>
+                    ${time ? `<span class="timeline-time">${time}</span>` : ""}
+                    <p>${detail}</p>
+                  </div>
+                </div>
+              `;
+              },
             )
             .join("")}
         </div>
@@ -6115,6 +6137,10 @@ document.addEventListener("input", (event) => {
   if (!fieldTarget) return;
   const key = fieldTarget.dataset.publishField;
   state.publishDraft[key] = fieldTarget.value;
+  if (key === "campaignName") {
+    const counter = fieldTarget.closest(".field")?.querySelector(".field-counter");
+    if (counter) counter.textContent = `${fieldTarget.value.length}/200`;
+  }
 });
 
 document.addEventListener("input", (event) => {
@@ -6123,7 +6149,11 @@ document.addEventListener("input", (event) => {
   ensurePublishDraftPlatforms();
   const key = fieldTarget.dataset.platformField;
   const platform = fieldTarget.dataset.platformName || state.publishDraft.activePlatform;
-  state.publishDraft.platformConfigs[platform][key] = fieldTarget.value;
+  if (key === "cooperationTypeSingle") {
+    state.publishDraft.platformConfigs[platform].cooperationTypes = fieldTarget.value ? [fieldTarget.value] : [];
+  } else {
+    state.publishDraft.platformConfigs[platform][key] = fieldTarget.value;
+  }
 });
 
 document.addEventListener("change", (event) => {
@@ -6132,7 +6162,11 @@ document.addEventListener("change", (event) => {
   ensurePublishDraftPlatforms();
   const key = fieldTarget.dataset.platformField;
   const platform = fieldTarget.dataset.platformName || state.publishDraft.activePlatform;
-  state.publishDraft.platformConfigs[platform][key] = fieldTarget.value;
+  if (key === "cooperationTypeSingle") {
+    state.publishDraft.platformConfigs[platform].cooperationTypes = fieldTarget.value ? [fieldTarget.value] : [];
+  } else {
+    state.publishDraft.platformConfigs[platform][key] = fieldTarget.value;
+  }
 });
 
 document.addEventListener("input", (event) => {
