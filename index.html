@@ -1,0 +1,62 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Meetinfluencer Dashboard</title>
+    <link rel="stylesheet" href="assets/styles.css" />
+  </head>
+  <body>
+    <div class="app-shell">
+      <aside class="sidebar">
+        <a class="brand" href="#promotions" aria-label="Meetinfluencer">
+          <img src="assets/images/brand-avatar.png" alt="" />
+          <span>
+            <strong>Meetinfluencer</strong>
+            <small>Creator Growth OS</small>
+          </span>
+        </a>
+
+        <div class="role-switch" aria-label="角色切换">
+          <button class="role-option active" data-role="brand">广告主</button>
+          <button class="role-option" data-role="creator">达人</button>
+        </div>
+
+        <nav class="nav-list" id="navList" aria-label="主导航"></nav>
+
+        <div class="sidebar-card">
+          <span class="pulse-dot"></span>
+          <strong>Live campaign pulse</strong>
+          <p>14 个内容节点待处理，平均响应时间 3.2 小时。</p>
+        </div>
+      </aside>
+
+      <main class="main">
+        <header class="topbar">
+          <button class="icon-button menu-toggle" id="menuToggle" aria-label="展开导航">
+            <span></span><span></span><span></span>
+          </button>
+          <div class="search-box">
+            <span aria-hidden="true">⌕</span>
+            <input id="globalSearch" type="search" placeholder="搜索推广、达人、状态" />
+          </div>
+          <div class="topbar-actions">
+            <button class="ghost-button" data-action="toast" data-message="通知中心暂无新的系统提醒">通知</button>
+            <button class="primary-button" data-action="open-publish">+ 创建推广</button>
+            <div class="user-chip">
+              <span class="avatar">MA</span>
+              <span>meetin. admin</span>
+            </div>
+          </div>
+        </header>
+
+        <section id="pageRoot" class="page-root" aria-live="polite"></section>
+      </main>
+    </div>
+
+    <div id="modalRoot"></div>
+    <div id="toastRoot" class="toast-root" aria-live="assertive"></div>
+
+    <script src="assets/app.js"></script>
+  </body>
+</html>
