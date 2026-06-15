@@ -1,0 +1,97 @@
+<svg width="1400" height="720" viewBox="0 0 1400 720" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1400" y2="720" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#F2F7FF" />
+      <stop offset="0.5" stop-color="#F7F9FF" />
+      <stop offset="1" stop-color="#F2FFF8" />
+    </linearGradient>
+    <linearGradient id="brand" x1="0" y1="0" x2="1" y2="1">
+      <stop stop-color="#2457D6" />
+      <stop offset="1" stop-color="#12A1A8" />
+    </linearGradient>
+    <filter id="shadow" x="-20" y="-20" width="1440" height="760" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+      <feDropShadow dx="0" dy="20" stdDeviation="18" flood-color="#182033" flood-opacity="0.14" />
+    </filter>
+    <filter id="cardShadow" x="-10" y="-10" width="520" height="260" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+      <feDropShadow dx="0" dy="14" stdDeviation="12" flood-color="#182033" flood-opacity="0.10" />
+    </filter>
+  </defs>
+
+  <!-- Background -->
+  <rect width="1400" height="720" rx="28" fill="url(#bg)" />
+
+  <!-- Window -->
+  <g filter="url(#shadow)">
+    <rect x="90" y="68" width="1220" height="584" rx="18" fill="#FFFFFF" />
+    <rect x="90" y="68" width="1220" height="52" rx="18" fill="#F5F7FF" />
+    <circle cx="122" cy="94" r="7" fill="#FF5F57" />
+    <circle cx="146" cy="94" r="7" fill="#FFBD2E" />
+    <circle cx="170" cy="94" r="7" fill="#28C840" />
+    <text x="220" y="101" font-family="PingFang SC, Microsoft YaHei, Arial" font-size="14" fill="#52607A">
+      Meetinfluencer · 广告主发单（示意截图）
+    </text>
+
+    <!-- Sidebar -->
+    <rect x="90" y="120" width="250" height="532" rx="0" fill="#FBFCFF" />
+    <rect x="110" y="146" width="210" height="56" rx="12" fill="#FFFFFF" stroke="#E5E7EF" />
+    <rect x="126" y="162" width="26" height="26" rx="8" fill="url(#brand)" />
+    <text x="162" y="171" font-family="PingFang SC, Microsoft YaHei, Arial" font-size="14" font-weight="700" fill="#182033">广告主工作台</text>
+    <text x="162" y="190" font-family="PingFang SC, Microsoft YaHei, Arial" font-size="12" fill="#6B7280">任务发布与管理</text>
+
+    <g font-family="PingFang SC, Microsoft YaHei, Arial" font-size="13" fill="#3B4558">
+      <text x="126" y="242">推广管理</text>
+      <text x="126" y="276">达人搜索</text>
+      <text x="126" y="310">合作达人</text>
+      <text x="126" y="344">账户设置</text>
+    </g>
+    <rect x="110" y="222" width="210" height="34" rx="10" fill="rgba(36,87,214,0.08)" />
+    <rect x="118" y="232" width="5" height="14" rx="2.5" fill="#2457D6" />
+
+    <!-- Main -->
+    <rect x="340" y="120" width="970" height="532" fill="#FFFFFF" />
+    <text x="380" y="166" font-family="PingFang SC, Microsoft YaHei, Arial" font-size="16" font-weight="700" fill="#182033">发布新任务</text>
+    <text x="380" y="190" font-family="PingFang SC, Microsoft YaHei, Arial" font-size="12" fill="#6B7280">填写推广信息、达人要求与预算，生成可报名的合作任务。</text>
+
+    <rect x="1058" y="148" width="230" height="36" rx="10" fill="url(#brand)" />
+    <text x="1122" y="171" font-family="PingFang SC, Microsoft YaHei, Arial" font-size="13" font-weight="700" fill="#FFFFFF">+ 创建推广任务</text>
+
+    <!-- Form card -->
+    <g filter="url(#cardShadow)">
+      <rect x="380" y="220" width="900" height="380" rx="16" fill="#FFFFFF" stroke="#E5E7EF" />
+    </g>
+
+    <!-- Stepper -->
+    <rect x="410" y="250" width="250" height="40" rx="12" fill="rgba(36,87,214,0.08)" stroke="rgba(36,87,214,0.18)" />
+    <rect x="670" y="250" width="250" height="40" rx="12" fill="#F9FAFC" stroke="#E5E7EF" />
+    <rect x="930" y="250" width="250" height="40" rx="12" fill="#F9FAFC" stroke="#E5E7EF" />
+    <text x="430" y="275" font-family="PingFang SC, Microsoft YaHei, Arial" font-size="13" font-weight="700" fill="#2457D6">1. 推广信息</text>
+    <text x="690" y="275" font-family="PingFang SC, Microsoft YaHei, Arial" font-size="13" fill="#6B7280">2. 达人要求</text>
+    <text x="950" y="275" font-family="PingFang SC, Microsoft YaHei, Arial" font-size="13" fill="#6B7280">3. 投放预算</text>
+
+    <!-- Fields -->
+    <g font-family="PingFang SC, Microsoft YaHei, Arial">
+      <text x="410" y="328" font-size="12" fill="#42506A" font-weight="700">任务名称</text>
+      <rect x="410" y="340" width="410" height="44" rx="12" fill="#FFFFFF" stroke="#E5E7EF" />
+      <text x="426" y="368" font-size="13" fill="#182033">MINISO 夏季新品内容合作</text>
+
+      <text x="870" y="328" font-size="12" fill="#42506A" font-weight="700">推广平台</text>
+      <rect x="870" y="340" width="310" height="44" rx="12" fill="#FFFFFF" stroke="#E5E7EF" />
+      <text x="886" y="368" font-size="13" fill="#182033">抖音 / 小红书</text>
+
+      <text x="410" y="418" font-size="12" fill="#42506A" font-weight="700">产品链接</text>
+      <rect x="410" y="430" width="770" height="44" rx="12" fill="#FFFFFF" stroke="#E5E7EF" />
+      <text x="426" y="458" font-size="13" fill="#182033">https://www.miniso.com/</text>
+
+      <text x="410" y="510" font-size="12" fill="#42506A" font-weight="700">内容要求</text>
+      <rect x="410" y="522" width="770" height="60" rx="12" fill="#FFFFFF" stroke="#E5E7EF" />
+      <text x="426" y="548" font-size="13" fill="#6B7280">露出产品核心卖点，视频前 10 秒清晰展示产品。</text>
+    </g>
+
+    <!-- Preview card -->
+    <rect x="1196" y="340" width="84" height="242" rx="14" fill="#F5F8FF" stroke="#DCE8FF" />
+    <rect x="1208" y="356" width="60" height="86" rx="10" fill="#FFFFFF" stroke="#E5E7EF" />
+    <rect x="1208" y="452" width="60" height="52" rx="10" fill="#FFFFFF" stroke="#E5E7EF" />
+    <rect x="1208" y="512" width="60" height="54" rx="10" fill="#FFFFFF" stroke="#E5E7EF" />
+    <text x="1212" y="590" font-family="PingFang SC, Microsoft YaHei, Arial" font-size="11" fill="#6B7280">预览</text>
+  </g>
+</svg>

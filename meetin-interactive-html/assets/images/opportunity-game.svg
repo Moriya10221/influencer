@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="720" height="360" viewBox="0 0 720 360" role="img" aria-label="Game creator campaign cover">
+  <defs>
+    <linearGradient id="g" x1="0" x2="1" y1="0" y2="1">
+      <stop offset="0" stop-color="#2457d6"/>
+      <stop offset="0.55" stop-color="#7c3aed"/>
+      <stop offset="1" stop-color="#12a1a8"/>
+    </linearGradient>
+    <linearGradient id="shine" x1="0" x2="1">
+      <stop offset="0" stop-color="#fff" stop-opacity=".28"/>
+      <stop offset="1" stop-color="#fff" stop-opacity="0"/>
+    </linearGradient>
+  </defs>
+  <rect width="720" height="360" rx="28" fill="url(#g)"/>
+  <path d="M54 72c92-46 187-28 282 52 103 87 211 66 330-62v298H54z" fill="#071a3d" opacity=".22"/>
+  <rect x="72" y="70" width="244" height="150" rx="24" fill="#fff" opacity=".16"/>
+  <rect x="93" y="91" width="202" height="108" rx="16" fill="#0f172a" opacity=".42"/>
+  <circle cx="535" cy="144" r="70" fill="#fff" opacity=".18"/>
+  <path d="M489 144c0-20 16-36 36-36h20c20 0 36 16 36 36s-16 36-36 36h-20c-20 0-36-16-36-36z" fill="#fff" opacity=".88"/>
+  <path d="M520 133v22M509 144h22" stroke="#2457d6" stroke-width="8" stroke-linecap="round"/>
+  <circle cx="552" cy="138" r="7" fill="#7c3aed"/>
+  <circle cx="571" cy="153" r="7" fill="#12a1a8"/>
+  <rect x="72" y="250" width="360" height="22" rx="11" fill="#fff" opacity=".88"/>
+  <rect x="72" y="285" width="246" height="16" rx="8" fill="#fff" opacity=".56"/>
+  <path d="M0 0h720v120C563 77 429 84 319 116 197 151 90 135 0 68z" fill="url(#shine)"/>
+</svg>
