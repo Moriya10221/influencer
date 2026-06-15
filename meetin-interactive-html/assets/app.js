@@ -374,7 +374,6 @@ function opportunityCover(item) {
     <div class="cover cover-placeholder ${item.isOfficial ? "official-cover-placeholder" : ""}" aria-hidden="true">
       <div class="cover-placeholder-copy">
         <strong>${item.isOfficial ? "官方任务" : "任务插图"}</strong>
-        ${item.isOfficial ? `<span>未上传图片时展示官方默认封面</span>` : ``}
       </div>
     </div>
   `;
@@ -459,12 +458,13 @@ const operatorNav = [
   ["advertiserList", "广告主管理", "广", "child", "新"],
   ["influencerListAdmin", "达人管理", "达", "child"],
   ["emailInvitesAdmin", "达人邀约", "邀", "child"],
-  ["gameTagsAdmin", "达人标签", "标", "child"],
   ["reviewCenter", "审核管理", "审"],
   ["campaignReviewAdmin", "活动审核", "活", "child"],
   ["creatorApplicationReviewAdmin", "报名审核", "报", "child"],
   ["creatorDeliverableReviewAdmin", "产物审核", "产", "child"],
   ["officialTaskCreate", "官方任务", "官", "child", "新"],
+  ["infoManagementAdmin", "信息管理", "信"],
+  ["gameTagsAdmin", "标签管理", "标", "child"],
   ["payoutAdmin", "财务管理", "财"],
   ["settingsAdmin", "系统设置", "设"],
 ];
@@ -3970,11 +3970,205 @@ function renderInfluencerListAdmin() {
 }
 
 function renderEmailInvitesAdmin() {
-  return `${pageHeader("运营后台", "邮件邀约", "查看批量邮件邀约记录与发送状态。")}<div class="panel"><p class="subcopy">此页先作为占位，后续可补批量发送、发送结果与失败重试记录。</p></div>`;
+  const inviteRows = [
+    ["The Waifu Connoisseur", "tishakouri@gmail.com", "11", "已发送", "done", "2026-5-10 59:20"],
+    ["SultanTheDerp", "waifuconnoisseurr@gmail.com", "11", "待发送", "draft", "2026-5-10 59:20"],
+    ["KitaSean", "contact.dawn.music@gmail.com", "11", "待发送", "draft", "2026-5-10 59:20"],
+    ["Dawn. music", "dimivgaming@hotmail.com", "11", "待发送", "draft", "2026-5-10 59:20"],
+    ["Anime Pro", "hina.lakki@o2.pl", "11", "待发送", "draft", "-"],
+  ];
+  const historyRows = [
+    ["2026-6-5 10:59:20", "邀约注册MeetInfluencer", "99", "99 100%", "99 100%", "99 100%"],
+    ["2026-6-4 10:59:20", "邀约注册MeetInfluencer", "60", "60 100%", "60 100%", "60 100%"],
+    ["2026-6-3 10:59:20", "邀约注册MeetInfluencer", "50", "50 100%", "50", "50 100%"],
+    ["2026-6-1 10:59:20", "主题内容", "150", "142 94.7%", "98 69.0%", "76 53.5%"],
+  ];
+  return `
+    ${pageHeader(
+      "运营后台",
+      "邮件邀约",
+      "批量筛选达人、发送邀约邮件，并跟踪送达、打开、点击和失败重试结果。",
+      `<button class="secondary-button" data-action="modal-email-history">历史邮件</button><button class="primary-button" data-action="modal-email-send">发送邮件</button>`,
+    )}
+    <div class="email-metrics">
+      ${metrics([
+        { label: "可邀约达人", value: "658", delta: "已接入邮箱" },
+        { label: "今日发送", value: "99", delta: "送达率 100%" },
+        { label: "待发送", value: "48", delta: "可批量处理" },
+        { label: "失败待重试", value: "6", delta: "SMTP / 邮箱异常" },
+      ])}
+    </div>
+    <div class="filter-bar sticky email-admin-filter">
+      <input class="input" placeholder="请输入你需要搜索的达人" />
+      <select class="select"><option>邀约状态</option><option>已发送</option><option>待发送</option><option>发送失败</option></select>
+      <input class="input" placeholder="发送时间" />
+      <button class="secondary-button" data-action="toast" data-message="邮件邀约筛选已应用">查询</button>
+      <button class="ghost-button" data-action="toast" data-message="列表已刷新">刷新</button>
+      <button class="primary-button" data-action="modal-email-send">发送邮件</button>
+    </div>
+    <div class="table-card">
+      <div class="table-head">
+        <h2>达人邀约列表</h2>
+        <span class="muted">支持勾选后批量发送</span>
+      </div>
+      <div class="table-wrap">
+        <table class="email-invite-table">
+          <thead>
+            <tr><th><input type="checkbox" aria-label="全选达人" /></th><th>达人</th><th>邮箱</th><th>已发邮件数</th><th>邀约状态</th><th>最近邮件发送时间</th><th>操作</th></tr>
+          </thead>
+          <tbody>
+            ${inviteRows
+              .map(
+                (row) => `
+                  <tr>
+                    <td><input type="checkbox" aria-label="选择 ${row[0]}" /></td>
+                    <td><strong>${row[0]}</strong></td>
+                    <td>${row[1]}</td>
+                    <td>${row[2]}</td>
+                    <td>${status(row[3], row[4])}</td>
+                    <td>${row[5]}</td>
+                    <td><div class="actions"><button class="link-button" data-action="modal-email-detail">发送明细</button><button class="link-button" data-action="modal-email-send">发邮件</button></div></td>
+                  </tr>
+                `,
+              )
+              .join("")}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  `;
+}
+
+function openEmailSendModal() {
+  openModal(
+    `
+    <div class="modal-head">
+      <div><h2>邮件邀约</h2><p class="subcopy">填写邮件主题和内容，支持对勾选达人批量发送。</p></div>
+      <button class="close-button" data-action="close-overlay" aria-label="关闭">×</button>
+    </div>
+    <div class="modal-body">
+      <div class="form-grid">
+        ${field("邮件主题", `<input class="input" placeholder="请输入邮件主题" value="邀约注册MeetInfluencer" />`, true, "full")}
+        ${field("邮件内容", `<textarea class="textarea email-compose-body" placeholder="请输入邮件内容">Hi {{creator_name}}，我们正在邀请优质创作者加入 MeetInfluencer 平台。完成注册后，你可以收到品牌合作邀约并管理合作收益。</textarea>`, true, "full")}
+      </div>
+    </div>
+    <div class="modal-foot">
+      <button class="ghost-button" data-action="close-overlay">取消</button>
+      <button class="primary-button" data-action="modal-email-feedback">确认发送</button>
+    </div>
+  `,
+    false,
+  );
+}
+
+function openEmailFeedbackModal() {
+  openModal(
+    `
+    <div class="modal-head">
+      <div><h2>邮件发送完成</h2><p class="subcopy">本次发送结果已生成，可继续查看发送明细。</p></div>
+      <button class="close-button" data-action="close-overlay" aria-label="关闭">×</button>
+    </div>
+    <div class="modal-body">
+      <div class="note-box">本次发送 50 人，成功 48 人，失败 2 人。</div>
+      <div class="email-result-grid">
+        <div><strong>48</strong><span>发送成功</span></div>
+        <div><strong>2</strong><span>失败待重试</span></div>
+        <div><strong>96%</strong><span>送达率</span></div>
+      </div>
+    </div>
+    <div class="modal-foot">
+      <button class="ghost-button" data-action="close-overlay">关闭</button>
+      <button class="primary-button" data-action="modal-email-detail">查看明细</button>
+    </div>
+  `,
+    true,
+  );
+}
+
+function openEmailDetailModal() {
+  openModal(
+    `
+    <div class="modal-head">
+      <div><h2>发送明细</h2><p class="subcopy">邮件任务：邀约注册MeetInfluencer</p></div>
+      <button class="close-button" data-action="close-overlay" aria-label="关闭">×</button>
+    </div>
+    <div class="modal-body">
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>序号</th><th>达人邮箱</th><th>状态</th><th>发送时间</th></tr></thead>
+          <tbody>
+            <tr><td>1</td><td>tishakouri@gmail.com</td><td>${status("已送达", "done")}</td><td>2026-1-5 10:59:20</td></tr>
+            <tr><td>2</td><td>waifuconnoisseurr@gmail.com</td><td>${status("已打开", "running")}</td><td>2026-1-5 10:59:20</td></tr>
+            <tr><td>3</td><td>contact.dawn.music@gmail.com</td><td>${status("已送达", "done")}</td><td>2026-1-5 10:59:20</td></tr>
+            <tr><td>4</td><td>dimivgaming@hotmail.com</td><td>${status("已点击", "done")}</td><td>2026-1-5 10:59:20</td></tr>
+            <tr><td>5</td><td>hina.lakki@o2.pl</td><td>${status("SMTP连接超时", "rejected")}</td><td>2026-1-5 10:59:20</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <div class="modal-foot">
+      <button class="ghost-button" data-action="close-overlay">关闭</button>
+      <button class="primary-button" data-action="toast-close" data-message="失败邮件已加入重试队列">重试失败邮件</button>
+    </div>
+  `,
+    false,
+  );
+}
+
+function openEmailHistoryModal() {
+  openModal(
+    `
+    <div class="modal-head">
+      <div><h2>历史邮件记录</h2><p class="subcopy">查看历史批量发送任务的数据表现和发送明细。</p></div>
+      <button class="close-button" data-action="close-overlay" aria-label="关闭">×</button>
+    </div>
+    <div class="modal-body">
+      <div class="filter-bar email-history-filter">
+        <input class="input" placeholder="发送主题" />
+        <input class="input" placeholder="发送时间" />
+        <button class="secondary-button" data-action="toast" data-message="历史邮件筛选已应用">查询</button>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>发送时间</th><th>邮件主题</th><th>发送数</th><th>送达数</th><th>打开数</th><th>点击数</th><th>操作</th></tr></thead>
+          <tbody>
+            <tr><td>2026-6-5 10:59:20</td><td>邀约注册MeetInfluencer</td><td>99</td><td>99 100%</td><td>99 100%</td><td>99 100%</td><td><div class="actions"><button class="link-button" data-action="modal-email-detail">发送明细</button><button class="link-button" data-action="toast" data-message="导出任务已创建">导出数据</button></div></td></tr>
+            <tr><td>2026-6-4 10:59:20</td><td>邀约注册MeetInfluencer</td><td>60</td><td>60 100%</td><td>60 100%</td><td>60 100%</td><td><div class="actions"><button class="link-button" data-action="modal-email-detail">发送明细</button><button class="link-button" data-action="toast" data-message="导出任务已创建">导出数据</button></div></td></tr>
+            <tr><td>2026-6-3 10:59:20</td><td>邀约注册MeetInfluencer</td><td>50</td><td>50 100%</td><td>50</td><td>50 100%</td><td><div class="actions"><button class="link-button" data-action="modal-email-detail">发送明细</button><button class="link-button" data-action="toast" data-message="导出任务已创建">导出数据</button></div></td></tr>
+            <tr><td>2026-6-1 10:59:20</td><td>主题内容</td><td>150</td><td>142 94.7%</td><td>98 69.0%</td><td>76 53.5%</td><td><div class="actions"><button class="link-button" data-action="modal-email-detail">发送明细</button><button class="link-button" data-action="toast" data-message="导出任务已创建">导出数据</button></div></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <div class="modal-foot">
+      <button class="ghost-button" data-action="close-overlay">关闭</button>
+    </div>
+  `,
+    false,
+  );
+}
+
+function renderInfoManagementAdmin() {
+  return `
+    ${pageHeader("运营后台", "信息管理", "统一维护平台基础信息、标签体系和后续可配置内容。")}
+    <div class="grid two-col">
+      <div class="panel">
+        <div class="section-row">
+          <h2>标签管理</h2>
+          <button class="primary-button" data-nav="gameTagsAdmin">进入管理</button>
+        </div>
+        <p class="subcopy">维护达人标签、游戏类目、内容属性和平台推荐时使用的基础标签。</p>
+      </div>
+      <div class="panel">
+        <h2>信息配置</h2>
+        <p class="subcopy">后续可扩展国家地区、平台类型、行业分类等基础数据配置。</p>
+      </div>
+    </div>
+  `;
 }
 
 function renderGameTagsAdmin() {
-  return `${pageHeader("运营后台", "游戏标签", "维护游戏类目与达人标签映射。")}<div class="panel"><p class="subcopy">此页先作为标签管理占位，后续可补新增、编辑、停用与使用次数统计。</p></div>`;
+  return `${pageHeader("运营后台", "标签管理", "维护达人标签、游戏类目与内容属性映射。")}<div class="panel"><p class="subcopy">此页先作为标签管理占位，后续可补新增、编辑、停用与使用次数统计。</p></div>`;
 }
 
 function renderUsersAdmin() {
@@ -4177,6 +4371,7 @@ const pages = {
   influencerListAdmin: renderInfluencerListAdmin,
   influencerDetailAdmin: renderAdminInfluencerDetailPage,
   emailInvitesAdmin: renderEmailInvitesAdmin,
+  infoManagementAdmin: renderInfoManagementAdmin,
   gameTagsAdmin: renderGameTagsAdmin,
   usersAdmin: renderUsersAdmin,
   campaignReviewAdmin: renderCampaignReviewAdmin,
@@ -5364,6 +5559,10 @@ function handleAction(action, target) {
     return;
   }
   if (action === "modal-product") openProductModal();
+  if (action === "modal-email-send") openEmailSendModal();
+  if (action === "modal-email-feedback") openEmailFeedbackModal();
+  if (action === "modal-email-history") openEmailHistoryModal();
+  if (action === "modal-email-detail") openEmailDetailModal();
   if (action === "modal-reject-reason") {
     const taskName = decodeURIComponent(target.dataset.task || "项目");
     const reason = decodeURIComponent(target.dataset.reason || "暂无被拒原因");
