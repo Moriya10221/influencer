@@ -18,7 +18,7 @@ const state = {
     region: "东南亚",
     campaignName: "MINISO 夏季新品内容合作",
     platforms: ["TikTok", "YouTube"],
-    countries: ["澳大利亚", "新西兰", "巴布亚新几内亚", "北马里亚纳", "法属波利尼西亚", "斐济", "关岛", "基里巴斯"],
+    countries: ["新加坡", "马来西亚", "泰国", "越南", "印度尼西亚", "菲律宾"],
     areas: ["东南亚"],
     productName: "MINISO 香氛系列",
     productLink: "https://www.miniso.com/",
@@ -548,7 +548,7 @@ const creators = [
     gender: "女性 81.52%",
     price: "$2,000",
     engagement: "3.5%",
-    contract: "未签约",
+    contract: "未收藏",
   },
   {
     name: "Nova Plays",
@@ -563,7 +563,7 @@ const creators = [
     gender: "女性 79.8%",
     price: "$800",
     engagement: "4.1%",
-    contract: "已签约",
+    contract: "已收藏",
   },
   {
     name: "Kira Live",
@@ -578,7 +578,7 @@ const creators = [
     gender: "男性 63.4%",
     price: "$1,200",
     engagement: "5.2%",
-    contract: "未签约",
+    contract: "未收藏",
   },
   {
     name: "Luna Trend",
@@ -593,7 +593,7 @@ const creators = [
     gender: "女性 88.3%",
     price: "$1,200",
     engagement: "6.2%",
-    contract: "已签约",
+    contract: "已收藏",
   },
   {
     name: "Retail Spark",
@@ -608,7 +608,7 @@ const creators = [
     gender: "女性 74.2%",
     price: "$650",
     engagement: "4.6%",
-    contract: "未签约",
+    contract: "未收藏",
   },
   {
     name: "Aiden Motion",
@@ -623,7 +623,7 @@ const creators = [
     gender: "男性 57.4%",
     price: "$1,100",
     engagement: "5.8%",
-    contract: "已签约",
+    contract: "已收藏",
   },
   {
     name: "Momo Beauty Lab",
@@ -638,7 +638,7 @@ const creators = [
     gender: "女性 90.1%",
     price: "$950",
     engagement: "7.1%",
-    contract: "未签约",
+    contract: "未收藏",
   },
   {
     name: "Tech Otto",
@@ -653,7 +653,7 @@ const creators = [
     gender: "男性 68.7%",
     price: "$2,600",
     engagement: "3.9%",
-    contract: "已签约",
+    contract: "已收藏",
   },
   {
     name: "Daily Miki",
@@ -668,7 +668,7 @@ const creators = [
     gender: "女性 76.8%",
     price: "$880",
     engagement: "5.4%",
-    contract: "未签约",
+    contract: "未收藏",
   },
   {
     name: "Kenji Shopping",
@@ -683,7 +683,7 @@ const creators = [
     gender: "女性 70.5%",
     price: "$1,400",
     engagement: "4.8%",
-    contract: "已签约",
+    contract: "已收藏",
   },
   {
     name: "Finance Mia",
@@ -698,7 +698,7 @@ const creators = [
     gender: "女性 62.4%",
     price: "$700",
     engagement: "3.2%",
-    contract: "未签约",
+    contract: "未收藏",
   },
   {
     name: "App Leo",
@@ -713,7 +713,7 @@ const creators = [
     gender: "男性 60.2%",
     price: "$520",
     engagement: "6.4%",
-    contract: "未签约",
+    contract: "未收藏",
   },
   {
     name: "Foodie Nara",
@@ -728,7 +728,7 @@ const creators = [
     gender: "女性 73.6%",
     price: "$980",
     engagement: "5.1%",
-    contract: "已签约",
+    contract: "已收藏",
   },
 ];
 
@@ -1184,7 +1184,7 @@ const adminCampaignFulfillmentRows = [
     cooperationStatus: "已确认合作",
     deliverableStatus: "内容审核中",
     operationReview: "已通过",
-    brandReview: "待广告主确认",
+    brandReview: "审核中（待广告主确认）",
     publishStatus: "待发布",
     trackingStatus: "未开始",
     settlementStatus: "未结算",
@@ -1264,10 +1264,11 @@ const adminInfluencerRows = [
 
 const adminFulfillmentTimelineMap = {
   "MINISO 夏季新品内容合作::MKTK-0192": [
-    { title: "报名通过", desc: "2026-06-10 09:20 运营通过达人报名，进入合作确认。" },
-    { title: "确认合作", desc: "2026-06-11 14:35 达人确认合作，开始创作内容。" },
-    { title: "提交初稿", desc: "2026-06-13 18:10 达人已提交第一版短视频，等待运营审核。" },
-    { title: "运营审核中", desc: "2026-06-14 10:30 当前处于运营审核阶段，待广告主复核。" },
+    { title: "报名通过", desc: "2026-06-10 09:20 运营通过达人报名，进入合作确认环节。" },
+    { title: "确认合作", desc: "2026-06-11 14:35 达人确认合作，正式启动内容创作。" },
+    { title: "提交初稿", desc: "2026-06-13 18:10 达人提交第一版短视频，进入平台合规审核环节。" },
+    { title: "平台审核通过", desc: "2026-06-14 09:00 平台审核通过，内容流转至广告主侧审核。" },
+    { title: "广告主审核中", desc: "2026-06-14 10:30 视频已提交广告主复核，等待广告主确认/反馈修改意见。" },
   ],
   "MINISO 夏季新品内容合作::MYTB-0241": [
     { title: "报名通过", desc: "2026-06-09 12:10 平台审核通过该达人报名。" },
@@ -1417,7 +1418,7 @@ function renderTopbar() {
   const langLabel = state.language === "en" ? "English" : "中文";
   const roleAction =
     state.role === "brand"
-      ? `<button class="primary-button" data-action="open-publish">+ 创建推广</button>`
+      ? `<button class="primary-button" data-action="open-publish">+ 创建活动</button>`
       : state.role === "operator"
         ? `<button class="primary-button" data-nav="officialTaskCreate">+ 创建官方任务</button>`
         : `<button class="primary-button" data-nav="opportunityHall">查看机会大厅</button>`;
@@ -1680,6 +1681,63 @@ function filterCreators(list) {
     });
 }
 
+function resetTalentSearchFilters() {
+  state.talentSearchFilters = {
+    ...state.talentSearchFilters,
+    keyword: "",
+    platform: "全部",
+    region: "全部",
+    followerCount: "全部",
+    followerGender: "全部",
+    followerAge: "全部",
+    recent28: "全部",
+    priceRange: "全部",
+    engagement: "全部",
+    category: "全部",
+    contract: "全部",
+    expanded: false,
+  };
+}
+
+function renderTalentSelectedConditions() {
+  const f = state.talentSearchFilters;
+  const items = [
+    ["platform", "平台", f.platform],
+    ["region", "国家/地区", f.region],
+    ["followerCount", "粉丝数", f.followerCount],
+    ["followerGender", "粉丝性别", f.followerGender],
+    ["followerAge", "粉丝年龄", f.followerAge],
+    ["recent28", "近28天涨粉数", f.recent28],
+    ["priceRange", "报价范围", f.priceRange],
+    ["engagement", "互动率", f.engagement],
+    ["category", "达人分类", f.category],
+    ["contract", "收藏状态", f.contract],
+  ].filter(([, , value]) => value && value !== "全部");
+
+  return `
+    <div class="selected-filter-row">
+      <div class="selected-filter-label">已选条件：</div>
+      <div class="selected-filter-chips">
+        ${
+          items.length
+            ? items
+                .map(
+                  ([key, label, value]) => `
+                    <button class="selected-filter-chip" data-action="remove-talent-selected-filter" data-filter-key="${key}" type="button">
+                      <span>${label}：${value}</span>
+                      <span class="selected-filter-x" aria-hidden="true">×</span>
+                    </button>
+                  `,
+                )
+                .join("")
+            : `<span class="selected-filter-empty">暂无筛选条件</span>`
+        }
+      </div>
+      <button class="selected-filter-clear" data-action="clear-talent-selected-filters" ${items.length ? "" : "disabled"} type="button">全部清除</button>
+    </div>
+  `;
+}
+
 function getFilteredCampaigns() {
   const source = state.brandHasCampaigns ? campaigns : [];
   const q = state.query.trim().toLowerCase();
@@ -1790,6 +1848,7 @@ function talentRows(source = creators) {
         <td>
           <div class="actions">
             <button class="link-button" data-action="drawer-creator" data-name="${row.name}">查看</button>
+            <button class="link-button" data-action="toast" data-message="已收藏 ${row.name}">收藏</button>
             <button class="link-button" data-action="modal-invite">邀请</button>
           </div>
         </td>
@@ -1851,7 +1910,6 @@ function collaborationRows() {
                 <td>${row.note || "-"}</td>
                 <td>
                   <div class="actions">
-                    <button class="link-button" data-action="modal-review">要求修改</button>
                     <button class="link-button" data-action="drawer-delivery">查看详情</button>
                   </div>
                 </td>
@@ -1934,7 +1992,8 @@ function deliveryRowsForReview() {
 function applicationRows() {
   return `
     <tr>
-      <td><strong>任务标题</strong><br /><span class="muted">报名账号 · Mika Studio</span></td>
+      <td><strong>任务标题</strong></td>
+      <td>Mika Studio</td>
       <td>当时填写的报名理由</td>
       <td>${status("等待平台审核", "pending")}</td>
       <td>-</td>
@@ -1957,7 +2016,8 @@ function invitationRows() {
     .map(
       (row) => `
       <tr>
-        <td><strong>${row.task}</strong><br /><span class="muted">${row.time}</span></td>
+        <td><button class="inline-link" data-action="open-task-detail" data-task="${encodeURIComponent(row.task)}"><strong>${row.task}</strong></button></td>
+        <td>${row.time}</td>
         <td>${row.type}</td>
         <td>${row.settlement}</td>
         <td class="money">${row.quote}</td>
@@ -1965,8 +2025,11 @@ function invitationRows() {
         <td>${status(row.status, row.statusClass)}</td>
         <td>
           <div class="actions">
-            <button class="link-button" data-action="accept-invite">确认</button>
-            <button class="link-button" data-action="reject-invite">拒绝</button>
+            ${
+              row.status === "待接单"
+                ? `<button class="link-button" data-action="accept-invite">确认</button><button class="link-button" data-action="reject-invite">拒绝</button>`
+                : `<span class="muted">-</span>`
+            }
           </div>
         </td>
       </tr>
@@ -1982,7 +2045,7 @@ function projectTableRows() {
     .map(
       (row) => `
       <tr>
-        <td><button class="inline-link" data-action="open-task-detail"><strong>${row.task}</strong></button><br /><span class="muted">${row.start}</span></td>
+        <td><button class="inline-link" data-action="open-task-detail" data-task="${encodeURIComponent(row.task)}"><strong>${row.task}</strong></button><br /><span class="muted">${row.start}</span></td>
         <td>${row.type}</td>
         <td>${row.settlement}</td>
         <td class="money">${row.quote}</td>
@@ -2095,15 +2158,292 @@ function renderPromotions() {
 function renderPublishTask() {
   return `
     ${pageHeader(
-      "任务创建",
-      "发布任务",
-      "按推广信息、达人要求、投放预算三步创建完整推广任务。",
-      `<button class="primary-button" data-action="open-publish">打开发布弹窗</button>`,
+      "活动创建",
+      "创建活动",
+      "一页完成推广信息、达人要求和投放预算配置。多平台活动可分别设置要求与预算。",
+      `<button class="secondary-button" data-nav="promotions">返回活动管理</button>`,
     )}
-    <div class="panel">
-      ${publishForm(false)}
-      ${publishControls(false)}
+    <div class="publish-page-form">
+      ${renderPublishOnePageForm()}
+      <div class="panel publish-page-actions">
+        <button class="ghost-button" data-action="toast" data-message="草稿已保存">保存草稿</button>
+        <button class="primary-button" data-action="submit-publish">确认发布</button>
+      </div>
     </div>
+    ${state.publishDraft.matchDrawerOpen ? renderPublishMatchDrawer() : ""}
+  `;
+}
+
+function renderPublishOnePageForm() {
+  const draft = state.publishDraft;
+  ensurePublishDraftPlatforms();
+  const matchReady = canOpenPublishMatch();
+  const publishPlatforms = [
+    { name: "TikTok", logo: assets.tiktokLogo },
+    { name: "YouTube", logo: assets.youtubeLogo },
+    { name: "Twitch", logo: assets.twitchLogo },
+    { name: "Instagram", logo: assets.instagramLogo },
+  ];
+  const platformLogos = Object.fromEntries(publishPlatforms.map((item) => [item.name, item.logo]));
+  const creatorTypeOptions = ["购物与零售", "游戏", "美妆", "运动户外", "理财与投资", "软件与应用", "食品饮料", "科技数码", "生活方式", "测评"];
+  const cooperationTypeOptions = ["全片", "插片", "直播", "长视频", "Shorts", "社区post", "素材授权"];
+  const settlementCycleOptions = ["按7天实际曝光量结算", "按3天实际曝光量结算", "按14天实际曝光量结算"];
+
+  const chipsView = (items, removeAction, limit = 8, logos = {}) => {
+    const visible = items.slice(0, limit);
+    const hidden = Math.max(0, items.length - visible.length);
+    return `
+      <div class="ms-chips">
+        ${visible
+          .map(
+            (x) => `
+            <span class="ms-chip">
+              ${logos[x] ? `<img class="ms-chip-logo" src="${logos[x]}" alt="" />` : ""}
+              <span>${x}</span>
+              <span class="ms-chip-x" role="button" tabindex="0" data-action="${removeAction}" data-value="${encodeURIComponent(x)}" aria-label="移除 ${x}">×</span>
+            </span>
+          `,
+          )
+          .join("")}
+        ${hidden ? `<span class="ms-more">+${hidden}</span>` : ""}
+      </div>
+    `;
+  };
+
+  return `
+    <section class="panel publish-section-card">
+      <div class="publish-section-head">
+        <div>
+          <h2>推广信息</h2>
+          <p class="subcopy">先定义活动基础信息。平台和地区可多选。</p>
+        </div>
+      </div>
+      <div class="form-grid">
+        ${field("活动名称", `<input class="input" placeholder="请输入活动名称" value="${draft.campaignName || ""}" data-publish-field="campaignName" />`, true)}
+        ${field(
+          "推广平台",
+          `
+          <div class="multi-select-input ${draft.platformMenuOpen ? "open" : ""}" data-ms-scope="publish-platform">
+            <div class="ms-trigger" role="button" tabindex="0" data-action="toggle-publish-platform-menu" aria-expanded="${draft.platformMenuOpen ? "true" : "false"}">
+              ${draft.platforms.length ? chipsView(draft.platforms, "remove-publish-platform", 6, platformLogos) : `<span class="ms-placeholder">请选择推广平台</span>`}
+              <span class="ms-caret" aria-hidden="true">▾</span>
+            </div>
+            <div class="dropdown-menu ms-menu">
+              ${publishPlatforms
+                .map(
+                  (p) => `
+                  <label class="dropdown-check option-with-icon">
+                    <input type="checkbox" ${draft.platforms.includes(p.name) ? "checked" : ""} data-action="toggle-publish-platform" data-value="${p.name}" />
+                    <img class="option-icon" src="${p.logo}" alt="" />
+                    <span>${p.name}</span>
+                  </label>
+                `,
+                )
+                .join("")}
+            </div>
+          </div>
+        `,
+          true,
+        )}
+        ${field(
+          "推广地区",
+          `
+          <div class="multi-select-input ${draft.areaMenuOpen ? "open" : ""}" data-ms-scope="publish-area">
+            <div class="ms-trigger" role="button" tabindex="0" data-action="toggle-publish-area-menu" aria-expanded="${draft.areaMenuOpen ? "true" : "false"}">
+              ${draft.countries.length ? chipsView(draft.countries, "remove-publish-country", 6) : `<span class="ms-placeholder">请选择推广国家/地区</span>`}
+              <span class="ms-caret" aria-hidden="true">▾</span>
+            </div>
+            <div class="dropdown-menu ms-menu">
+              ${publishAreaGroups
+                .map(
+                  (group) => `
+                  <div class="publish-area-group">
+                    <label class="dropdown-check publish-area-parent">
+                      <input type="checkbox" ${draft.areas.includes(group.area) ? "checked" : ""} data-action="toggle-publish-area" data-value="${encodeURIComponent(group.area)}" />
+                      <span>${group.area}</span>
+                    </label>
+                    <div class="publish-area-children">
+                      ${group.countries
+                        .map(
+                          (country) => `
+                          <label class="dropdown-check publish-area-child">
+                            <input type="checkbox" ${draft.countries.includes(country) ? "checked" : ""} data-action="toggle-publish-country" data-value="${encodeURIComponent(country)}" data-area="${encodeURIComponent(group.area)}" />
+                            <span>${country}</span>
+                          </label>
+                        `,
+                        )
+                        .join("")}
+                    </div>
+                  </div>
+                `,
+                )
+                .join("")}
+            </div>
+          </div>
+        `,
+          true,
+        )}
+        ${field("推广产品", `<input class="input" placeholder="请输入产品名称" value="${draft.productName || ""}" data-publish-field="productName" />`, true)}
+        ${field("产品链接", `<input class="input" placeholder="请输入产品链接" value="${draft.productLink || ""}" data-publish-field="productLink" />`)}
+        ${field("产品描述", `<textarea class="textarea" placeholder="请输入产品描述" data-publish-field="productDesc">${draft.productDesc || ""}</textarea>`, false, "full")}
+        ${field("产品图片 / 附件", `<button class="ghost-button" data-action="toast" data-message="文件已加入上传队列">+ 上传文件</button><small class="muted">支持 PDF、PNG、JPG、JPEG，10M 以内</small>`, false, "full")}
+      </div>
+    </section>
+
+    <section class="panel publish-section-card">
+      <div class="publish-section-head">
+        <div>
+          <h2>按平台配置达人要求与预算</h2>
+          <p class="subcopy">不同平台的内容形式、粉丝门槛和预算可分别设置，便于后续精准匹配达人。</p>
+        </div>
+      </div>
+      <div class="publish-platform-config-list">
+        ${draft.platforms
+          .map((platform, index) => {
+            const config = draft.platformConfigs[platform] || defaultPublishPlatformConfig(platform);
+            const statusInfo = publishPlatformConfigStatus(config);
+            return `
+              <article class="publish-platform-config-card">
+                <div class="publish-platform-config-head">
+                  <div>
+                    <h3>${platformLogos[platform] ? `<img src="${platformLogos[platform]}" alt="" />` : ""}${platform}</h3>
+                    <span class="publish-status ${statusInfo.cls}">${statusInfo.text}</span>
+                  </div>
+                  ${
+                    index > 0
+                      ? `<button class="ghost-button" data-action="copy-previous-platform-requirements" data-platform="${platform}">沿用上一平台要求</button>`
+                      : ""
+                  }
+                </div>
+                <div class="form-grid">
+                  ${field(
+                    "达人粉丝数量",
+                    `<div class="money-range">
+                      <input class="input" placeholder="最低(K)" value="${config.followerMinK || ""}" data-platform-name="${platform}" data-platform-field="followerMinK" />
+                      <span class="money-range-sep">—</span>
+                      <input class="input" placeholder="最高(K)" value="${config.followerMaxK || ""}" data-platform-name="${platform}" data-platform-field="followerMaxK" />
+                      <span class="money-suffix">K</span>
+                    </div>`,
+                    true,
+                  )}
+                  ${field("合作达人数量", `<input class="input" placeholder="请输入人数" value="${config.creatorCount || ""}" data-platform-name="${platform}" data-platform-field="creatorCount" />`, true)}
+                  ${field(
+                    "达人标签",
+                    `
+                    <div class="multi-select-input ${draft.creatorTypeMenuOpen && draft.creatorTagMenuPlatform === platform ? "open" : ""}" data-ms-scope="publish-creator-tags">
+                      <div class="ms-trigger" role="button" tabindex="0" data-action="toggle-publish-creator-types" data-platform="${platform}" aria-expanded="${draft.creatorTypeMenuOpen && draft.creatorTagMenuPlatform === platform ? "true" : "false"}">
+                        ${
+                          (config.creatorTypes || []).length
+                            ? `<div class="ms-chips">${(config.creatorTypes || [])
+                                .slice(0, 6)
+                                .map(
+                                  (item) => `
+                                  <span class="ms-chip">
+                                    <span>${item}</span>
+                                    <span class="ms-chip-x" role="button" tabindex="0" data-action="remove-platform-creator-type" data-platform="${platform}" data-value="${encodeURIComponent(item)}" aria-label="移除 ${item}">×</span>
+                                  </span>
+                                `,
+                                )
+                                .join("")}</div>`
+                            : `<span class="ms-placeholder">请选择达人标签</span>`
+                        }
+                        <span class="ms-caret" aria-hidden="true">▾</span>
+                      </div>
+                      <div class="dropdown-menu ms-menu">
+                        ${creatorTypeOptions
+                          .map(
+                            (item) => `
+                            <label class="dropdown-check">
+                              <input type="checkbox" ${(config.creatorTypes || []).includes(item) ? "checked" : ""} data-action="toggle-platform-creator-type" data-platform="${platform}" data-value="${encodeURIComponent(item)}" />
+                              <span>${item}</span>
+                            </label>
+                          `,
+                          )
+                          .join("")}
+                      </div>
+                    </div>
+                    `,
+                    true,
+                    "full",
+                  )}
+                  ${field(
+                    "合作类型",
+                    `<div class="chips platform-config-chips">${cooperationTypeOptions
+                      .map(
+                        (item) =>
+                          `<button class="chip ${(config.cooperationTypes || []).includes(item) ? "active" : ""}" data-action="toggle-platform-cooperation-type" data-platform="${platform}" data-value="${encodeURIComponent(item)}">${item}</button>`,
+                      )
+                      .join("")}</div>`,
+                    true,
+                    "full",
+                  )}
+                  ${field("内容要求", `<textarea class="textarea" placeholder="请填写 ${platform} 内容要求" data-platform-name="${platform}" data-platform-field="contentRequirement">${config.contentRequirement || ""}</textarea>`, true, "full")}
+                  ${field(
+                    "平台预算",
+                    `<div class="money-single">
+                      <input class="input" placeholder="请输入预算" value="${config.platformBudget || ""}" data-platform-name="${platform}" data-platform-field="platformBudget" />
+                      <span class="money-suffix">USD</span>
+                    </div>`,
+                    true,
+                  )}
+                  ${field(
+                    "单人单价",
+                    `<div class="money-range">
+                      <input class="input" placeholder="最低" value="${config.unitPriceMin || ""}" data-platform-name="${platform}" data-platform-field="unitPriceMin" />
+                      <span class="money-range-sep">—</span>
+                      <input class="input" placeholder="最高" value="${config.unitPriceMax || ""}" data-platform-name="${platform}" data-platform-field="unitPriceMax" />
+                      <span class="money-suffix">USD</span>
+                    </div>`,
+                    false,
+                  )}
+                  ${field(
+                    "结算方式",
+                    `<select class="select" data-platform-name="${platform}" data-platform-field="settlement">
+                      <option value="固定价" ${config.settlement === "固定价" ? "selected" : ""}>固定价</option>
+                      <option value="固定CPM" ${config.settlement === "固定CPM" ? "selected" : ""}>固定CPM</option>
+                      <option value="按曝光量区间现金结算" ${config.settlement === "按曝光量区间现金结算" ? "selected" : ""}>按曝光量区间现金结算</option>
+                    </select>`,
+                    true,
+                  )}
+                  ${field(
+                    "结算周期",
+                    `<select class="select" data-platform-name="${platform}" data-platform-field="settlementCycle">
+                      ${settlementCycleOptions.map((item) => `<option value="${item}" ${config.settlementCycle === item ? "selected" : ""}>${item}</option>`).join("")}
+                    </select>`,
+                  )}
+                </div>
+              </article>
+            `;
+          })
+          .join("")}
+      </div>
+    </section>
+
+    <section class="panel publish-section-card">
+      <div class="publish-section-head">
+        <div>
+          <h2>交付与效果</h2>
+        </div>
+      </div>
+      <div class="form-grid">
+        ${field("达人报名时间", `<input class="input" value="${draft.registrationRange || ""}" placeholder="2026-06-11 ~ 2026-06-20" data-publish-field="registrationRange" />`)}
+        ${field("项目截至日期", `<input class="input" value="${draft.projectDeadline || ""}" placeholder="2026-06-30" data-publish-field="projectDeadline" />`, true)}
+        ${field("期望效果", `<select class="select" data-publish-field="expectedEffect"><option value="曝光" ${draft.expectedEffect === "曝光" ? "selected" : ""}>曝光</option><option value="点击" ${draft.expectedEffect === "点击" ? "selected" : ""}>点击</option><option value="转化" ${draft.expectedEffect === "转化" ? "selected" : ""}>转化</option></select>`, true)}
+        ${field("预估效果", `<input class="input" value="${draft.estimatedEffect || ""}" placeholder="80K" data-publish-field="estimatedEffect" />`)}
+        ${field("参考链接", `<input class="input" placeholder="请输入素材、脚本或参考内容链接" value="${draft.requirementLink || ""}" data-publish-field="requirementLink" />`, false, "full")}
+        ${field("附件", `<button class="ghost-button" data-action="toast" data-message="附件已加入上传队列">+ 上传附件</button><small class="muted">支持 PDF、PNG、JPG、JPEG，10M 以内</small>`, false, "full")}
+      </div>
+    </section>
+
+    <section class="panel publish-section-card publish-match-section">
+      <div class="publish-section-head">
+        <div>
+          <h2>匹配达人</h2>
+          <p class="subcopy">${matchReady ? "必填信息已完整，可以查看系统匹配的达人列表。" : "请先填写完整必填信息，再查看匹配达人。"}</p>
+        </div>
+        <button class="secondary-button" data-action="open-publish-match-drawer" ${matchReady ? "" : "disabled"}>查看匹配达人</button>
+      </div>
+    </section>
   `;
 }
 
@@ -2141,18 +2481,33 @@ function ensurePublishDraftPlatforms() {
 
 function publishPlatformConfigStatus(config) {
   if (!config) return { text: "未配置", cls: "empty" };
-  const requiredCount = 6;
+  const requiredCount = 5;
   const doneCount = [
     config.followerMinK && config.followerMaxK,
     config.creatorTypes && config.creatorTypes.length,
     config.cooperationTypes && config.cooperationTypes.length,
     config.contentRequirement && config.contentRequirement.trim(),
     config.platformBudget,
-    config.unitPriceMin && config.unitPriceMax,
   ].filter(Boolean).length;
   if (doneCount === 0) return { text: "未配置", cls: "empty" };
   if (doneCount < requiredCount) return { text: "待补充", cls: "pending" };
   return { text: "已完成", cls: "done" };
+}
+
+function canOpenPublishMatch() {
+  const draft = state.publishDraft;
+  ensurePublishDraftPlatforms();
+  const baseReady = [
+    draft.campaignName && draft.campaignName.trim(),
+    draft.platforms && draft.platforms.length,
+    draft.countries && draft.countries.length,
+    draft.productName && draft.productName.trim(),
+    draft.registrationRange && draft.registrationRange.trim(),
+    draft.projectDeadline && draft.projectDeadline.trim(),
+    draft.expectedEffect && draft.expectedEffect.trim(),
+  ].every(Boolean);
+  const platformReady = draft.platforms.every((platform) => publishPlatformConfigStatus(draft.platformConfigs[platform]).cls === "done");
+  return baseReady && platformReady;
 }
 
 function getPublishAreaGroup(area = "") {
@@ -2269,8 +2624,8 @@ function publishForm(inModal = true) {
               <div class="ms-trigger" role="button" tabindex="0" data-action="toggle-publish-area-menu" aria-expanded="${draft.areaMenuOpen ? "true" : "false"}">
                 ${
                   draft.areas.length
-                    ? chipsView(draft.areas, "remove-publish-area", 6)
-                    : `<span class="ms-placeholder">请选择推广地区</span>`
+                    ? chipsView(draft.countries, "remove-publish-country", 6)
+                    : `<span class="ms-placeholder">请选择推广国家/地区</span>`
                 }
                 <span class="ms-caret" aria-hidden="true">▾</span>
               </div>
@@ -2393,13 +2748,12 @@ function publishForm(inModal = true) {
               <div class="publish-section-head">
                 <div>
                   <h3>通用投放信息</h3>
-                  <p class="subcopy">这部分信息对所有已选平台共用。</p>
                 </div>
               </div>
               <div class="form-grid">
                 ${field("达人报名时间", `<input class="input" value="${draft.registrationRange || ""}" data-publish-field="registrationRange" />`)}
-                ${field("项目截至日期", `<input class="input" value="${draft.projectDeadline || ""}" data-publish-field="projectDeadline" />`)}
-                ${field("期望效果", `<select class="select" data-publish-field="expectedEffect"><option value="曝光" ${draft.expectedEffect === "曝光" ? "selected" : ""}>曝光</option><option value="点击" ${draft.expectedEffect === "点击" ? "selected" : ""}>点击</option><option value="转化" ${draft.expectedEffect === "转化" ? "selected" : ""}>转化</option></select>`)}
+                ${field("项目截至日期", `<input class="input" value="${draft.projectDeadline || ""}" data-publish-field="projectDeadline" />`, true)}
+                ${field("期望效果", `<select class="select" data-publish-field="expectedEffect"><option value="曝光" ${draft.expectedEffect === "曝光" ? "selected" : ""}>曝光</option><option value="点击" ${draft.expectedEffect === "点击" ? "selected" : ""}>点击</option><option value="转化" ${draft.expectedEffect === "转化" ? "selected" : ""}>转化</option></select>`, true)}
                 ${field("预估效果", `<input class="input" value="${draft.estimatedEffect || ""}" data-publish-field="estimatedEffect" />`)}
               </div>
             </section>
@@ -2431,7 +2785,7 @@ function publishForm(inModal = true) {
                     <input class="input" placeholder="最高" value="${activeConfig.unitPriceMax || ""}" data-platform-field="unitPriceMax" />
                     <span class="money-suffix">USD</span>
                   </div>`,
-                  true,
+                  false,
                 )}
                 ${field(
                   "结算方式",
@@ -2572,7 +2926,7 @@ function publishControls(inModal = true) {
       </div>
       <div class="modal-foot-right">
         ${step === 0 ? "" : `<button class="ghost-button" data-action="publish-prev">上一步</button>`}
-        ${step === 2 ? `<button class="ghost-button" data-action="open-publish-match-drawer">查看匹配达人</button>` : ""}
+        ${step === 2 ? `<button class="ghost-button" data-action="open-publish-match-drawer" ${canOpenPublishMatch() ? "" : "disabled"}>查看匹配达人</button>` : ""}
         <button class="primary-button" data-action="${step === 2 ? "submit-publish" : "publish-next"}">${step === 2 ? "确认发布" : "下一步"}</button>
       </div>
     </div>
@@ -2703,7 +3057,7 @@ function renderTalentManagement() {
     )}
     ${metrics([
       { label: "资源池达人", value: "2,381", delta: "+126 本月" },
-      { label: "已签约", value: "486", delta: "20.4%" },
+      { label: "收藏达人", value: "486", delta: "可快速邀约" },
       { label: "可邀约", value: "1,842", delta: "+7.6%" },
       { label: "平均互动率", value: "4.2%", delta: "+0.3%" },
     ])}
@@ -2712,11 +3066,11 @@ function renderTalentManagement() {
         <div class="table-head"><h2>近期达人池</h2><button class="secondary-button" data-nav="talentSearch">进入达人搜索</button></div>
         <div class="table-wrap">
           <table>
-            <thead><tr><th>达人</th><th>分类</th><th>粉丝数</th><th>平均曝光量</th><th>互动率</th><th>状态</th><th>操作</th></tr></thead>
+            <thead><tr><th>达人</th><th>分类</th><th>粉丝数</th><th>平均曝光量</th><th>互动率</th><th>收藏状态</th><th>操作</th></tr></thead>
             <tbody>
               ${creators
                 .map(
-                  (row) => `<tr><td><strong>${row.name}</strong><br /><span class="muted">${row.platform}</span></td><td>${row.category}</td><td>${row.fans}</td><td>${row.avgViews}</td><td>${row.engagement}</td><td>${status("未签约", "pending")}</td><td><button class="link-button" data-action="modal-invite">邀请</button></td></tr>`,
+                  (row) => `<tr><td><strong>${row.name}</strong><br /><span class="muted">${row.platform}</span></td><td>${row.category}</td><td>${row.fans}</td><td>${row.avgViews}</td><td>${row.engagement}</td><td>${status(row.contract, row.contract === "已收藏" ? "success" : "pending")}</td><td><button class="link-button" data-action="modal-invite">邀请</button></td></tr>`,
                 )
                 .join("")}
             </tbody>
@@ -2849,7 +3203,7 @@ function renderTalentSearch() {
     ${pageHeader(
       "达人搜索",
       "达人搜索",
-      "按达人分类、签约状态、平台与表现数据筛选创作者。",
+      "按达人分类、收藏状态、平台与表现数据筛选创作者。",
       `<button class="secondary-button" data-nav="collaborators">合作达人</button>`,
     )}
     <div class="talent-search-fixed">
@@ -2961,20 +3315,21 @@ function renderTalentSearch() {
             ${state.talentSearchFilters.expanded ? "收起" : "展开"}
           </button>
         </div>
-        <div class="filter-row">
+        <div class="filter-row talent-contract-row">
           <div class="filter-label">达人筛选：</div>
           <div class="filter-content">
             <select class="select" data-talent-filter="contract">
               ${[
-                { value: "全部", text: "签约状态" },
-                { value: "已签约", text: "已签约" },
-                { value: "未签约", text: "未签约" },
+                { value: "全部", text: "收藏状态" },
+                { value: "已收藏", text: "已收藏" },
+                { value: "未收藏", text: "未收藏" },
               ]
                 .map((x) => `<option value="${x.value}" ${state.talentSearchFilters.contract === x.value ? "selected" : ""}>${x.text}</option>`)
                 .join("")}
             </select>
           </div>
         </div>
+        ${renderTalentSelectedConditions()}
       </div>
     </div>
     <div class="table-card talent-list-card">
@@ -3265,15 +3620,9 @@ function renderOpportunityHall() {
   `;
 }
 
-function renderTaskDetail() {
+function renderTaskDetailBody() {
   const statusView = applicationStatusView(applicationDetail.statusKey);
   return `
-    ${pageHeader(
-      "达人端",
-      "任务详情",
-      "查看任务信息、达人要求、内容要求与招募价格。",
-      `<button class="secondary-button" data-nav="opportunityHall">返回机会大厅</button>`,
-    )}
     <div class="task-detail-layout">
       <div class="panel task-summary-card">
         <div class="task-summary-head">任务名称</div>
@@ -3369,6 +3718,18 @@ function renderTaskDetail() {
   `;
 }
 
+function renderTaskDetail() {
+  return `
+    ${pageHeader(
+      "达人端",
+      "任务详情",
+      "查看任务信息、达人要求、内容要求与招募价格。",
+      `<button class="secondary-button" data-nav="opportunityHall">返回机会大厅</button>`,
+    )}
+    ${renderTaskDetailBody()}
+  `;
+}
+
 function renderApplications() {
   return `
     ${pageHeader(
@@ -3381,7 +3742,7 @@ function renderApplications() {
       <div class="table-head"><h2>已报名记录</h2><span class="muted">共 1 条</span></div>
       <div class="table-wrap">
         <table>
-          <thead><tr><th>报名任务</th><th>报名理由</th><th>报名状态</th><th>反馈时间</th><th>备注</th><th>操作</th></tr></thead>
+          <thead><tr><th>报名任务</th><th>报名账号</th><th>报名理由</th><th>报名状态</th><th>反馈时间</th><th>备注</th><th>操作</th></tr></thead>
           <tbody>${applicationRows()}</tbody>
         </table>
       </div>
@@ -3413,7 +3774,7 @@ function renderInvitations() {
       <div class="table-head"><h2>任务名称</h2><button class="ghost-button" data-action="toast" data-message="邀请状态已刷新">刷新</button></div>
       <div class="table-wrap">
         <table>
-          <thead><tr><th>任务名称</th><th>合作类型</th><th>结算方式</th><th>报价(USD)</th><th>期望发布时间</th><th>状态</th><th>操作</th></tr></thead>
+          <thead><tr><th>任务名称</th><th>邀请时间</th><th>合作类型</th><th>结算方式</th><th>报价(USD)</th><th>期望发布时间</th><th>状态</th><th>操作</th></tr></thead>
           <tbody>${invitationRows()}</tbody>
         </table>
       </div>
@@ -3432,7 +3793,7 @@ function renderMyProjects() {
     <div class="filter-bar sticky">
       <input class="input" placeholder="搜索或选择任务名称" />
       <select class="select"><option>全部平台</option><option>YouTube</option><option>TikTok</option><option>Instagram</option><option>Twitch</option><option>Twitter</option><option>Facebook</option><option>Others</option></select>
-      <select class="select"><option>请选择交付进度</option><option>脚本待提交</option><option>初稿待确认</option><option>待发布</option><option>审核被拒</option></select>
+      <select class="select"><option>请选择交付进度</option><option>待提交</option><option>待平台审核</option><option>待广告主审核</option><option>审核被拒</option><option>审核通过</option><option>已完成</option></select>
     </div>
     <div class="tabs">
       ${tabButton("myProjects", "active", "合作中")}
@@ -3453,20 +3814,29 @@ function renderMyProjects() {
 function renderRevenue() {
   return `
     ${pageHeader(
-      "收益中心",
+      "履约数据",
       "我的收益",
-      "该入口出现在原型导航中，但源文件夹没有独立收益页面；这里补齐为收益概览。",
+      "当前达人端暂未接入结算模块，金额类信息以 - 展示，可查看已发布内容和效果回传情况。",
       `<button class="secondary-button" data-nav="myProjects">返回我的任务</button>`,
     )}
     ${metrics([
-      { label: "待结算金额", value: "$280", delta: "2 个项目" },
-      { label: "本月收益", value: "$1.2K", delta: "+12%" },
-      { label: "已完成发布", value: "9", delta: "+3 条" },
+      { label: "待结算金额", value: "-", delta: "暂未接入结算" },
+      { label: "本月收益", value: "-", delta: "暂未接入结算" },
+      { label: "已完成发布", value: "9", delta: "已回传作品" },
       { label: "实际完成值", value: "186K", delta: "曝光" },
     ])}
     <div class="panel" style="margin-top:16px">
-      <h2>结算明细</h2>
-      <p class="subcopy">收益页可继续接入付款状态、发票信息和提现记录。</p>
+      <h2>履约数据</h2>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>任务名称</th><th>发布状态</th><th>实际完成值</th><th>收益金额</th><th>结算状态</th></tr></thead>
+          <tbody>
+            <tr><td>全境封锁-全球活动</td><td>${status("已发布", "success")}</td><td>126K 曝光</td><td>-</td><td>-</td></tr>
+            <tr><td>MINISO 夏季新品内容合作</td><td>${status("内容审核中", "pending")}</td><td>-</td><td>-</td><td>-</td></tr>
+            <tr><td>全境封锁2-上线活动</td><td>${status("已发布", "success")}</td><td>60K 曝光</td><td>-</td><td>-</td></tr>
+          </tbody>
+        </table>
+      </div>
     </div>
   `;
 }
@@ -3831,7 +4201,14 @@ function renderCampaignFulfillment() {
                     .map(
                       (row) => `
                       <tr>
-                        <td><div class="row-title"><img src="${row.platform.includes("TikTok") ? assets.talentAvatar1 : assets.talentAvatar2}" alt="" /><span><strong>${row.creator}</strong><small>${row.creatorId} · ${row.platform}</small></span></div></td>
+                        <td>
+                          <div class="row-title">
+                            <button class="avatar-button" data-action="drawer-creator" data-name="${row.creator}" aria-label="查看 ${row.creator} 达人档案">
+                              <img src="${row.platform.includes("TikTok") ? assets.talentAvatar1 : assets.talentAvatar2}" alt="" />
+                            </button>
+                            <span><strong>${row.creator}</strong><small>${row.creatorId} · ${row.platform}</small></span>
+                          </div>
+                        </td>
                         <td>${status(row.cooperationStatus, row.cooperationStatus.includes("待") ? "pending" : "running")}</td>
                         <td>${row.deliverableStatus}</td>
                         <td>${row.operationReview}</td>
@@ -4510,29 +4887,61 @@ function openCampaignInfoModal(campaignName = "") {
     return;
   }
 
-  openModal(
-    `
-    <div class="modal-head">
-      <div><h2>任务信息</h2><p class="subcopy">${target.name || campaignName}</p></div>
-      <button class="close-button" data-action="close-overlay" aria-label="关闭">×</button>
-    </div>
-    <div class="modal-body">
-      <div class="form-grid">
-        ${field("任务名称", `<div class="note-box">${target.name || "-"}</div>`, false)}
-        ${field("推广平台", `<div class="note-box">${target.platform || "-"}</div>`, false)}
-        ${field("推广产品", `<div class="note-box">${target.product || "-"}</div>`, false)}
-        ${field("推广地区", `<div class="note-box">${target.region || "-"}</div>`, false)}
-        ${field("预算", `<div class="note-box">${target.budget || "-"}</div>`, false)}
-        ${field("截止时间", `<div class="note-box">${target.deadline || "-"}</div>`, false)}
-        ${field("达人要求", `<div class="note-box">${target.requirement || "请查看任务详情页"}</div>`, false, "full")}
+  modalRoot.innerHTML = `
+    <div class="drawer-backdrop" data-action="close-overlay"></div>
+    <aside class="drawer campaign-info-drawer" role="dialog" aria-modal="true">
+      <div class="drawer-head">
+        <div>
+          <h2>任务详情</h2>
+          <p class="subcopy">${target.name || campaignName}</p>
+        </div>
+        <button class="close-button" data-action="close-overlay" aria-label="关闭">×</button>
       </div>
-    </div>
-    <div class="modal-foot">
-      <button class="primary-button" data-action="close-overlay">我知道了</button>
-    </div>
-  `,
-    false,
-  );
+      <div class="drawer-body">
+        <div class="campaign-info-summary">
+          <strong>${target.name || "-"}</strong>
+          <span>${target.product || "推广产品"} · ${target.platform || "推广平台"}</span>
+        </div>
+        <div class="campaign-info-grid">
+          <div><span>推广平台</span><strong>${target.platform || "-"}</strong></div>
+          <div><span>推广产品</span><strong>${target.product || "-"}</strong></div>
+          <div><span>推广地区</span><strong>${target.region || "-"}</strong></div>
+          <div><span>预算</span><strong>${target.budget || "-"}</strong></div>
+          <div><span>截止时间</span><strong>${target.deadline || "-"}</strong></div>
+          <div><span>任务状态</span><strong>${target.status || "合作中"}</strong></div>
+        </div>
+        <div class="campaign-info-block">
+          <h3>达人要求</h3>
+          <div class="note-box">${target.requirement || "请查看任务详情页"}</div>
+        </div>
+      </div>
+      <div class="drawer-foot">
+        <button class="ghost-button" data-action="close-overlay">关闭</button>
+        <button class="primary-button" data-nav="taskReview">查看完整任务</button>
+      </div>
+    </aside>
+  `;
+}
+
+function openCreatorTaskDetailDrawer(taskName = "") {
+  modalRoot.innerHTML = `
+    <div class="drawer-backdrop" data-action="close-overlay"></div>
+    <aside class="drawer task-detail-drawer" role="dialog" aria-modal="true">
+      <div class="drawer-head">
+        <div>
+          <h2>任务详情</h2>
+          <p class="subcopy">${taskName || taskDetailProfile.displayTitle}</p>
+        </div>
+        <button class="close-button" data-action="close-overlay" aria-label="关闭">×</button>
+      </div>
+      <div class="drawer-body">
+        ${renderTaskDetailBody()}
+      </div>
+      <div class="drawer-foot">
+        <button class="ghost-button" data-action="close-overlay">关闭</button>
+      </div>
+    </aside>
+  `;
 }
 
 function refreshPublishModal() {
@@ -4752,32 +5161,53 @@ function openCreatorDrawer(name = "Mika Studio") {
   `;
 }
 
+function buildFulfillmentFlow(row) {
+  const progress = row.progress || "";
+  const statusText = row.status || "";
+  const isRejected = progress.includes("拒") || statusText.includes("拒");
+  const currentIndex = (() => {
+    if (statusText === "已发布") return 8;
+    if (progress === "待发布") return 7;
+    if (statusText === "待审核" || progress === "内容审核中") return 4;
+    if (progress === "内容制作中") return 2;
+    if (statusText === "待确认合作") return 0;
+    return 1;
+  })();
+  const activeIndex = isRejected ? 5 : Math.max(0, Math.min(currentIndex, 8));
+  const applyTime = row.applyTime || row.acceptTime || "2026-6-5 10:59:20";
+  const approveTime = row.platformApproveTime || row.acceptTime || "2026-6-6 11:20:00";
+  const submitTime = row.contentSubmitTime || "2026-6-8 18:30:00";
+  const platformReviewTime = row.platformReviewTime || "2026-6-9 10:00:00";
+  const brandReviewTime = row.brandReviewTime || "2026-6-10 15:30:00";
+  const publishTime = row.publishTime || row.due || "-";
+  const rejectReason = row.rejectReason || "内容与任务要求不完全一致，请补充品牌露出并重新提交。";
+  const nodes = [
+    { title: "达人报名", time: applyTime, desc: `${row.creator} 提交报名，等待平台审核。` },
+    { title: "审核通过", time: approveTime, desc: "平台已审核通过，达人进入履单流程。" },
+    { title: "内容制作中", time: row.due || "-", desc: `达人正在制作内容，预计交付日期 ${row.due || "-"}。` },
+    { title: "内容初审中（平台）", time: submitTime, desc: "达人已提交内容，平台进行基础合规与素材完整性初审。" },
+    { title: "内容复审中（广告主）", time: platformReviewTime, desc: "平台初审通过，等待广告主确认内容是否符合投放要求。" },
+    { title: "内容被拒", time: brandReviewTime, desc: `被拒理由：${rejectReason}` },
+    { title: "内容审核通过", time: brandReviewTime, desc: "广告主已确认内容，可进入发布安排。" },
+    { title: "内容发布中", time: publishTime, desc: "达人按计划发布内容，等待链接与数据回传。" },
+    { title: "内容已发布", time: publishTime, desc: row.tracking || "内容已发布，等待效果数据回流。" },
+  ];
+
+  return nodes
+    .filter((item) => isRejected || item.title !== "内容被拒")
+    .map((item, index) => {
+      const originalIndex = nodes.indexOf(item);
+      const stateClass = originalIndex < activeIndex ? "done" : originalIndex === activeIndex ? "active" : "pending";
+      return { ...item, stateClass };
+    });
+}
+
 function openDeliveryDrawer(creatorKey = "") {
   const row =
     collaborations.find((item) => (item.creatorId || item.creator) === creatorKey) ||
     collaborations.find((item) => item.creator === creatorKey) ||
     collaborations[0];
-  const timelineItems =
-    row.status === "已发布"
-      ? [
-          { title: "内容制作中", desc: `达人按要求完成内容制作，交付截至 ${row.due}。` },
-          { title: "待发布", desc: `已确认发布时间，发布于 ${row.publishTime || row.due}。` },
-          { title: "效果追踪", desc: row.tracking || "效果数据回流中。" },
-          { title: "已完成", desc: `已完成发布与追踪，结算金额 ${row.settleAmount || "-"}。` },
-        ]
-      : row.status === "待审核" || row.progress === "内容审核中"
-        ? [
-            { title: "内容制作中", desc: `达人已提交内容，交付截至 ${row.due}。` },
-            { title: "待审核", desc: "当前内容已提交，等待广告主审核结果。" },
-          ]
-        : row.progress === "待发布"
-          ? [
-              { title: "内容制作中", desc: `内容已制作完成，交付截至 ${row.due}。` },
-              { title: "待发布", desc: "当前已进入待发布阶段，等待达人按计划发布。" },
-            ]
-          : [
-              { title: "内容制作中", desc: `当前处于内容制作阶段，预计交付日期 ${row.due}。` },
-            ];
+  const timelineItems = buildFulfillmentFlow(row);
   const footer =
     row.status === "待审核" || row.progress === "内容审核中"
       ? `
@@ -4802,11 +5232,17 @@ function openDeliveryDrawer(creatorKey = "") {
         <div class="deliver-placeholders single" aria-label="交付内容占位">
           <div class="deliver-item"><span class="deliver-badge">${row.status === "已发布" ? "发布结果" : "附件"}</span><span class="deliver-desc">${row.status === "已发布" ? row.tracking || "已发布，等待数据回流" : "交付附件（占位）"}</span></div>
         </div>
-        <div class="timeline" style="margin-top:16px">
+        <div class="fulfillment-flow" aria-label="达人报名与履单状态信息流">
           ${timelineItems
             .map(
               (item) => `
-              <div class="timeline-item"><span class="timeline-dot"></span><div><strong>${item.title}</strong><p>${item.desc}</p></div></div>
+              <div class="fulfillment-flow-item ${item.stateClass}">
+                <span class="fulfillment-flow-dot"></span>
+                <div>
+                  <div class="fulfillment-flow-head"><strong>${item.title}</strong><span>${item.time}</span></div>
+                  <p>${item.desc}</p>
+                </div>
+              </div>
             `,
             )
             .join("")}
@@ -4826,6 +5262,7 @@ function openAdminFulfillmentDrawer(campaignName = "", creatorId = "") {
     { title: "报名通过", desc: "达人已通过审核，进入合作流程。" },
     { title: "合作推进中", desc: "当前任务正在推进履约，请继续跟进交付进度。" },
   ];
+  const currentNode = timelineItems[timelineItems.length - 1];
   modalRoot.innerHTML = `
     <div class="drawer-backdrop" data-action="close-overlay"></div>
     <aside class="drawer" role="dialog" aria-modal="true">
@@ -4839,12 +5276,12 @@ function openAdminFulfillmentDrawer(campaignName = "", creatorId = "") {
           <div class="mini-stat"><span>交付状态</span><strong>${row.deliverableStatus}</strong></div>
           <div class="mini-stat"><span>结算状态</span><strong>${row.settlementStatus}</strong></div>
         </div>
-        <div class="note-box" style="margin-top:12px">平台审核：${row.operationReview} ｜ 广告主审核：${row.brandReview} ｜ 发布状态：${row.publishStatus} ｜ 截止时间：${row.due}</div>
-        <div class="timeline" style="margin-top:16px">
+        <div class="note-box" style="margin-top:12px">当前状态：${currentNode?.title || row.deliverableStatus}</div>
+        <div class="timeline admin-fulfillment-timeline" style="margin-top:16px">
           ${timelineItems
             .map(
-              (item) => `
-              <div class="timeline-item"><span class="timeline-dot"></span><div><strong>${item.title}</strong><p>${item.desc}</p></div></div>
+              (item, index) => `
+              <div class="timeline-item ${index === timelineItems.length - 1 ? "current" : ""}"><span class="timeline-dot"></span><div><strong>${item.title}</strong><p>${item.desc}</p></div></div>
             `,
             )
             .join("")}
@@ -4947,7 +5384,12 @@ function toast(message, title = "操作成功") {
 
 function handleAction(action, target) {
   const message = target.dataset.message || "已完成操作";
-  if (action === "open-publish") openPublishModal();
+  if (action === "open-publish") {
+    state.publishStep = 0;
+    state.publishDraft.matchDrawerOpen = false;
+    openPublishModal();
+    return;
+  }
   if (action === "select-publish-platform-tab") {
     state.publishDraft.activePlatform = target.dataset.platform || state.publishDraft.activePlatform;
     state.publishDraft.creatorTypeMenuOpen = false;
@@ -5047,7 +5489,7 @@ function handleAction(action, target) {
   }
   if (action === "toggle-platform-creator-type") {
     ensurePublishDraftPlatforms();
-    const platform = state.publishDraft.activePlatform;
+    const platform = target.dataset.platform || state.publishDraft.activePlatform;
     const value = decodeURIComponent(target.dataset.value || "");
     const next = new Set(state.publishDraft.platformConfigs[platform].creatorTypes || []);
     if (next.has(value)) next.delete(value);
@@ -5058,7 +5500,7 @@ function handleAction(action, target) {
   }
   if (action === "toggle-platform-cooperation-type") {
     ensurePublishDraftPlatforms();
-    const platform = state.publishDraft.activePlatform;
+    const platform = target.dataset.platform || state.publishDraft.activePlatform;
     const value = decodeURIComponent(target.dataset.value || "");
     const next = new Set(state.publishDraft.platformConfigs[platform].cooperationTypes || []);
     if (next.has(value)) next.delete(value);
@@ -5069,15 +5511,16 @@ function handleAction(action, target) {
   }
   if (action === "copy-previous-platform-requirements") {
     ensurePublishDraftPlatforms();
-    const currentIndex = state.publishDraft.platforms.indexOf(state.publishDraft.activePlatform);
+    const targetPlatform = target.dataset.platform || state.publishDraft.activePlatform;
+    const currentIndex = state.publishDraft.platforms.indexOf(targetPlatform);
     const previousPlatform = currentIndex > 0 ? state.publishDraft.platforms[currentIndex - 1] : "";
     if (!previousPlatform) {
       toast("当前没有可沿用的上一个平台要求");
       return;
     }
     const previous = { ...state.publishDraft.platformConfigs[previousPlatform] };
-    state.publishDraft.platformConfigs[state.publishDraft.activePlatform] = {
-      ...state.publishDraft.platformConfigs[state.publishDraft.activePlatform],
+    state.publishDraft.platformConfigs[targetPlatform] = {
+      ...state.publishDraft.platformConfigs[targetPlatform],
       creatorCount: previous.creatorCount,
       followerMinK: previous.followerMinK,
       followerMaxK: previous.followerMaxK,
@@ -5090,7 +5533,10 @@ function handleAction(action, target) {
     return;
   }
   if (action === "toggle-publish-creator-types") {
-    state.publishDraft.creatorTypeMenuOpen = !state.publishDraft.creatorTypeMenuOpen;
+    const platform = target.dataset.platform || state.publishDraft.activePlatform;
+    const isSameOpen = state.publishDraft.creatorTypeMenuOpen && state.publishDraft.creatorTagMenuPlatform === platform;
+    state.publishDraft.creatorTypeMenuOpen = !isSameOpen;
+    state.publishDraft.creatorTagMenuPlatform = platform;
     state.publishDraft.platformMenuOpen = false;
     state.publishDraft.countryMenuOpen = false;
     state.publishDraft.areaMenuOpen = false;
@@ -5101,7 +5547,7 @@ function handleAction(action, target) {
   if (action === "remove-platform-creator-type") {
     ensurePublishDraftPlatforms();
     const value = decodeURIComponent(target.dataset.value || "");
-    const platform = state.publishDraft.activePlatform;
+    const platform = target.dataset.platform || state.publishDraft.activePlatform;
     state.publishDraft.platformConfigs[platform].creatorTypes = (state.publishDraft.platformConfigs[platform].creatorTypes || []).filter((x) => x !== value);
     refreshPublishModal();
     return;
@@ -5125,6 +5571,10 @@ function handleAction(action, target) {
     return;
   }
   if (action === "open-publish-match-drawer") {
+    if (!canOpenPublishMatch()) {
+      toast("请先填写完整必填信息，再查看匹配达人");
+      return;
+    }
     state.publishDraft.matchDrawerOpen = true;
     refreshPublishModal();
     return;
@@ -5456,6 +5906,19 @@ function handleAction(action, target) {
     render();
     return;
   }
+  if (action === "remove-talent-selected-filter") {
+    const key = target.dataset.filterKey;
+    if (key && key in state.talentSearchFilters) {
+      state.talentSearchFilters[key] = "全部";
+    }
+    render();
+    return;
+  }
+  if (action === "clear-talent-selected-filters") {
+    resetTalentSearchFilters();
+    render();
+    return;
+  }
   if (action === "preview-sample-promotions") {
     openSamplePromotionsModal();
     return;
@@ -5550,7 +6013,7 @@ function handleAction(action, target) {
     render();
   }
   if (action === "open-task-detail") {
-    go("taskDetail");
+    openCreatorTaskDetailDrawer(decodeURIComponent(target.dataset.task || ""));
     return;
   }
   if (action === "modal-upload") openUploadModal();
@@ -5659,7 +6122,7 @@ document.addEventListener("input", (event) => {
   if (!fieldTarget) return;
   ensurePublishDraftPlatforms();
   const key = fieldTarget.dataset.platformField;
-  const platform = state.publishDraft.activePlatform;
+  const platform = fieldTarget.dataset.platformName || state.publishDraft.activePlatform;
   state.publishDraft.platformConfigs[platform][key] = fieldTarget.value;
 });
 
@@ -5668,7 +6131,7 @@ document.addEventListener("change", (event) => {
   if (!fieldTarget) return;
   ensurePublishDraftPlatforms();
   const key = fieldTarget.dataset.platformField;
-  const platform = state.publishDraft.activePlatform;
+  const platform = fieldTarget.dataset.platformName || state.publishDraft.activePlatform;
   state.publishDraft.platformConfigs[platform][key] = fieldTarget.value;
 });
 
