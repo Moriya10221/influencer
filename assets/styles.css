@@ -368,6 +368,7 @@ button {
   gap: 10px;
   cursor: pointer;
   user-select: none;
+  overflow: hidden;
 }
 
 .multi-select-input.open .dropdown-menu {
@@ -2655,6 +2656,192 @@ tr:last-child td {
   }
 }
 
+.social-auth-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 14px;
+}
+
+.social-auth-head h2 {
+  margin: 0 0 4px;
+}
+
+.social-auth-count {
+  flex: 0 0 auto;
+  padding: 7px 12px;
+  border-radius: 999px;
+  background: #fdf2f8;
+  color: #db2777;
+  font-size: 13px;
+  font-weight: 800;
+}
+
+.social-auth-note {
+  display: grid;
+  gap: 4px;
+  padding: 12px 14px;
+  border: 1px solid rgba(99, 102, 241, 0.16);
+  border-radius: 14px;
+  background: linear-gradient(135deg, rgba(239, 246, 255, 0.9), rgba(253, 242, 248, 0.72));
+  color: #42526e;
+  margin-bottom: 14px;
+}
+
+.social-auth-note strong {
+  color: var(--ink);
+}
+
+.social-auth-note span {
+  font-size: 13px;
+  line-height: 1.45;
+}
+
+.social-auth-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.social-auth-card {
+  display: grid;
+  gap: 10px;
+  padding: 14px;
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.78);
+}
+
+.social-auth-main {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-width: 0;
+}
+
+.social-auth-main strong,
+.social-auth-main span {
+  display: block;
+}
+
+.social-auth-icon {
+  width: 36px;
+  height: 36px;
+  border-radius: 12px;
+  background: #fff;
+  border: 1px solid var(--line);
+  display: grid;
+  place-items: center;
+  flex: 0 0 auto;
+}
+
+.social-auth-icon img {
+  width: 22px;
+  height: 22px;
+  object-fit: contain;
+}
+
+.social-letter {
+  font-size: 18px;
+  font-weight: 900;
+  color: #111827;
+  line-height: 1;
+}
+
+.social-letter.fb {
+  color: #1877f2;
+  font-size: 24px;
+  font-family: Arial, sans-serif;
+}
+
+.social-auth-status {
+  margin-top: 3px;
+  font-size: 12px;
+  font-weight: 800;
+}
+
+.social-auth-status.success {
+  color: #059669;
+}
+
+.social-auth-status.pending {
+  color: #b45309;
+}
+
+.social-auth-status.muted {
+  color: var(--muted);
+}
+
+.social-auth-meta,
+.social-account-empty {
+  color: var(--muted);
+  font-size: 12px;
+}
+
+.social-account-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  min-height: 26px;
+}
+
+.social-account-list span {
+  max-width: 100%;
+  padding: 5px 8px;
+  border-radius: 999px;
+  background: #f8fafc;
+  color: #475569;
+  font-size: 12px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.social-auth-action {
+  justify-self: start;
+  min-height: 34px;
+  padding: 7px 12px;
+}
+
+.auth-flow-steps {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 8px;
+  margin-bottom: 16px;
+}
+
+.auth-flow-steps span {
+  padding: 10px 12px;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  color: #64748b;
+  font-weight: 800;
+  font-size: 13px;
+  background: #fff;
+}
+
+.auth-flow-steps .active {
+  color: #db2777;
+  border-color: rgba(236, 72, 153, 0.28);
+  background: #fdf2f8;
+}
+
+.upload-line {
+  width: 100%;
+  justify-content: center;
+}
+
+@media (max-width: 980px) {
+  .social-auth-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .social-auth-head {
+    flex-direction: column;
+  }
+}
+
 .promotion-empty-state {
   display: grid;
   gap: 18px;
@@ -3353,7 +3540,8 @@ tr:last-child td {
 
 .modal-body {
   flex: 0 1 auto;
-  max-height: calc(100vh - 210px);
+  max-height: min(620px, calc(100vh - 210px));
+  overflow-x: hidden;
 }
 
 .modal-foot,

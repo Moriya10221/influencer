@@ -75,8 +75,8 @@ const state = {
     region: "东南亚",
     campaignName: "MINISO 夏季新品内容合作",
     platforms: ["TikTok", "YouTube"],
-    countries: ["新加坡", "马来西亚", "泰国", "越南", "印度尼西亚", "菲律宾"],
-    areas: ["东南亚"],
+    countries: [],
+    areas: [],
     productName: "MINISO 香氛系列",
     productLink: "",
     productDesc: "新品香氛系列，适合生活方式与美妆垂类内容。",
@@ -420,6 +420,52 @@ function platformLogo(platformName = "") {
   return `<span class="platform-logo-fallback">${platformName || "-"}</span>`;
 }
 
+function socialPlatformIcon(platformName = "") {
+  const normalized = String(platformName || "").toLowerCase();
+  if (normalized.includes("tiktok")) return `<img src="${assets.tiktokLogo}" alt="" />`;
+  if (normalized.includes("youtube")) return `<img src="${assets.youtubeLogo}" alt="" />`;
+  if (normalized.includes("twitch")) return `<img src="${assets.twitchLogo}" alt="" />`;
+  if (normalized.includes("instagram")) return `<img src="${assets.instagramLogo}" alt="" />`;
+  if (normalized.includes("twitter")) return `<span class="social-letter x">X</span>`;
+  if (normalized.includes("facebook")) return `<span class="social-letter fb">f</span>`;
+  return `<span class="social-letter">${String(platformName || "-").slice(0, 1)}</span>`;
+}
+
+function creatorSocialPlatforms() {
+  return [
+    {
+      name: "TikTok",
+      statusText: "已认证",
+      statusClass: "success",
+      accounts: ["Mika Studio", "Mika Beauty Lab"],
+      metrics: "最高粉丝 744.15万",
+      usage: "报名合作任务、数据回传",
+      updatedAt: "2026-06-12",
+    },
+    {
+      name: "YouTube",
+      statusText: "已认证",
+      statusClass: "success",
+      accounts: ["Nova Plays"],
+      metrics: "平均互动率 4.1%",
+      usage: "长视频合作、品牌邀约",
+      updatedAt: "2026-06-10",
+    },
+    {
+      name: "Instagram",
+      statusText: "审核中",
+      statusClass: "pending",
+      accounts: ["mika.trend"],
+      metrics: "预计 1 个工作日内完成",
+      usage: "内容种草、图片素材",
+      updatedAt: "2026-06-15",
+    },
+    { name: "Twitch", statusText: "未认证", statusClass: "muted", accounts: [], metrics: "可添加直播账号", usage: "-", updatedAt: "-" },
+    { name: "Twitter", statusText: "未认证", statusClass: "muted", accounts: [], metrics: "可添加社媒账号", usage: "-", updatedAt: "-" },
+    { name: "Facebook", statusText: "未认证", statusClass: "muted", accounts: [], metrics: "可添加主页或个人号", usage: "-", updatedAt: "-" },
+  ];
+}
+
 function parseRegionTokens(region = "") {
   return String(region || "")
     .split("/")
@@ -516,6 +562,7 @@ const creatorNav = [
   ["invitations", "合作邀请", "邀"],
   ["myProjects", "我的任务", "任"],
   ["revenue", "我的收益", "收"],
+  ["socialAuth", "社媒认证", "媒"],
   ["personalCenter", "个人中心", "个"],
 ];
 
@@ -2003,7 +2050,7 @@ function collaborationRows() {
                 <td>${row.type}</td>
                 <td>${row.settlement}</td>
                 <td>${row.due}</td>
-                <td>${row.progress}</td>
+                <td>${row.progress === "待确认合作" ? "合作中" : row.progress}</td>
                 <td>${row.note || "-"}</td>
                 <td>
                   <div class="actions">
@@ -3150,9 +3197,6 @@ function openPageNotesDrawer(page = "") {
       <div class="drawer-body">
         ${content}
       </div>
-      <div class="drawer-foot">
-        <button class="ghost-button" data-action="close-overlay">关闭</button>
-      </div>
     </aside>
   `;
 }
@@ -3880,6 +3924,12 @@ function renderProjectProgressPage() {
       "查看该任务的交付节点、审核状态与操作记录。",
       `<button class="secondary-button" data-nav="myProjects">返回我的任务</button>`,
     )}
+    ${projectProgressBody(project)}
+  `;
+}
+
+function projectProgressBody(project) {
+  return `
     <div class="panel">
       <h2>${project.task}</h2>
       <div class="mini-stats" style="margin-top:12px">
@@ -3908,6 +3958,22 @@ function renderProjectProgressPage() {
         ${project.status === "已完成" ? "" : `<button class="primary-button" data-action="modal-upload">提交产物</button>`}
       </div>
     </div>
+  `;
+}
+
+function openProjectProgressDrawer(taskName = "") {
+  const project = projectRows.find((row) => row.task === taskName) || projectRows[0];
+  modalRoot.innerHTML = `
+    <div class="drawer-backdrop" data-action="close-overlay"></div>
+    <aside class="drawer" role="dialog" aria-modal="true">
+      <div class="drawer-head">
+        <div><h2>交付进度详情</h2><p class="subcopy">${project.task}</p></div>
+        <button class="close-button" data-action="close-overlay" aria-label="关闭">×</button>
+      </div>
+      <div class="drawer-body">
+        ${projectProgressBody(project)}
+      </div>
+    </aside>
   `;
 }
 
@@ -4023,6 +4089,7 @@ function renderRevenue() {
 }
 
 function renderPersonalCenter() {
+  const verifiedAccounts = creatorSocialPlatforms().filter((item) => item.accounts.length);
   return `
     ${pageHeader(
       "账号资料",
@@ -4049,17 +4116,99 @@ function renderPersonalCenter() {
               <input class="input phone-number" placeholder="请输入手机号" inputmode="tel" />
             </div>`,
           )}
-          ${field("内容领域", `<div class="chips"><button class="chip active" data-action="toggle-chip">游戏</button><button class="chip active" data-action="toggle-chip">生活方式</button><button class="chip" data-action="toggle-chip">美妆</button><button class="chip" data-action="toggle-chip">购物与零售</button></div>`, false, "full")}
+          ${field(
+            "系统识别标签",
+            `<div class="readonly-tags">
+              <span>游戏</span>
+              <span>生活方式</span>
+              <span>测评</span>
+              <span>短视频种草</span>
+            </div>
+            <small class="muted">标签由平台根据已认证账号内容、历史合作和审核结果生成，用于任务匹配，达人不可自行修改。</small>`,
+            false,
+            "full",
+          )}
           ${field("个人简介", `<textarea class="textarea">专注 TikTok / YouTube 游戏与生活方式内容，擅长短视频种草、直播转化和产品测评。</textarea>`, false, "full")}
         </div>
       </div>
       <div class="panel">
-        <h2>平台账号</h2>
-        <div class="timeline" style="margin-top:14px">
-          <div class="timeline-item"><span class="timeline-dot"></span><div><strong>TikTok · Mika Studio</strong><p>粉丝数 744.15万 · 平均曝光量 161.10万</p></div></div>
-          <div class="timeline-item"><span class="timeline-dot"></span><div><strong>YouTube · Nova Plays</strong><p>粉丝数 161.10万 · 互动率 4.1%</p></div></div>
-          <div class="timeline-item"><span class="timeline-dot"></span><div><strong>收款信息</strong><p>固定价任务可按平台结算周期进入收益中心。</p></div></div>
+        <div class="table-head compact-head">
+          <h2>平台账号概览</h2>
+          <button class="secondary-button" data-nav="socialAuth">管理认证</button>
         </div>
+        <div class="timeline" style="margin-top:14px">
+          ${verifiedAccounts
+            .map(
+              (item) => `
+                <div class="timeline-item">
+                  <span class="timeline-dot"></span>
+                  <div>
+                    <strong>${item.name} · ${item.accounts.join(" / ")}</strong>
+                    <p>${item.metrics} · ${item.statusText}</p>
+                  </div>
+                </div>
+              `,
+            )
+            .join("")}
+          <div class="timeline-item"><span class="timeline-dot"></span><div><strong>收款信息</strong><p>达人端暂未接入结算模块，收益相关字段按业务接入后展示。</p></div></div>
+        </div>
+      </div>
+    </div>
+  `;
+}
+
+function renderSocialAuth() {
+  const platforms = creatorSocialPlatforms();
+  const verifiedCount = platforms.reduce((sum, item) => sum + item.accounts.length, 0);
+  return `
+    ${pageHeader(
+      "社媒认证",
+      "社媒认证",
+      "认证参与合作的平台账号，一个平台可认证多个账号。",
+      "",
+    )}
+    ${metrics([
+      { label: "已认证账号", value: String(verifiedCount), delta: "可用于合作报名" },
+      { label: "审核中", value: "1", delta: "Instagram" },
+      { label: "可认证平台", value: String(platforms.length), delta: "支持多平台账号" },
+      { label: "待补充平台", value: "3", delta: "Twitch / Twitter / Facebook" },
+    ])}
+    <div class="panel social-auth-page-note">
+      <strong>认证规则</strong>
+      <span>平台账号用于报名、邀约接收、履约数据回传和任务匹配。账号信息由平台审核确认，避免达人自行填写标签造成匹配失真。</span>
+    </div>
+    <div class="table-card">
+      <div class="table-head">
+        <h2>平台账号认证</h2>
+        <span class="muted">一行一个平台，支持继续添加同平台账号</span>
+      </div>
+      <div class="table-wrap">
+        <table class="social-auth-table">
+          <thead><tr><th>平台</th><th>已认证账号</th><th>使用场景</th><th>最近更新</th><th>操作</th></tr></thead>
+          <tbody>
+            ${platforms
+              .map(
+                (item) => `
+                  <tr>
+                    <td><div class="social-auth-main"><span class="social-auth-icon">${socialPlatformIcon(item.name)}</span><strong>${item.name}</strong></div></td>
+                    <td>
+                      <div class="social-account-summary">${item.accounts.length} 个账号</div>
+                      ${
+                        item.accounts.length
+                          ? `<div class="social-account-list">${item.accounts.map((account) => `<span>${account}<em class="${item.statusClass}">${item.statusText}</em></span>`).join("")}</div>`
+                          : `<span class="muted">暂无认证账号</span>`
+                      }
+                      <div class="social-auth-meta">${item.metrics}</div>
+                    </td>
+                    <td>${item.usage}</td>
+                    <td>${item.updatedAt}</td>
+                    <td><button class="link-button" data-action="open-social-auth" data-platform="${item.name}">认证</button></td>
+                  </tr>
+                `,
+              )
+              .join("")}
+          </tbody>
+        </table>
       </div>
     </div>
   `;
@@ -4352,17 +4501,29 @@ function renderCampaignFulfillment() {
   const rows = adminCampaignFulfillmentRows.filter((row) => row.campaign === selectedCampaign);
   const summary = rows[0];
   const isOfficialCampaign = officialTaskRows.some((row) => row.name === selectedCampaign);
+  const backTarget = isOfficialCampaign ? "officialTaskCreate" : "advertiserProfile";
   return `
     ${pageHeader(
       "运营后台",
       "任务履单明细",
       "按广告主任务查看达人合作、交付、审核、发布与结算状态。",
-      `<button class="secondary-button" data-nav="${isOfficialCampaign ? "officialTaskCreate" : "advertiserProfile"}">返回${isOfficialCampaign ? "官方任务" : "广告主档案"}</button>`,
+      `<button class="icon-button page-back-icon" data-nav="${backTarget}" aria-label="返回${isOfficialCampaign ? "官方任务" : "广告主档案"}" title="返回">←</button>`,
     )}
-    <div class="chips" style="margin-bottom:16px">
-      ${campaignOptions
-        .map((item) => `<button class="chip ${selectedCampaign === item ? "active" : ""}" data-action="select-admin-campaign" data-value="${encodeURIComponent(item)}">${item}</button>`)
-        .join("")}
+    <div class="panel campaign-switcher">
+      <div>
+        <span class="muted">当前任务</span>
+        <strong>${selectedCampaign}</strong>
+      </div>
+      <div class="campaign-switcher-controls">
+        <input class="input" list="campaignFulfillmentOptions" placeholder="搜索任务名称 / 广告主 / 官方任务" value="${selectedCampaign}" data-admin-campaign-picker />
+        <datalist id="campaignFulfillmentOptions">
+          ${campaignOptions.map((item) => `<option value="${item}"></option>`).join("")}
+        </datalist>
+        <select class="select" data-admin-campaign-select aria-label="切换任务">
+          ${campaignOptions.map((item) => `<option value="${item}" ${item === selectedCampaign ? "selected" : ""}>${item}</option>`).join("")}
+        </select>
+      </div>
+      <span class="campaign-switcher-hint">大量任务不平铺展示，通过搜索、筛选和选择器定位明细。</span>
     </div>
     ${summary ? metrics([
       { label: "广告主", value: summary.advertiser, delta: "当前任务归属" },
@@ -4954,6 +5115,7 @@ const pages = {
   myProjects: renderMyProjects,
   projectProgress: renderProjectProgressPage,
   revenue: renderRevenue,
+  socialAuth: renderSocialAuth,
   personalCenter: renderPersonalCenter,
 };
 
@@ -5002,11 +5164,57 @@ function openAdminListDrawer(name = "", kind = "advertisers") {
           }
         </div>
       </div>
-      <div class="drawer-foot">
-        <button class="ghost-button" data-action="close-overlay">关闭</button>
-      </div>
     </aside>
   `;
+}
+
+function openSocialAuthModal(platform = "TikTok") {
+  const platforms = ["TikTok", "YouTube", "Instagram", "Twitch", "Twitter", "Facebook", "Others"];
+  openModal(
+    `
+    <div class="modal-head">
+      <div><h2>平台认证（二选一）</h2><p class="subcopy">选择一种方式完成 ${platform} 账号认证。</p></div>
+      <button class="close-button" data-action="close-overlay" aria-label="关闭">×</button>
+    </div>
+    <div class="modal-body">
+      ${field(
+        "认证平台",
+        `<select class="select">${platforms
+          .map((item) => `<option ${item === platform ? "selected" : ""}>${item}</option>`)
+          .join("")}</select>`,
+        true,
+      )}
+      <div class="auth-choice-grid">
+        <section class="auth-choice-card primary-choice">
+          <span class="choice-label">方式一</span>
+          <div class="auth-choice-title">
+            <span class="social-auth-icon">${socialPlatformIcon(platform)}</span>
+            <div><strong>第三方平台授权</strong><p>点击后跳转平台完成授权验证。</p></div>
+          </div>
+          <p class="muted">平台仅获取账号名称、主页链接与认证所需基础信息，不用于其他目的。</p>
+          <button class="secondary-button auth-wide-button" data-action="toast-close" data-message="已发起第三方授权认证">跳转认证</button>
+        </section>
+        <section class="auth-choice-card">
+          <span class="choice-label alt">方式二</span>
+          <div class="auth-choice-title">
+            <span class="social-auth-icon">▧</span>
+            <div><strong>主页截图认证</strong><p>通过账号主页链接和截图完成认证。</p></div>
+          </div>
+          <div class="form-grid compact-form">
+            ${field("主页链接", `<input class="input" placeholder="请输入账号主页链接" />`, true, "full")}
+            ${field("认证截图", `<button class="ghost-button upload-line" data-action="toast" data-message="截图已加入上传队列">+ 上传主页截图</button>`, true, "full")}
+          </div>
+          <p class="muted">截图需清晰展示头像、频道名称或主页名称，请勿提交屏幕拍照。</p>
+        </section>
+      </div>
+      <div class="note-box">同一平台可认证多个账号；提交后进入平台审核。</div>
+    </div>
+    <div class="modal-foot">
+      <button class="ghost-button" data-action="close-overlay">取消</button>
+      <button class="primary-button" data-action="toast-close" data-message="认证申请已提交，等待平台审核">提交认证</button>
+    </div>
+  `,
+  );
 }
 
 function openNotificationCenterDrawer() {
@@ -5052,9 +5260,6 @@ function openNotificationCenterDrawer() {
               </div>`
             : `<div class="empty-state"><strong>暂无通知</strong><span class="muted">当前没有需要处理的站内信提醒。</span></div>`
         }
-      </div>
-      <div class="drawer-foot">
-        <button class="ghost-button" data-action="close-overlay">关闭</button>
       </div>
     </aside>
   `;
@@ -6245,6 +6450,10 @@ function handleAction(action, target) {
     openPageNotesDrawer(target.dataset.page || state.page);
     return;
   }
+  if (action === "open-social-auth") {
+    openSocialAuthModal(target.dataset.platform || "TikTok");
+    return;
+  }
   if (action === "modal-invite") openInviteModal();
   if (action === "open-notifications") {
     openNotificationCenterDrawer();
@@ -6318,8 +6527,9 @@ function handleAction(action, target) {
   }
   if (action === "modal-upload") openUploadModal();
   if (action === "drawer-project-progress") {
-    state.creatorProjectDetailTask = decodeURIComponent(target.dataset.task || "任务");
-    go("projectProgress");
+    const taskName = decodeURIComponent(target.dataset.task || "任务");
+    state.creatorProjectDetailTask = taskName;
+    openProjectProgressDrawer(taskName);
     return;
   }
   if (action === "modal-product") openProductModal();
