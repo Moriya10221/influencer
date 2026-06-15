@@ -126,6 +126,11 @@ const state = {
     keyword: "",
     type: "全部",
   },
+  creatorTaskDetail: {
+    name: "",
+    backTo: "opportunityHall",
+  },
+  creatorProjectDetailTask: "",
   adminFilters: {
     reviewType: "全部",
     reviewResult: "全部",
@@ -405,7 +410,9 @@ function regionBadge(region) {
 function creatorInfoCell(row, showId = true) {
   return `
     <div class="row-title collab-creator-two-lines">
-      <img src="${row.avatar || assets.creatorPreview}" alt="" />
+      <button class="avatar-button" data-action="drawer-creator" data-name="${row.creator}" aria-label="查看 ${row.creator} 达人详情">
+        <img src="${row.avatar || assets.creatorPreview}" alt="" />
+      </button>
       <span>
         <strong class="creator-name">${row.creator}</strong>
         <small class="creator-subline">${showId ? row.creatorId || "-" : ""}${showId ? " · " : ""}${row.platform || "-"}</small>
@@ -760,7 +767,8 @@ const collaborations = [
     price: "99",
     status: "待确认合作",
     tag: "核心游戏达人",
-    statusClass: "running",
+    applyReason: "受众与该活动高度匹配，可在 7 天内完成脚本、拍摄和发布，并提供 2 次修改。",
+    statusClass: "pending",
     progress: "待确认合作",
     due: "2026-6-10",
     acceptTime: "2026-6-6 14:21:09",
@@ -784,9 +792,11 @@ const collaborations = [
     price: "80",
     status: "待确认合作",
     tag: "潜力测评达人",
+    applyReason: "擅长开箱测评与中长视频内容，可按品牌要求补充对比段落并引导转化。",
     statusClass: "pending",
     progress: "待确认合作",
     due: "2026-6-5",
+    acceptTime: "2026-6-7 09:10:12",
     note: "已确认脚本，等待初稿。",
   },
   {
@@ -841,6 +851,7 @@ const collaborations = [
     price: "120",
     status: "待确认合作",
     tag: "高转化生活方式达人",
+    applyReason: "近 30 天同类内容互动率高，可结合真实生活场景拍摄并强化产品露出。",
     statusClass: "pending",
     progress: "待确认合作",
     due: "2026-6-18",
@@ -874,6 +885,7 @@ const collaborations = [
     price: "150",
     status: "待确认合作",
     tag: "零售种草达人",
+    applyReason: "频道受众为高频购物人群，可提供清单式种草与价格对比，提高转化率。",
     statusClass: "pending",
     progress: "待确认合作",
     due: "2026-6-16",
@@ -907,6 +919,7 @@ const collaborations = [
     price: "110",
     status: "待确认合作",
     tag: "运动户外达人",
+    applyReason: "可用训练 vlog + 产品穿搭露出组合形式，保证自然植入与稳定曝光。",
     statusClass: "pending",
     progress: "待确认合作",
     due: "2026-6-14",
@@ -1458,7 +1471,7 @@ function renderTopbar() {
 }
 
 function isCreatorPage(page) {
-  return creatorNav.some(([id]) => id === page) || ["taskDetail", "applications"].includes(page);
+  return creatorNav.some(([id]) => id === page) || ["taskDetail", "applications", "projectProgress"].includes(page);
 }
 
 function isOperatorPage(page) {
@@ -1892,6 +1905,7 @@ function collaborationRows() {
               <td>${videoPlaceholder(row.recentVideo)}</td>
               <td>${row.avgViews || "-"}</td>
               <td><button class="link-button" data-action="modal-campaign-info" data-campaign="${encodeURIComponent(row.campaign)}"> ${row.campaign}</button></td>
+              <td>${row.applyReason || "-"}</td>
               <td>${row.acceptTime || "-"}</td>
               <td>${row.settlement}</td>
               <td class="money">${row.price}</td>
@@ -2005,7 +2019,7 @@ function applicationRows() {
       <td>${status("等待平台审核", "pending")}</td>
       <td>-</td>
       <td>-</td>
-      <td><button class="link-button" data-nav="taskDetail">查看任务</button></td>
+      <td><button class="link-button" data-action="open-task-detail" data-task="${encodeURIComponent(taskDetailProfile.displayTitle)}">查看任务</button></td>
     </tr>
   `;
 }
@@ -3101,7 +3115,7 @@ function renderTalentManagement() {
 
 function renderCollaborators() {
   const activeTab = state.tabs.collaborators;
-  const pendingCols = 14;
+  const pendingCols = 15;
   const activeCols = 8;
   const publishedCols = 10;
   const platformOptions = ["YouTube", "TikTok", "Instagarm", "Twitch", "Twitter", "Facebook", "Others"];
@@ -3185,7 +3199,7 @@ function renderCollaborators() {
           <thead>
             ${
               activeTab === "pending"
-                ? `<tr><th>达人基本信息</th><th>粉丝数</th><th>内容标签</th><th>国家/地区</th><th>受众性别</th><th>受众年龄</th><th>最近发布视频</th><th>平均曝光量</th><th>所属任务</th><th>接单时间</th><th>结算方式</th><th>报价(USD)</th><th>状态</th><th>操作</th></tr>`
+                ? `<tr><th>达人基本信息</th><th>粉丝数</th><th>内容标签</th><th>国家/地区</th><th>受众性别</th><th>受众年龄</th><th>最近发布视频</th><th>平均曝光量</th><th>所属任务</th><th>报名理由</th><th>接单时间</th><th>结算方式</th><th>报价(USD)</th><th>状态</th><th>操作</th></tr>`
                 : activeTab === "active"
                   ? `<tr><th>达人基本信息</th><th>所属任务</th><th>合作类型</th><th>结算方式</th><th>预计交付日期</th><th>交付进度</th><th>备注</th><th>操作</th></tr>`
                   : `<tr><th>达人基本信息</th><th>所属任务</th><th>合作类型</th><th>结算方式</th><th>交付进度</th><th>发布时间</th><th>结算金额</th><th>备注</th><th>效果追踪</th><th>操作</th></tr>`
@@ -3632,6 +3646,13 @@ function renderOpportunityHall() {
 
 function renderTaskDetailBody() {
   const statusView = applicationStatusView(applicationDetail.statusKey);
+  const selectedTitle = state.creatorTaskDetail.name || taskDetailProfile.displayTitle;
+  const matchedCampaign = creatorCampaigns.find((item) => item.name === selectedTitle);
+  const detailProfile = {
+    ...taskDetailProfile,
+    displayTitle: selectedTitle,
+    brandLabel: matchedCampaign?.isOfficial ? "平台官方" : taskDetailProfile.brandLabel,
+  };
   return `
     <div class="task-detail-layout">
       <div class="panel task-summary-card">
@@ -3640,20 +3661,20 @@ function renderTaskDetailBody() {
           <div class="task-brand-block">
             <div class="task-brand-logo" aria-hidden="true"><span>MINI</span><span>SOU</span></div>
             <div class="task-brand-copy">
-              <div class="task-brand-name">${taskDetailProfile.brandLabel}</div>
-              <div class="task-title">${taskDetailProfile.displayTitle}</div>
+              <div class="task-brand-name">${detailProfile.brandLabel}</div>
+              <div class="task-title">${detailProfile.displayTitle}</div>
               <div class="task-summary-grid">
                 <div class="task-info-item">
                   <span>截止报名时间</span>
-                  <strong>${taskDetailProfile.deadline}</strong>
+                  <strong>${detailProfile.deadline}</strong>
                 </div>
                 <div class="task-info-item">
                   <span>推广国家/地区</span>
-                  <div>${countryChips(taskDetailProfile.targetCountries, { compact: true })}</div>
+                  <div>${countryChips(detailProfile.targetCountries, { compact: true })}</div>
                 </div>
                 <div class="task-info-item">
                   <span>推广平台</span>
-                  <div>${platformBadges(taskDetailProfile.platforms)}</div>
+                  <div>${platformBadges(detailProfile.platforms)}</div>
                 </div>
               </div>
             </div>
@@ -3729,14 +3750,64 @@ function renderTaskDetailBody() {
 }
 
 function renderTaskDetail() {
+  const backTo = state.creatorTaskDetail.backTo || "opportunityHall";
+  const backLabel =
+    backTo === "myProjects"
+      ? "返回我的任务"
+      : backTo === "invitations"
+        ? "返回合作邀请"
+        : backTo === "applications"
+          ? "返回报名进度"
+          : "返回机会大厅";
   return `
     ${pageHeader(
       "达人端",
       "任务详情",
       "查看任务信息、达人要求、内容要求与招募价格。",
-      `<button class="secondary-button" data-nav="opportunityHall">返回机会大厅</button>`,
+      `<button class="secondary-button" data-nav="${backTo}">${backLabel}</button>`,
     )}
     ${renderTaskDetailBody()}
+  `;
+}
+
+function renderProjectProgressPage() {
+  const taskName = state.creatorProjectDetailTask || projectRows[0]?.task || "任务";
+  const project = projectRows.find((row) => row.task === taskName) || projectRows[0];
+  return `
+    ${pageHeader(
+      "达人端",
+      "交付进度详情",
+      "查看该任务的交付节点、审核状态与操作记录。",
+      `<button class="secondary-button" data-nav="myProjects">返回我的任务</button>`,
+    )}
+    <div class="panel">
+      <h2>${project.task}</h2>
+      <div class="mini-stats" style="margin-top:12px">
+        <div class="mini-stat"><span>合作类型</span><strong>${project.type}</strong></div>
+        <div class="mini-stat"><span>当前进度</span><strong>${project.progress}</strong></div>
+        <div class="mini-stat"><span>最终状态</span><strong>${project.finalStatus || project.progress}</strong></div>
+      </div>
+      <div class="timeline" style="margin-top:16px">
+        ${(project.timeline || [])
+          .map(
+            (item) => `
+            <div class="timeline-item">
+              <span class="timeline-dot"></span>
+              <div>
+                <strong>${item.title}</strong>
+                <p>${item.time}</p>
+                <p>${item.detail}</p>
+                <div class="note-box" style="margin-top:8px">审核结果：${item.result}</div>
+              </div>
+            </div>
+          `,
+          )
+          .join("")}
+      </div>
+      <div class="actions" style="margin-top:16px">
+        ${project.status === "已完成" ? "" : `<button class="primary-button" data-action="modal-upload">提交产物</button>`}
+      </div>
+    </div>
   `;
 }
 
@@ -4781,6 +4852,7 @@ const pages = {
   applications: renderApplications,
   invitations: renderInvitations,
   myProjects: renderMyProjects,
+  projectProgress: renderProjectProgressPage,
   revenue: renderRevenue,
   personalCenter: renderPersonalCenter,
 };
@@ -5249,7 +5321,7 @@ function openDeliveryDrawer(creatorKey = "") {
               <div class="fulfillment-flow-item ${item.stateClass}">
                 <span class="fulfillment-flow-dot"></span>
                 <div>
-                  <div class="fulfillment-flow-head"><strong>${item.title}</strong><span>${item.time}</span></div>
+                  <div class="fulfillment-flow-head"><strong>${item.title}</strong>${item.stateClass === "pending" ? "" : `<span>${item.time}</span>`}</div>
                   <p>${item.desc}</p>
                 </div>
               </div>
@@ -6035,12 +6107,18 @@ function handleAction(action, target) {
     render();
   }
   if (action === "open-task-detail") {
-    openCreatorTaskDetailDrawer(decodeURIComponent(target.dataset.task || ""));
+    const rawName = target.dataset.campaign || target.dataset.task || "";
+    const taskName = decodeURIComponent(rawName);
+    state.creatorTaskDetail.name = taskName || taskDetailProfile.displayTitle;
+    state.creatorTaskDetail.backTo = state.page === "myProjects" ? "myProjects" : state.page === "invitations" ? "invitations" : state.page === "applications" ? "applications" : "opportunityHall";
+    if (state.page !== "taskDetail") go("taskDetail");
+    render();
     return;
   }
   if (action === "modal-upload") openUploadModal();
   if (action === "drawer-project-progress") {
-    openProjectProgressDrawer(decodeURIComponent(target.dataset.task || "任务"));
+    state.creatorProjectDetailTask = decodeURIComponent(target.dataset.task || "任务");
+    go("projectProgress");
     return;
   }
   if (action === "modal-product") openProductModal();
