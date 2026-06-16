@@ -132,6 +132,17 @@ const state = {
     platforms: [],
     platformMenuOpen: false,
   },
+  myTalentFilters: {
+    keyword: "",
+    cooperationStatus: "全部",
+    cooperationTimes: "全部",
+    platform: "全部",
+    category: "全部",
+    engagement: "全部",
+    exposure30d: "全部",
+    qualityTier: "全部",
+    priceRange: "全部",
+  },
   confirmedCollaborators: [],
   appliedCampaigns: [],
   pendingApplyCampaign: "",
@@ -187,6 +198,12 @@ const state = {
     name: "",
     backTo: "opportunityHall",
   },
+  myTalentDetail: {
+    name: "Mika Studio",
+    tab: "ledger",
+  },
+  inviteTalentSource: "recommend",
+  inviteSelectedCreators: ["Mika Studio", "Nova Plays"],
   creatorProjectDetailTask: "",
   adminFilters: {
     reviewType: "全部",
@@ -551,8 +568,9 @@ function isConfirmedCollaboration(row) {
 
 const brandNav = [
   ["promotions", "活动管理", "活"],
-  ["talentManagement", "达人资源", "资"],
+  ["talentManagement", "达人管理", "达"],
   ["talentSearch", "达人搜索", "搜", "child"],
+  ["myTalents", "合作达人", "合", "child"],
   ["collaborators", "合作管理", "合"],
   ["account", "账户管理", "账"],
 ];
@@ -577,7 +595,8 @@ const operatorNav = [
   ["creatorApplicationReviewAdmin", "报名审核", "报", "child"],
   ["creatorDeliverableReviewAdmin", "产物审核", "产", "child"],
   ["officialTaskCreate", "官方任务", "官", "child", "新"],
-  ["infoManagementAdmin", "信息管理", "信"],
+  ["operationsManagementAdmin", "运营管理", "运"],
+  ["loginPageConfigAdmin", "登录页配置", "登", "child"],
   ["gameTagsAdmin", "标签管理", "标", "child"],
   ["payoutAdmin", "财务管理", "财"],
   ["settingsAdmin", "系统设置", "设"],
@@ -843,6 +862,210 @@ const creators = [
     price: "$980",
     engagement: "5.1%",
     contract: "已收藏",
+  },
+];
+
+const myTalentRows = [
+  {
+    name: "Mika Studio",
+    uid: "@mika_studio",
+    avatar: assets.talentAvatar1,
+    platform: "TikTok",
+    region: ["US", "UK"],
+    followers: "744.15万",
+    categories: ["游戏", "生活方式", "测评"],
+    totalOrders: 6,
+    validOrders: 5,
+    completionRate: "83%",
+    qualityTier: "S级优质",
+    avgExposure: "161.10万",
+    avgEngagement: "3.5%",
+    avgClicks: "2.8%",
+    totalBudget: "$11,800",
+    settledBudget: "$8,400",
+    pendingSettlement: "$2,000",
+    baseQuote: "$2,000",
+    statusTags: ["有进行中的任务", "历史合作"],
+    hasActive: true,
+    weakWarning: false,
+    audienceGender: "女性 81.52%",
+    audienceAge: "18-24",
+    audienceCountries: ["US", "UK", "CA"],
+    formats: ["全片", "切片", "直播"],
+    styleTags: ["剧情种草", "开箱测评"],
+    taskLedger: [
+      { campaign: "MINISO 夏季新品内容合作", createdAt: "2026-06-02 11:20", platform: "TikTok", region: "英国 / 美国", cooperationStatus: "履约中", flow: "报名→运营初审→广告主复审→内容提交→内容双审", budget: "$2,000", deliverable: "已提交脚本 / 已提交视频", reviewStatus: "待广告主复审", publishLink: "-", exposure: "-", likes: "-", interaction: "-", publishAt: "-", settlementStatus: "待结算" },
+      { campaign: "全境封锁-全球活动", createdAt: "2026-05-18 15:40", platform: "TikTok", region: "美国 / 英国", cooperationStatus: "已完成", flow: "报名→运营初审→广告主复审→内容提交→内容双审→发布确认", budget: "$2,300", deliverable: "已提交脚本 / 已提交视频", reviewStatus: "审核通过", publishLink: "tiktok.com/@mika_studio/video/001", exposure: "126K", likes: "11.2K", interaction: "4.1%", publishAt: "2026-05-29 20:15", settlementStatus: "已结算" },
+      { campaign: "Anker 充电配件新品推广", createdAt: "2026-04-09 09:30", platform: "YouTube", region: "德国 / 英国", cooperationStatus: "已完成", flow: "报名→运营初审→广告主复审→内容提交→内容双审→发布确认", budget: "$1,850", deliverable: "已提交脚本 / 已提交视频", reviewStatus: "审核通过", publishLink: "youtube.com/watch?v=anker88", exposure: "98K", likes: "6.1K", interaction: "3.8%", publishAt: "2026-04-18 18:00", settlementStatus: "已结算" },
+    ],
+    deliverables: [
+      { campaign: "MINISO 夏季新品内容合作", type: "短视频", submittedAt: "2026-06-10 18:20", review: "待审核", rejectReason: "-", publishStatus: "未发布", effect: "-", action: "预览内容" },
+      { campaign: "全境封锁-全球活动", type: "短视频", submittedAt: "2026-05-27 17:00", review: "通过", rejectReason: "-", publishStatus: "已发布", effect: "126K / 4.1%", action: "预览内容" },
+      { campaign: "Anker 充电配件新品推广", type: "脚本", submittedAt: "2026-04-15 10:30", review: "通过", rejectReason: "-", publishStatus: "已发布", effect: "98K / 3.8%", action: "预览内容" },
+    ],
+    quality: {
+      responseTime: "平均 3.2 小时",
+      deliveryCycle: "平均 4.5 天",
+      overdueCount: "1 次",
+      signupReject: "1 次 / 14%",
+      opsReject: "2 次 / 高曝光镜头不足、品牌露出偏弱、CTA不明确",
+      brandReject: "1 次 / 品牌卖点表达不充分、脚本节奏偏慢、标题不聚焦",
+    },
+    settlements: [
+      { campaign: "全境封锁-全球活动", quote: "$2,300", completedAt: "2026-05-29 20:15", cycle: "7 天曝光核算", billAt: "2026-06-06 10:00", status: "已结算", note: "已完成打款" },
+      { campaign: "MINISO 夏季新品内容合作", quote: "$2,000", completedAt: "-", cycle: "14 天曝光核算", billAt: "-", status: "待结算", note: "待发布后生成账单" },
+    ],
+    communications: [
+      { time: "2026-06-11 09:20", type: "系统消息", content: "达人已提交短视频初稿，待广告主复审。" },
+      { time: "2026-06-11 16:40", type: "人工留言", content: "适合生活方式新品复投，可继续做英国站种草。" },
+    ],
+  },
+  {
+    name: "Nova Plays",
+    uid: "@novaplays",
+    avatar: assets.talentAvatar2,
+    platform: "YouTube",
+    region: ["JP", "CN"],
+    followers: "161.10万",
+    categories: ["科技", "软件", "测评"],
+    totalOrders: 4,
+    validOrders: 3,
+    completionRate: "75%",
+    qualityTier: "A级良好",
+    avgExposure: "42.80万",
+    avgEngagement: "4.1%",
+    avgClicks: "3.3%",
+    totalBudget: "$4,200",
+    settledBudget: "$3,200",
+    pendingSettlement: "$800",
+    baseQuote: "$800",
+    statusTags: ["历史合作"],
+    hasActive: false,
+    weakWarning: false,
+    audienceGender: "女性 79.8%",
+    audienceAge: "18-30",
+    audienceCountries: ["JP", "CN", "SG"],
+    formats: ["全片", "长视频"],
+    styleTags: ["开箱测评", "功能拆解"],
+    taskLedger: [
+      { campaign: "Anker 充电配件新品推广", createdAt: "2026-05-05 13:20", platform: "YouTube", region: "日本 / 中国", cooperationStatus: "已完成", flow: "报名→运营初审→广告主复审→内容提交→内容双审→发布确认", budget: "$800", deliverable: "已提交脚本 / 已提交视频", reviewStatus: "审核通过", publishLink: "youtube.com/watch?v=nova001", exposure: "42.8K", likes: "3.2K", interaction: "4.1%", publishAt: "2026-05-18 20:00", settlementStatus: "已结算" },
+      { campaign: "MINISO 夏季新品内容合作", createdAt: "2026-03-11 17:10", platform: "YouTube", region: "日本", cooperationStatus: "已完成", flow: "报名→运营初审→广告主复审→内容提交→内容双审→发布确认", budget: "$1,100", deliverable: "已提交脚本 / 已提交视频", reviewStatus: "审核通过", publishLink: "youtube.com/watch?v=miniso77", exposure: "55K", likes: "4.6K", interaction: "4.5%", publishAt: "2026-03-26 19:30", settlementStatus: "已结算" },
+    ],
+    deliverables: [
+      { campaign: "Anker 充电配件新品推广", type: "长视频", submittedAt: "2026-05-14 16:00", review: "通过", rejectReason: "-", publishStatus: "已发布", effect: "42.8K / 4.1%", action: "预览内容" },
+      { campaign: "MINISO 夏季新品内容合作", type: "脚本", submittedAt: "2026-03-18 10:20", review: "通过", rejectReason: "-", publishStatus: "已发布", effect: "55K / 4.5%", action: "预览内容" },
+    ],
+    quality: {
+      responseTime: "平均 6.8 小时",
+      deliveryCycle: "平均 5.2 天",
+      overdueCount: "0 次",
+      signupReject: "0 次 / 0%",
+      opsReject: "1 次 / 信息密度不足、标题不够聚焦、镜头切换偏慢",
+      brandReject: "0 次 / -",
+    },
+    settlements: [
+      { campaign: "Anker 充电配件新品推广", quote: "$800", completedAt: "2026-05-18 20:00", cycle: "7 天曝光核算", billAt: "2026-05-26 12:00", status: "已结算", note: "正常完成结算" },
+      { campaign: "MINISO 夏季新品内容合作", quote: "$1,100", completedAt: "2026-03-26 19:30", cycle: "14 天曝光核算", billAt: "2026-04-09 11:00", status: "已结算", note: "复投合作表现稳定" },
+    ],
+    communications: [
+      { time: "2026-05-12 10:00", type: "系统消息", content: "任务通过审核，进入内容制作阶段。" },
+      { time: "2026-05-28 14:00", type: "人工留言", content: "适合品牌功能型产品复投，沟通成本较低。" },
+    ],
+  },
+  {
+    name: "Luna Trend",
+    uid: "@lunatrend_daily",
+    avatar: assets.talentAvatar3,
+    platform: "Instagram",
+    region: ["US", "TH"],
+    followers: "289.40万",
+    categories: ["美妆", "生活", "购物零售"],
+    totalOrders: 3,
+    validOrders: 2,
+    completionRate: "67%",
+    qualityTier: "B级一般",
+    avgExposure: "68.50万",
+    avgEngagement: "6.2%",
+    avgClicks: "4.4%",
+    totalBudget: "$3,600",
+    settledBudget: "$2,400",
+    pendingSettlement: "$1,200",
+    baseQuote: "$1,200",
+    statusTags: ["有进行中的任务", "历史合作"],
+    hasActive: true,
+    weakWarning: true,
+    audienceGender: "女性 88.3%",
+    audienceAge: "18-24",
+    audienceCountries: ["US", "TH", "MY"],
+    formats: ["图文", "切片", "全片"],
+    styleTags: ["高颜值种草", "生活方式"],
+    taskLedger: [
+      { campaign: "MINISO 夏季新品内容合作", createdAt: "2026-06-01 09:00", platform: "Instagram", region: "美国 / 泰国", cooperationStatus: "履约中", flow: "报名→运营初审→广告主复审→内容提交", budget: "$1,200", deliverable: "已提交脚本 / 未提交视频", reviewStatus: "待运营审核", publishLink: "-", exposure: "-", likes: "-", interaction: "-", publishAt: "-", settlementStatus: "未到结算周期" },
+      { campaign: "美妆新品春季种草", createdAt: "2026-02-14 18:00", platform: "Instagram", region: "美国", cooperationStatus: "已完成", flow: "报名→运营初审→广告主复审→内容提交→内容双审→发布确认", budget: "$1,400", deliverable: "已提交脚本 / 已提交视频", reviewStatus: "审核通过", publishLink: "instagram.com/p/luna88", exposure: "83K", likes: "8.8K", interaction: "7.6%", publishAt: "2026-02-27 21:20", settlementStatus: "已结算" },
+      { campaign: "轻食饮品试饮计划", createdAt: "2025-12-20 12:20", platform: "Instagram", region: "泰国", cooperationStatus: "已取消", flow: "报名→运营初审→广告主复审", budget: "$1,000", deliverable: "未提交脚本 / 未提交视频", reviewStatus: "已驳回", publishLink: "-", exposure: "-", likes: "-", interaction: "-", publishAt: "-", settlementStatus: "未到结算周期" },
+    ],
+    deliverables: [
+      { campaign: "MINISO 夏季新品内容合作", type: "图文", submittedAt: "2026-06-09 15:40", review: "待审核", rejectReason: "-", publishStatus: "未发布", effect: "-", action: "预览内容" },
+      { campaign: "轻食饮品试饮计划", type: "脚本", submittedAt: "2025-12-28 10:00", review: "驳回", rejectReason: "品牌露出不足", publishStatus: "未发布", effect: "-", action: "预览内容" },
+    ],
+    quality: {
+      responseTime: "平均 11.5 小时",
+      deliveryCycle: "平均 6.8 天",
+      overdueCount: "2 次",
+      signupReject: "1 次 / 20%",
+      opsReject: "2 次 / 品牌露出不足、封面风格不符、互动引导偏弱",
+      brandReject: "1 次 / 卖点不突出、发布时间延后、素材重拍",
+    },
+    settlements: [
+      { campaign: "美妆新品春季种草", quote: "$1,400", completedAt: "2026-02-27 21:20", cycle: "7 天曝光核算", billAt: "2026-03-06 09:30", status: "已结算", note: "已完成对账" },
+      { campaign: "MINISO 夏季新品内容合作", quote: "$1,200", completedAt: "-", cycle: "7 天曝光核算", billAt: "-", status: "待结算", note: "等待内容发布确认" },
+    ],
+    communications: [
+      { time: "2026-06-09 16:10", type: "系统消息", content: "达人已提交图文素材，等待平台审核。" },
+      { time: "2026-06-09 18:00", type: "人工留言", content: "适合美妆类活动，但需加强对发布时间和脚本质量的跟进。" },
+    ],
+  },
+  {
+    name: "Tech Otto",
+    uid: "@tech_otto",
+    avatar: assets.talentAvatar4,
+    platform: "Others",
+    region: ["DE", "UK"],
+    followers: "305.00万",
+    categories: ["科技", "软件"],
+    totalOrders: 0,
+    validOrders: 0,
+    completionRate: "0%",
+    qualityTier: "C级较差",
+    avgExposure: "9.80万",
+    avgEngagement: "3.9%",
+    avgClicks: "-",
+    totalBudget: "$0",
+    settledBudget: "$0",
+    pendingSettlement: "$0",
+    baseQuote: "$2,600",
+    statusTags: ["历史合作"],
+    hasActive: false,
+    weakWarning: false,
+    audienceGender: "男性 68.7%",
+    audienceAge: "25-34",
+    audienceCountries: ["DE", "UK"],
+    formats: ["长视频", "切片"],
+    styleTags: ["数码拆解", "硬件评测"],
+    taskLedger: [],
+    deliverables: [],
+    quality: {
+      responseTime: "-",
+      deliveryCycle: "-",
+      overdueCount: "0 次",
+      signupReject: "0 次 / 0%",
+      opsReject: "0 次 / -",
+      brandReject: "0 次 / -",
+    },
+    settlements: [],
+    communications: [
+      { time: "2026-06-01 12:10", type: "人工留言", content: "暂未合作，先纳入科技类达人池观察。" },
+    ],
   },
 ];
 
@@ -1588,11 +1811,11 @@ function renderTopbar() {
 }
 
 function isCreatorPage(page) {
-  return creatorNav.some(([id]) => id === page) || ["taskDetail", "applications", "projectProgress"].includes(page);
+  return creatorNav.some(([id]) => id === page) || ["taskDetail", "applications", "projectProgress", "notificationRecords"].includes(page);
 }
 
 function isOperatorPage(page) {
-  return operatorNav.some(([id]) => id === page) || ["advertiserProfile", "advertiserCampaigns", "campaignFulfillment", "influencerDetailAdmin"].includes(page);
+  return operatorNav.some(([id]) => id === page) || ["advertiserProfile", "advertiserCampaigns", "campaignFulfillment", "influencerDetailAdmin", "notificationRecords"].includes(page);
 }
 
 function getActiveNav() {
@@ -1615,6 +1838,10 @@ function setRole(role) {
 
 function pageTitle(page = state.page) {
   return navLabels[page] || "Meetinfluencer";
+}
+
+function normalizePage(page) {
+  return page;
 }
 
 function resolveOperatorRelatedPage(page = state.page) {
@@ -2136,6 +2363,15 @@ function deliveryRowsForReview() {
 
 function applicationRows() {
   return `
+    <tr>
+      <td><strong>MINISO 夏季新品内容合作</strong></td>
+      <td>Mika Studio</td>
+      <td>账号内容与美妆生活方式受众匹配，过往测评数据稳定。</td>
+      <td>${status("报名通过", "success")}</td>
+      <td>2026-06-10 09:20</td>
+      <td>平台审核通过，已进入合作流程。</td>
+      <td><button class="link-button" data-action="open-task-detail" data-task="${encodeURIComponent(taskDetailProfile.displayTitle)}">查看任务</button></td>
+    </tr>
     <tr>
       <td><strong>任务标题</strong></td>
       <td>Mika Studio</td>
@@ -3202,6 +3438,7 @@ function openPageNotesDrawer(page = "") {
 }
 
 function renderTalentManagement() {
+  return `${pageHeader("达人管理", "达人管理", "")}<div class="panel"><div class="empty-state"><strong>页面暂未配置内容</strong><span class="muted">此页先留空，暂不展示具体模块。</span></div></div>`;
   const recentRows = creators.slice(0, 6);
   return `
     ${pageHeader(
@@ -3362,7 +3599,7 @@ function renderCollaborators() {
 }
 
 function renderTalentSearch() {
-  const platforms = ["全部", "TikTok", "YouTube", "Twitch", "Instagram"];
+  const platforms = ["全部", "TikTok", "YouTube", "Twitch", "Instagram", "Facebook", "Twitter", "Others"];
   const regions = ["全部", "美国", "日本", "韩国", "印尼", "泰国", "越南", "马来西亚", "英国", "德国"];
   const categories = ["全部", "购物与零售", "游戏", "美妆", "运动户外", "理财与投资", "软件与应用", "食品饮料", "科技与数码"];
   const visibleCats = state.talentSearchFilters.expanded ? categories : categories.slice(0, 8);
@@ -3509,6 +3746,685 @@ function renderTalentSearch() {
         </table>
       </div>
     </div>
+  `;
+}
+
+function filterMyTalents(list = myTalentRows) {
+  const f = state.myTalentFilters;
+  const keyword = String(f.keyword || "").trim().toLowerCase();
+
+  return list
+    .filter((row) => {
+      if (!keyword) return true;
+      return [row.name, row.uid, row.platform, ...(row.categories || []), ...(row.styleTags || [])].join(" ").toLowerCase().includes(keyword);
+    })
+    .filter(
+      (row) =>
+        f.cooperationStatus === "全部" ||
+        (f.cooperationStatus === "有进行中的任务" && row.statusTags.includes("有进行中的任务")) ||
+        (f.cooperationStatus === "历史合作" && row.statusTags.includes("历史合作")),
+    )
+    .filter((row) => {
+      if (f.cooperationTimes === "全部") return true;
+      if (f.cooperationTimes === "0次（仅收藏）") return row.totalOrders === 0;
+      if (f.cooperationTimes === "1次") return row.totalOrders === 1;
+      if (f.cooperationTimes === "2-3次") return row.totalOrders >= 2 && row.totalOrders <= 3;
+      if (f.cooperationTimes === "4次及以上") return row.totalOrders >= 4;
+      return true;
+    })
+    .filter((row) => f.platform === "全部" || row.platform === f.platform)
+    .filter((row) => f.category === "全部" || row.categories.includes(f.category))
+    .filter((row) => {
+      if (f.engagement === "全部") return true;
+      const value = parsePercent(row.avgEngagement);
+      if (f.engagement === "1%+") return value >= 1;
+      if (f.engagement === ">3%") return value > 3;
+      if (f.engagement === ">5%") return value > 5;
+      if (f.engagement === ">10%") return value > 10;
+      return true;
+    })
+    .filter((row) => {
+      if (f.exposure30d === "全部") return true;
+      const value = parseCompactNumber(row.avgExposure);
+      if (f.exposure30d === "0-10w") return value < 100000;
+      if (f.exposure30d === "10w-50w") return value >= 100000 && value < 500000;
+      if (f.exposure30d === "50w-200w") return value >= 500000 && value < 2000000;
+      if (f.exposure30d === "200w+") return value >= 2000000;
+      return true;
+    })
+    .filter((row) => f.qualityTier === "全部" || row.qualityTier === f.qualityTier)
+    .filter((row) => {
+      if (f.priceRange === "全部") return true;
+      const value = parseMoneyUSD(row.baseQuote);
+      if (f.priceRange === "$0-500") return value >= 0 && value < 500;
+      if (f.priceRange === "$500-1K") return value >= 500 && value < 1000;
+      if (f.priceRange === "$1K-3K") return value >= 1000 && value < 3000;
+      if (f.priceRange === "$3K-10K") return value >= 3000 && value < 10000;
+      if (f.priceRange === "$10K+") return value >= 10000;
+      return true;
+    });
+}
+
+function resetMyTalentFilters() {
+  state.myTalentFilters = {
+    keyword: "",
+    cooperationStatus: "全部",
+    cooperationTimes: "全部",
+    platform: "全部",
+    category: "全部",
+    engagement: "全部",
+    exposure30d: "全部",
+    qualityTier: "全部",
+    priceRange: "全部",
+  };
+}
+
+function renderMyTalentSelectedConditions() {
+  const f = state.myTalentFilters;
+  const items = [
+    ["cooperationStatus", "合作状态", f.cooperationStatus],
+    ["cooperationTimes", "合作次数", f.cooperationTimes],
+    ["platform", "达人平台", f.platform],
+    ["category", "垂类分类", f.category],
+    ["engagement", "平均互动率", f.engagement],
+    ["exposure30d", "近30天平均曝光量", f.exposure30d],
+    ["qualityTier", "履约质量", f.qualityTier],
+    ["priceRange", "报价区间", f.priceRange],
+  ].filter(([, , value]) => value && value !== "全部");
+
+  return `
+    <div class="selected-filter-row">
+      <div class="selected-filter-label">已选条件：</div>
+      <div class="selected-filter-chips">
+        ${
+          items.length
+            ? items
+                .map(
+                  ([key, label, value]) => `
+                    <button class="selected-filter-chip" data-action="remove-my-talent-filter" data-filter-key="${key}" type="button">
+                      <span>${label}：${value}</span>
+                      <span class="selected-filter-x" aria-hidden="true">×</span>
+                    </button>
+                  `,
+                )
+                .join("")
+            : `<span class="selected-filter-empty">暂无筛选条件</span>`
+        }
+      </div>
+    </div>
+  `;
+}
+
+function myTalentStatusBadges(tags = []) {
+  return `<div class="my-talent-status-list">${tags.map((item) => `<span class="my-talent-status-chip">${item}</span>`).join("")}</div>`;
+}
+
+function myTalentRegionTags(codes = []) {
+  const flagMap = { US: "🇺🇸", UK: "🇬🇧", JP: "🇯🇵", CN: "🇨🇳", TH: "🇹🇭", MY: "🇲🇾", DE: "🇩🇪", CA: "🇨🇦", SG: "🇸🇬" };
+  return `<div class="country-chips">${codes.map((code) => `<span class="country-chip">${flagMap[code] || "🌐"} ${code}</span>`).join("")}</div>`;
+}
+
+function renderMyTalents() {
+  const filteredRows = filterMyTalents();
+  const platforms = ["全部", "TikTok", "YouTube", "Instagram", "Twitch", "Facebook", "Twitter", "Others"];
+  const categories = ["全部", "购物零售", "游戏", "美妆", "科技", "生活", "理财", "软件", "食品饮料"];
+
+  return `
+    ${pageHeader(
+      "我的达人",
+      "我的达人",
+      "按达人聚合历史合作、履约表现、投放效果与结算信息，支持复投评估与合作台账追溯。",
+      `<button class="secondary-button" data-action="toast" data-message="已导出当前列表">导出当前列表</button><button class="primary-button" data-action="modal-invite">批量邀请达人</button>`,
+    )}
+    <div class="panel my-talents-filter-panel">
+      <div class="talent-search-top">
+        <div class="search-box-inline">
+          <span aria-hidden="true">⌕</span>
+          <input class="input search-input" type="search" placeholder="搜索达人昵称 / UID / 标签关键词" value="${state.myTalentFilters.keyword}" data-my-talent-filter="keyword" />
+        </div>
+        <div class="filter-action-row">
+          <button class="ghost-button" data-action="reset-my-talent-filters">重置筛选</button>
+          <button class="secondary-button" data-action="toast" data-message="已导出当前列表">导出当前列表</button>
+          <button class="primary-button" data-action="modal-invite">批量邀请达人</button>
+        </div>
+      </div>
+      <div class="filter-row">
+        <div class="filter-label">合作状态</div>
+        <div class="filter-content"><div class="chips chips-nowrap">${["全部", "有进行中的任务", "历史合作"].map((item) => `<button class="chip ${state.myTalentFilters.cooperationStatus === item ? "active" : ""}" data-action="set-my-talent-filter" data-key="cooperationStatus" data-value="${item}">${item}</button>`).join("")}</div></div>
+      </div>
+      <div class="filter-row">
+        <div class="filter-label">合作次数</div>
+        <div class="filter-content"><div class="chips chips-nowrap">${["全部", "0次（仅收藏）", "1次", "2-3次", "4次及以上"].map((item) => `<button class="chip ${state.myTalentFilters.cooperationTimes === item ? "active" : ""}" data-action="set-my-talent-filter" data-key="cooperationTimes" data-value="${item}">${item}</button>`).join("")}</div></div>
+      </div>
+      <div class="filter-row">
+        <div class="filter-label">达人平台</div>
+        <div class="filter-content"><div class="chips chips-nowrap">${platforms.map((item) => `<button class="chip ${state.myTalentFilters.platform === item ? "active" : ""}" data-action="set-my-talent-filter" data-key="platform" data-value="${item}">${item}</button>`).join("")}</div></div>
+      </div>
+      <div class="filter-row">
+        <div class="filter-label">垂类分类</div>
+        <div class="filter-content"><div class="chips chips-nowrap">${categories.map((item) => `<button class="chip ${state.myTalentFilters.category === item ? "active" : ""}" data-action="set-my-talent-filter" data-key="category" data-value="${item}">${item}</button>`).join("")}</div></div>
+      </div>
+      <div class="filter-row">
+        <div class="filter-label">平均互动率</div>
+        <div class="filter-content"><div class="chips chips-nowrap">${["全部", "1%+", ">3%", ">5%", ">10%"].map((item) => `<button class="chip ${state.myTalentFilters.engagement === item ? "active" : ""}" data-action="set-my-talent-filter" data-key="engagement" data-value="${item}">${item}</button>`).join("")}</div></div>
+      </div>
+      <div class="filter-row">
+        <div class="filter-label">近30天平均曝光量</div>
+        <div class="filter-content"><div class="chips chips-nowrap">${["全部", "0-10w", "10w-50w", "50w-200w", "200w+"].map((item) => `<button class="chip ${state.myTalentFilters.exposure30d === item ? "active" : ""}" data-action="set-my-talent-filter" data-key="exposure30d" data-value="${item}">${item}</button>`).join("")}</div></div>
+      </div>
+      <div class="filter-row">
+        <div class="filter-label">履约质量分层</div>
+        <div class="filter-content"><div class="chips chips-nowrap">${["全部", "S级优质", "A级良好", "B级一般", "C级较差"].map((item) => `<button class="chip ${state.myTalentFilters.qualityTier === item ? "active" : ""}" data-action="set-my-talent-filter" data-key="qualityTier" data-value="${item}">${item}</button>`).join("")}</div></div>
+      </div>
+      <div class="filter-row">
+        <div class="filter-label">报价区间 USD</div>
+        <div class="filter-content"><div class="chips chips-nowrap">${["全部", "$0-500", "$500-1K", "$1K-3K", "$3K-10K", "$10K+"].map((item) => `<button class="chip ${state.myTalentFilters.priceRange === item ? "active" : ""}" data-action="set-my-talent-filter" data-key="priceRange" data-value="${item}">${item}</button>`).join("")}</div></div>
+      </div>
+      ${renderMyTalentSelectedConditions()}
+    </div>
+    <div class="panel my-talent-batch-bar">
+      <strong>批量操作</strong>
+      <div class="filter-action-row">
+        <button class="secondary-button" data-action="modal-invite">批量发起合作邀约</button>
+        <button class="ghost-button" data-action="toast" data-message="已导出达人合作汇总 Excel">导出达人数据</button>
+        <button class="ghost-button" data-action="toast" data-message="已批量移除收藏">批量取消收藏</button>
+      </div>
+    </div>
+    <div class="table-card my-talent-list-card">
+      <div class="table-head"><h2>达人总列表</h2><span class="muted">按达人聚合当前广告主全部历史合作与进行中任务</span></div>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th><input type="checkbox" aria-label="全选达人" /></th>
+              <th>达人卡片</th>
+              <th>粉丝体量</th>
+              <th>垂类标签</th>
+              <th>合作总单数</th>
+              <th>有效履约单数</th>
+              <th>履约完成率</th>
+              <th>平均单条曝光</th>
+              <th>平均互动率</th>
+              <th>累计投放预算</th>
+              <th>待结算金额</th>
+              <th>合作状态</th>
+              <th>操作</th>
+            </tr>
+          </thead>
+          <tbody>
+            ${
+              filteredRows.length
+                ? filteredRows
+                    .map(
+                      (row) => `
+                        <tr class="my-talent-row ${row.qualityTier.startsWith("S") ? "tier-s" : ""}">
+                          <td><input type="checkbox" aria-label="选择 ${row.name}" /></td>
+                          <td class="my-talent-main-cell">
+                            ${row.hasActive ? `<span class="row-corner-badge">进行中</span>` : ""}
+                            <div class="row-title">
+                              <button class="avatar-button" data-action="open-my-talent-drawer" data-name="${encodeURIComponent(row.name)}" aria-label="查看 ${row.name} 达人详情">
+                                <img src="${row.avatar}" alt="" />
+                              </button>
+                              <span>
+                                <strong>${row.name}</strong>
+                                <small>${row.uid} · ${socialPlatformIcon(row.platform)} ${row.platform}</small>
+                              </span>
+                            </div>
+                            <div class="my-talent-region-line">${myTalentRegionTags(row.region)}</div>
+                          </td>
+                          <td>${row.followers}</td>
+                          <td>${simpleChips(row.categories)}</td>
+                          <td>${row.totalOrders}</td>
+                          <td>${row.validOrders}</td>
+                          <td><div class="my-talent-rate"><strong>${row.completionRate}</strong><span class="tier-pill">${row.qualityTier}</span></div></td>
+                          <td>${row.avgExposure}</td>
+                          <td>${row.avgEngagement}</td>
+                          <td>${row.totalBudget}</td>
+                          <td>${row.pendingSettlement}</td>
+                          <td>${myTalentStatusBadges(row.statusTags)}${row.weakWarning ? `<small class="weak-warning-inline">历史曾有中途放弃 / 多次驳回</small>` : ""}</td>
+                          <td><div class="table-actions-inline"><button class="link-button" data-action="open-my-talent-drawer" data-name="${encodeURIComponent(row.name)}">查看详情</button><button class="link-button" data-action="close-and-nav" data-page="collaborators">发起邀约</button><button class="link-button" data-action="toast" data-message="已取消收藏 ${row.name}">取消收藏</button></div></td>
+                        </tr>
+                      `,
+                    )
+                    .join("")
+                : emptyRow(13)
+            }
+          </tbody>
+        </table>
+      </div>
+    </div>
+  `;
+}
+
+function renderMyTalentSelectedConditions() {
+  const f = state.myTalentFilters;
+  const items = [
+    ["cooperationStatus", "合作状态", f.cooperationStatus],
+    ["cooperationTimes", "合作次数", f.cooperationTimes],
+    ["platform", "达人平台", f.platform],
+    ["category", "垂类分类", f.category],
+    ["engagement", "平均互动率", f.engagement],
+    ["exposure30d", "近30天平均曝光量", f.exposure30d],
+    ["qualityTier", "履约质量", f.qualityTier],
+    ["priceRange", "报价区间", f.priceRange],
+  ].filter(([, , value]) => value && value !== "全部");
+
+  return `
+    <div class="selected-filter-row my-talent-selected-row">
+      <div class="selected-filter-label">已选条件：</div>
+      <div class="selected-filter-chips">
+        ${
+          items.length
+            ? items
+                .map(
+                  ([key, label, value]) => `
+                    <button class="selected-filter-chip" data-action="remove-my-talent-filter" data-filter-key="${key}" type="button">
+                      <span>${label}：${value}</span>
+                      <span class="selected-filter-x" aria-hidden="true">×</span>
+                    </button>
+                  `,
+                )
+                .join("")
+            : `<span class="selected-filter-empty">暂无筛选条件</span>`
+        }
+      </div>
+      <button class="selected-filter-clear" data-action="clear-my-talent-selected-filters" ${items.length ? "" : "disabled"} type="button">清除全部</button>
+    </div>
+  `;
+}
+
+function myTalentSelect(label, key, options) {
+  const current = state.myTalentFilters[key] || "全部";
+  return `
+    <label class="compact-filter-field">
+      <span>${label}</span>
+      <select class="select compact-filter-select" data-my-talent-filter="${key}">
+        ${options.map((item) => `<option value="${item}" ${current === item ? "selected" : ""}>${item}</option>`).join("")}
+      </select>
+    </label>
+  `;
+}
+
+function renderMyTalents() {
+  const filteredRows = filterMyTalents();
+  const platforms = ["全部", "TikTok", "YouTube", "Instagram", "Twitch", "Facebook", "Twitter", "Others"];
+  const categories = ["全部", "购物零售", "游戏", "美妆", "科技", "生活", "理财", "软件", "食品饮料"];
+
+  return `
+    ${pageHeader("合作达人", "合作达人", "围绕达人聚合历史合作、履约表现、投放效果与结算信息，支持复投评估和合作台账追溯。", "")}
+    <div class="panel my-talents-filter-panel compact-my-talent-filter">
+      <div class="talent-search-top">
+        <div class="search-box-inline">
+          <span aria-hidden="true">⌕</span>
+          <input class="input search-input" type="search" placeholder="搜索达人昵称 / UID / 标签关键词" value="${state.myTalentFilters.keyword}" data-my-talent-filter="keyword" />
+        </div>
+      </div>
+      <div class="compact-filter-grid">
+        ${myTalentSelect("合作状态", "cooperationStatus", ["全部", "有进行中的任务", "历史合作"])}
+        ${myTalentSelect("合作次数", "cooperationTimes", ["全部", "0次（仅收藏）", "1次", "2-3次", "4次及以上"])}
+        ${myTalentSelect("达人平台", "platform", platforms)}
+        ${myTalentSelect("垂类分类", "category", categories)}
+        ${myTalentSelect("平均互动率", "engagement", ["全部", "1%+", ">3%", ">5%", ">10%"])}
+        ${myTalentSelect("近30天曝光", "exposure30d", ["全部", "0-10w", "10w-50w", "50w-200w", "200w+"])}
+        ${myTalentSelect("履约质量", "qualityTier", ["全部", "S级优质", "A级良好", "B级一般", "C级较差"])}
+        ${myTalentSelect("报价区间", "priceRange", ["全部", "$0-500", "$500-1K", "$1K-3K", "$3K-10K", "$10K+"])}
+      </div>
+      ${renderMyTalentSelectedConditions()}
+    </div>
+    <div class="table-card my-talent-list-card">
+      <div class="table-head">
+        <div>
+          <h2>达人总列表</h2>
+          <span class="muted">按达人聚合当前广告主全部历史合作与进行中任务</span>
+        </div>
+        <button class="primary-button" data-action="modal-invite">批量邀请达人</button>
+      </div>
+      <div class="table-wrap my-talent-sticky-wrap">
+        <table class="my-talent-table">
+          <thead>
+            <tr>
+              <th><input type="checkbox" aria-label="全选达人" /></th>
+              <th>达人基础信息</th>
+              <th>粉丝体量</th>
+              <th>垂类标签</th>
+              <th>合作总单数</th>
+              <th>有效履约单数</th>
+              <th>履约完成率</th>
+              <th>平均单条曝光</th>
+              <th>平均互动率</th>
+              <th>累计合作金额</th>
+              <th>待结算金额</th>
+              <th>操作</th>
+            </tr>
+          </thead>
+          <tbody>
+            ${
+              filteredRows.length
+                ? filteredRows
+                    .map(
+                      (row) => `
+                        <tr class="my-talent-row ${row.qualityTier.startsWith("S") ? "tier-s" : ""}">
+                          <td><input type="checkbox" aria-label="选择 ${row.name}" /></td>
+                          <td class="my-talent-main-cell">
+                            ${row.hasActive ? `<span class="row-corner-badge">进行中</span>` : ""}
+                            <div class="row-title my-talent-title-line">
+                              <button class="avatar-button" data-action="open-my-talent-drawer" data-name="${encodeURIComponent(row.name)}" aria-label="查看 ${row.name} 达人详情">
+                                <img src="${row.avatar}" alt="" />
+                              </button>
+                              <span class="my-talent-name-stack">
+                                <span class="my-talent-name-row"><strong>${row.name}</strong><span class="my-talent-platform-icon">${socialPlatformIcon(row.platform)}</span></span>
+                                <small>${row.uid} · ${row.platform}</small>
+                              </span>
+                            </div>
+                            <div class="my-talent-region-line">${myTalentRegionTags(row.region)}</div>
+                          </td>
+                          <td>${row.followers}</td>
+                          <td><div class="my-talent-tag-line">${simpleChips(row.categories)}</div></td>
+                          <td>${row.totalOrders}</td>
+                          <td>${row.validOrders}</td>
+                          <td><div class="my-talent-rate"><strong>${row.completionRate}</strong><span class="tier-pill">${row.qualityTier}</span></div></td>
+                          <td>${row.avgExposure}</td>
+                          <td>${row.avgEngagement}</td>
+                          <td>${row.totalBudget}</td>
+                          <td>${row.pendingSettlement}</td>
+                          <td>
+                            <div class="table-actions-inline my-talent-actions">
+                              <button class="link-button" data-action="open-my-talent-drawer" data-name="${encodeURIComponent(row.name)}">查看详情</button>
+                              <button class="link-button" data-action="open-my-talent-invite" data-name="${encodeURIComponent(row.name)}">发起邀约</button>
+                              <button class="icon-link-button" data-action="toast" data-message="已取消收藏 ${row.name}" title="取消收藏" aria-label="取消收藏">♡</button>
+                            </div>
+                          </td>
+                        </tr>
+                      `,
+                    )
+                    .join("")
+                : emptyRow(12)
+            }
+          </tbody>
+        </table>
+      </div>
+    </div>
+  `;
+}
+
+function renderMyTalentDrawerTab(profile) {
+  const activeTab = state.myTalentDetail.tab || "ledger";
+
+  if (activeTab === "ledger") {
+    return `
+      <div class="panel my-talent-inner-panel">
+        <div class="table-head"><h2>合作任务台账</h2><span class="muted">按时间倒序展示该达人与当前广告主全部合作任务</span></div>
+        <div class="my-talent-tab-filters">
+          <input class="input" value="2026-01-01 ~ 2026-06-30" />
+          <select class="select"><option>全部合作状态</option><option>履约中</option><option>已完成</option><option>已拒绝</option></select>
+          <select class="select"><option>全部结算状态</option><option>待结算</option><option>已结算</option></select>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>活动名称</th><th>创建时间</th><th>平台 / 地区</th><th>合作状态</th><th>履约节点进度</th><th>合作预算</th><th>交付信息</th><th>审核状态</th><th>发布数据</th><th>结算状态</th><th>操作</th></tr></thead>
+            <tbody>
+              ${
+                profile.taskLedger.length
+                  ? profile.taskLedger
+                      .map(
+                        (item) => `
+                          <tr>
+                            <td><strong>${item.campaign}</strong></td>
+                            <td>${item.createdAt}</td>
+                            <td>${item.platform}<br /><small>${item.region}</small></td>
+                            <td>${status(item.cooperationStatus, item.cooperationStatus.includes("完成") ? "done" : item.cooperationStatus.includes("拒绝") || item.cooperationStatus.includes("取消") ? "rejected" : "running")}</td>
+                            <td><small>${item.flow}</small></td>
+                            <td>${item.budget}</td>
+                            <td>${item.deliverable}</td>
+                            <td>${item.reviewStatus}</td>
+                            <td>${item.publishLink === "-" ? "-" : `${item.exposure} / ${item.interaction}`}</td>
+                            <td>${item.settlementStatus}</td>
+                            <td><div class="table-actions-inline"><button class="link-button" data-action="modal-campaign-info" data-campaign="${encodeURIComponent(item.campaign)}">查看任务详情</button><button class="link-button" data-action="open-my-talent-content" data-name="${encodeURIComponent(profile.name)}" data-campaign="${encodeURIComponent(item.campaign)}">查看交付内容</button></div></td>
+                          </tr>
+                        `,
+                      )
+                      .join("")
+                  : emptyRow(11)
+              }
+            </tbody>
+          </table>
+        </div>
+      </div>
+    `;
+  }
+
+  if (activeTab === "deliverables") {
+    return `
+      <div class="panel my-talent-inner-panel">
+        <div class="table-head"><h2>交付内容档案</h2><span class="muted">汇总该达人提交过的脚本、视频和图文产物</span></div>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>所属活动</th><th>内容类型</th><th>提交时间</th><th>审核结果</th><th>发布状态</th><th>数据效果</th><th>操作</th></tr></thead>
+            <tbody>
+              ${
+                profile.deliverables.length
+                  ? profile.deliverables
+                      .map(
+                        (item) => `
+                          <tr>
+                            <td>${item.campaign}</td>
+                            <td>${item.type}</td>
+                            <td>${item.submittedAt}</td>
+                            <td>${status(item.review, item.review === "通过" ? "done" : item.review === "驳回" ? "rejected" : "pending")}${item.rejectReason !== "-" ? `<small class="weak-warning-inline">驳回原因：${item.rejectReason}</small>` : ""}</td>
+                            <td>${item.publishStatus}</td>
+                            <td>${item.effect}</td>
+                            <td><div class="table-actions-inline"><button class="link-button" data-action="open-my-talent-content" data-name="${encodeURIComponent(profile.name)}" data-campaign="${encodeURIComponent(item.campaign)}">预览内容</button><button class="link-button" data-action="toast" data-message="已下载素材占位文件">下载素材</button></div></td>
+                          </tr>
+                        `,
+                      )
+                      .join("")
+                  : emptyRow(7)
+              }
+            </tbody>
+          </table>
+        </div>
+      </div>
+    `;
+  }
+
+  if (activeTab === "quality") {
+    return `
+      <div class="grid two-col my-talent-quality-grid">
+        <div class="panel">
+          <div class="panel-head"><h2>履约时效统计</h2></div>
+          <div class="timeline">
+            <div class="timeline-item"><span class="timeline-dot"></span><div><strong>平均接单响应时长</strong><p>${profile.quality.responseTime}</p></div></div>
+            <div class="timeline-item"><span class="timeline-dot"></span><div><strong>平均内容交付周期</strong><p>${profile.quality.deliveryCycle}</p></div></div>
+            <div class="timeline-item"><span class="timeline-dot"></span><div><strong>逾期交付次数</strong><p>${profile.quality.overdueCount}</p></div></div>
+          </div>
+        </div>
+        <div class="panel">
+          <div class="panel-head"><h2>审核驳回统计</h2></div>
+          <div class="timeline">
+            <div class="timeline-item"><span class="timeline-dot"></span><div><strong>报名阶段驳回</strong><p>${profile.quality.signupReject}</p></div></div>
+            <div class="timeline-item"><span class="timeline-dot"></span><div><strong>内容初审运营驳回 TOP3</strong><p>${profile.quality.opsReject}</p></div></div>
+            <div class="timeline-item"><span class="timeline-dot"></span><div><strong>内容复审广告主驳回 TOP3</strong><p>${profile.quality.brandReject}</p></div></div>
+          </div>
+        </div>
+        <div class="panel">
+          <div class="panel-head"><h2>曝光对比图</h2></div>
+          <div class="chart-placeholder">柱状图占位：历次合作曝光对比</div>
+        </div>
+        <div class="panel">
+          <div class="panel-head"><h2>驳回原因分布</h2></div>
+          <div class="chart-placeholder">饼图占位：驳回原因占比</div>
+        </div>
+        <div class="panel full">
+          <div class="panel-head"><h2>互动率变化趋势</h2></div>
+          <div class="chart-placeholder wide">折线图占位：历次合作互动率变化</div>
+        </div>
+      </div>
+    `;
+  }
+
+  if (activeTab === "settlements") {
+    return `
+      <div class="panel my-talent-inner-panel">
+        <div class="table-head"><h2>结算账单明细</h2><span class="muted">按账单周期沉淀单达人历史结算记录</span></div>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>活动名称</th><th>合作报价</th><th>发布完成时间</th><th>结算周期</th><th>账单生成时间</th><th>结算状态</th><th>结算备注</th><th>操作</th></tr></thead>
+            <tbody>
+              ${
+                profile.settlements.length
+                  ? profile.settlements
+                      .map(
+                        (item) => `
+                          <tr>
+                            <td>${item.campaign}</td>
+                            <td>${item.quote}</td>
+                            <td>${item.completedAt}</td>
+                            <td>${item.cycle}</td>
+                            <td>${item.billAt}</td>
+                            <td>${status(item.status, item.status === "已结算" ? "done" : "pending")}</td>
+                            <td>${item.note}</td>
+                            <td><button class="link-button" data-action="open-my-talent-settlement" data-name="${encodeURIComponent(profile.name)}" data-campaign="${encodeURIComponent(item.campaign)}">查看结算单详情</button></td>
+                          </tr>
+                        `,
+                      )
+                      .join("")
+                  : emptyRow(8)
+              }
+            </tbody>
+          </table>
+        </div>
+      </div>
+    `;
+  }
+
+  return `
+    <div class="panel my-talent-inner-panel">
+      <div class="table-head"><h2>沟通记录</h2><span class="muted">系统通知与人工备注沉淀在同一时间轴中</span></div>
+      <div class="timeline">
+        ${profile.communications
+          .map(
+            (item) => `
+              <div class="timeline-item">
+                <span class="timeline-dot"></span>
+                <div>
+                  <strong>${item.type}</strong>
+                  <span class="timeline-time">${item.time}</span>
+                  <p>${item.content}</p>
+                </div>
+              </div>
+            `,
+          )
+          .join("")}
+      </div>
+    </div>
+  `;
+}
+
+function openMyTalentContentModal(name = "", campaign = "") {
+  const profile = myTalentRows.find((item) => item.name === name) || myTalentRows[0];
+  const matched = profile.deliverables.find((item) => item.campaign === campaign) || profile.deliverables[0];
+  openModal(`
+    <div class="modal-head">
+      <div><h2>交付内容预览</h2><p class="subcopy">${profile.name} · ${matched?.campaign || campaign}</p></div>
+      <button class="close-button" data-action="close-overlay" aria-label="关闭">×</button>
+    </div>
+    <div class="modal-body">
+      <div class="deliver-placeholders single">
+        <div class="deliver-item"><span class="deliver-badge">${matched?.type || "内容"}</span><span class="deliver-desc">${matched?.review || "待审核"} · ${matched?.publishStatus || "-"}</span></div>
+      </div>
+      <div class="note-box" style="margin-top:12px">当前原型展示脚本 / 视频 / 图文预览占位。正式系统可在此查看素材、审核意见与发布链接。</div>
+    </div>
+    <div class="drawer-foot">
+      <button class="ghost-button" data-action="close-overlay">关闭</button>
+      <button class="primary-button" data-action="toast-close" data-message="已下载素材占位文件">下载素材</button>
+    </div>
+  `);
+}
+
+function openMyTalentSettlementModal(name = "", campaign = "") {
+  const profile = myTalentRows.find((item) => item.name === name) || myTalentRows[0];
+  const matched = profile.settlements.find((item) => item.campaign === campaign) || profile.settlements[0];
+  openModal(`
+    <div class="modal-head">
+      <div><h2>结算单详情</h2><p class="subcopy">${profile.name} · ${matched?.campaign || campaign}</p></div>
+      <button class="close-button" data-action="close-overlay" aria-label="关闭">×</button>
+    </div>
+    <div class="modal-body">
+      <div class="mini-stats">
+        <div class="mini-stat"><span>合作报价</span><strong>${matched?.quote || "-"}</strong></div>
+        <div class="mini-stat"><span>结算周期</span><strong>${matched?.cycle || "-"}</strong></div>
+        <div class="mini-stat"><span>结算状态</span><strong>${matched?.status || "-"}</strong></div>
+      </div>
+      <div class="note-box" style="margin-top:12px">${matched?.note || "暂无结算备注"}</div>
+    </div>
+    <div class="drawer-foot">
+      <button class="ghost-button" data-action="close-overlay">关闭</button>
+    </div>
+  `);
+}
+
+function openMyTalentDrawer(name = "Mika Studio") {
+  const profile = myTalentRows.find((item) => item.name === name) || myTalentRows[0];
+  state.myTalentDetail.name = profile.name;
+  modalRoot.innerHTML = `
+    <div class="drawer-backdrop" data-action="close-overlay"></div>
+    <aside class="drawer my-talent-drawer" role="dialog" aria-modal="true">
+      <div class="drawer-head">
+        <div><h2>${profile.name}</h2><p class="subcopy">${profile.uid} · ${profile.platform} · ${profile.region.join(" / ")}</p></div>
+        <button class="close-button" data-action="close-overlay" aria-label="关闭">×</button>
+      </div>
+      <div class="drawer-body">
+        <div class="my-talent-overview-grid">
+          <div class="panel">
+            <div class="row-title">
+              <img src="${profile.avatar}" alt="" />
+              <span><strong>${profile.name}</strong><small>${profile.uid} · ${profile.platform}</small></span>
+            </div>
+            <div class="my-talent-summary-stack">
+              <div><span>受众画像</span><strong>${profile.audienceGender} · ${profile.audienceAge}</strong></div>
+              <div><span>受众国家</span>${myTalentRegionTags(profile.audienceCountries)}</div>
+              <div><span>报价信息</span><strong>${profile.baseQuote}</strong><small>${profile.formats.join(" / ")}</small></div>
+              <div><span>达人标签</span>${simpleChips([...profile.categories, ...profile.styleTags])}</div>
+            </div>
+          </div>
+          <div class="panel">
+            <div class="mini-stats">
+              <div class="mini-stat"><span>总对接任务</span><strong>${profile.totalOrders} 单</strong></div>
+              <div class="mini-stat"><span>成功履约发布</span><strong>${profile.validOrders} 单</strong></div>
+              <div class="mini-stat"><span>中途放弃 / 驳回</span><strong>${Math.max(0, profile.totalOrders - profile.validOrders)} 单</strong></div>
+              <div class="mini-stat"><span>履约完成率</span><strong>${profile.completionRate}</strong><small>${profile.qualityTier}</small></div>
+            </div>
+          </div>
+          <div class="panel">
+            <div class="mini-stats">
+              <div class="mini-stat"><span>平均曝光</span><strong>${profile.avgExposure}</strong></div>
+              <div class="mini-stat"><span>平均互动率</span><strong>${profile.avgEngagement}</strong></div>
+              <div class="mini-stat"><span>平均点击跳转</span><strong>${profile.avgClicks}</strong></div>
+            </div>
+          </div>
+          <div class="panel">
+            <div class="mini-stats">
+              <div class="mini-stat"><span>累计消耗总预算</span><strong>${profile.totalBudget}</strong></div>
+              <div class="mini-stat"><span>已结算金额</span><strong>${profile.settledBudget}</strong></div>
+              <div class="mini-stat"><span>待结算金额</span><strong>${profile.pendingSettlement}</strong></div>
+            </div>
+            <div class="filter-action-row" style="margin-top:12px">
+              <button class="secondary-button" data-action="open-my-talent-invite" data-name="${encodeURIComponent(profile.name)}">发起新合作邀约</button>
+              <button class="ghost-button" data-action="toast" data-message="已导出 ${profile.name} 全部合作记录">导出合作记录</button>
+              <button class="ghost-button" data-action="close-overlay">关闭侧滑</button>
+            </div>
+          </div>
+        </div>
+        <div class="tabs my-talent-tabs">
+          <button class="tab ${state.myTalentDetail.tab === "ledger" ? "active" : ""}" data-action="set-my-talent-tab" data-tab="ledger">合作任务台账</button>
+          <button class="tab ${state.myTalentDetail.tab === "deliverables" ? "active" : ""}" data-action="set-my-talent-tab" data-tab="deliverables">交付内容档案</button>
+          <button class="tab ${state.myTalentDetail.tab === "quality" ? "active" : ""}" data-action="set-my-talent-tab" data-tab="quality">履约质量分析</button>
+          <button class="tab ${state.myTalentDetail.tab === "settlements" ? "active" : ""}" data-action="set-my-talent-tab" data-tab="settlements">结算账单明细</button>
+          <button class="tab ${state.myTalentDetail.tab === "communication" ? "active" : ""}" data-action="set-my-talent-tab" data-tab="communication">沟通记录</button>
+        </div>
+        ${renderMyTalentDrawerTab(profile)}
+      </div>
+    </aside>
   `;
 }
 
@@ -3961,22 +4877,6 @@ function projectProgressBody(project) {
   `;
 }
 
-function openProjectProgressDrawer(taskName = "") {
-  const project = projectRows.find((row) => row.task === taskName) || projectRows[0];
-  modalRoot.innerHTML = `
-    <div class="drawer-backdrop" data-action="close-overlay"></div>
-    <aside class="drawer" role="dialog" aria-modal="true">
-      <div class="drawer-head">
-        <div><h2>交付进度详情</h2><p class="subcopy">${project.task}</p></div>
-        <button class="close-button" data-action="close-overlay" aria-label="关闭">×</button>
-      </div>
-      <div class="drawer-body">
-        ${projectProgressBody(project)}
-      </div>
-    </aside>
-  `;
-}
-
 function renderApplications() {
   return `
     ${pageHeader(
@@ -3986,7 +4886,7 @@ function renderApplications() {
       `<button class="primary-button" data-nav="opportunityHall">继续找机会</button>`,
     )}
     <div class="table-card">
-      <div class="table-head"><h2>已报名记录</h2><span class="muted">共 1 条</span></div>
+      <div class="table-head"><h2>已报名记录</h2><span class="muted">共 2 条</span></div>
       <div class="table-wrap">
         <table>
           <thead><tr><th>报名任务</th><th>报名账号</th><th>报名理由</th><th>报名状态</th><th>反馈时间</th><th>备注</th><th>操作</th></tr></thead>
@@ -4159,7 +5059,6 @@ function renderPersonalCenter() {
 
 function renderSocialAuth() {
   const platforms = creatorSocialPlatforms();
-  const verifiedCount = platforms.reduce((sum, item) => sum + item.accounts.length, 0);
   return `
     ${pageHeader(
       "社媒认证",
@@ -4167,24 +5066,18 @@ function renderSocialAuth() {
       "认证参与合作的平台账号，一个平台可认证多个账号。",
       "",
     )}
-    ${metrics([
-      { label: "已认证账号", value: String(verifiedCount), delta: "可用于合作报名" },
-      { label: "审核中", value: "1", delta: "Instagram" },
-      { label: "可认证平台", value: String(platforms.length), delta: "支持多平台账号" },
-      { label: "待补充平台", value: "3", delta: "Twitch / Twitter / Facebook" },
-    ])}
     <div class="panel social-auth-page-note">
-      <strong>认证规则</strong>
-      <span>平台账号用于报名、邀约接收、履约数据回传和任务匹配。账号信息由平台审核确认，避免达人自行填写标签造成匹配失真。</span>
+      <strong>认证说明</strong>
+      <span>为确保你能在「合作邀请」和「我的任务」中实时查看活动数据，请正确认证参与活动所使用的指定平台账号。</span>
     </div>
     <div class="table-card">
       <div class="table-head">
         <h2>平台账号认证</h2>
-        <span class="muted">一行一个平台，支持继续添加同平台账号</span>
+        <span class="muted">支持同个平台关联多个账号</span>
       </div>
       <div class="table-wrap">
         <table class="social-auth-table">
-          <thead><tr><th>平台</th><th>已认证账号</th><th>使用场景</th><th>最近更新</th><th>操作</th></tr></thead>
+          <thead><tr><th>平台</th><th>已认证账号</th><th>操作</th></tr></thead>
           <tbody>
             ${platforms
               .map(
@@ -4192,21 +5085,75 @@ function renderSocialAuth() {
                   <tr>
                     <td><div class="social-auth-main"><span class="social-auth-icon">${socialPlatformIcon(item.name)}</span><strong>${item.name}</strong></div></td>
                     <td>
-                      <div class="social-account-summary">${item.accounts.length} 个账号</div>
                       ${
                         item.accounts.length
-                          ? `<div class="social-account-list">${item.accounts.map((account) => `<span>${account}<em class="${item.statusClass}">${item.statusText}</em></span>`).join("")}</div>`
-                          : `<span class="muted">暂无认证账号</span>`
+                          ? `<div class="social-account-summary"><span>${item.accounts.length}</span> 个账户已认证</div>
+                             <div class="social-account-compact-list">
+                               ${item.accounts
+                                 .map(
+                                   (account) => `
+                                     <span class="social-account-pill">${account}<em class="${item.statusClass}">${item.statusText}</em></span>
+                                   `,
+                                 )
+                                 .join("")}
+                             </div>`
+                          : ``
                       }
-                      <div class="social-auth-meta">${item.metrics}</div>
                     </td>
-                    <td>${item.usage}</td>
-                    <td>${item.updatedAt}</td>
                     <td><button class="link-button" data-action="open-social-auth" data-platform="${item.name}">认证</button></td>
                   </tr>
                 `,
               )
               .join("")}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  `;
+}
+
+function renderNotificationRecords() {
+  const items =
+    state.role === "brand"
+      ? state.brandNotifications.items
+      : state.role === "creator"
+        ? state.creatorNotifications.items
+        : [];
+  return `
+    ${pageHeader(
+      "通知中心",
+      "通知记录",
+      "查看全部站内通知、处理状态和关联任务。",
+      `<button class="secondary-button" data-action="open-notifications">快捷查看</button>`,
+    )}
+    <div class="filter-bar sticky">
+      <input class="input" placeholder="搜索通知标题 / 任务名称" />
+      <select class="select"><option>全部类型</option><option>报名结果</option><option>产物审核</option><option>合作邀请</option></select>
+      <select class="select"><option>全部状态</option><option>未读</option><option>已读</option><option>已处理</option></select>
+    </div>
+    <div class="table-card">
+      <div class="table-head"><h2>全部通知</h2><span class="muted">共 ${items.length} 条</span></div>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>通知类型</th><th>关联任务</th><th>通知内容</th><th>时间</th><th>操作</th></tr></thead>
+          <tbody>
+            ${
+              items.length
+                ? items
+                    .map(
+                      (item) => `
+                        <tr>
+                          <td><strong>${item.title}</strong></td>
+                          <td>${item.task || "-"}</td>
+                          <td>${item.content}</td>
+                          <td>${item.time}</td>
+                          <td><button class="link-button" data-action="open-notification" data-type="${item.type}" data-task="${encodeURIComponent(item.task || "")}" data-status="${encodeURIComponent(item.statusKey || "")}">${item.cta}</button></td>
+                        </tr>
+                      `,
+                    )
+                    .join("")
+                : emptyRow(5)
+            }
           </tbody>
         </table>
       </div>
@@ -4502,6 +5449,10 @@ function renderCampaignFulfillment() {
   const summary = rows[0];
   const isOfficialCampaign = officialTaskRows.some((row) => row.name === selectedCampaign);
   const backTarget = isOfficialCampaign ? "officialTaskCreate" : "advertiserProfile";
+  const campaignBase =
+    adminAdvertiserCampaignRows.find((row) => row.name === selectedCampaign) ||
+    officialTaskRows.find((row) => row.name === selectedCampaign) ||
+    {};
   return `
     ${pageHeader(
       "运营后台",
@@ -4509,21 +5460,24 @@ function renderCampaignFulfillment() {
       "按广告主任务查看达人合作、交付、审核、发布与结算状态。",
       `<button class="icon-button page-back-icon" data-nav="${backTarget}" aria-label="返回${isOfficialCampaign ? "官方任务" : "广告主档案"}" title="返回">←</button>`,
     )}
-    <div class="panel campaign-switcher">
-      <div>
-        <span class="muted">当前任务</span>
-        <strong>${selectedCampaign}</strong>
+    <div class="chips campaign-quick-tabs" style="margin-bottom:16px">
+      ${campaignOptions
+        .map((item) => `<button class="chip ${selectedCampaign === item ? "active" : ""}" data-action="select-admin-campaign" data-value="${encodeURIComponent(item)}">${item}</button>`)
+        .join("")}
+    </div>
+    <div class="panel campaign-basic-panel">
+      <div class="table-head compact-head">
+        <h2>任务基础信息</h2>
+        <span class="muted">${isOfficialCampaign ? "官方任务" : "广告主任务"}</span>
       </div>
-      <div class="campaign-switcher-controls">
-        <input class="input" list="campaignFulfillmentOptions" placeholder="搜索任务名称 / 广告主 / 官方任务" value="${selectedCampaign}" data-admin-campaign-picker />
-        <datalist id="campaignFulfillmentOptions">
-          ${campaignOptions.map((item) => `<option value="${item}"></option>`).join("")}
-        </datalist>
-        <select class="select" data-admin-campaign-select aria-label="切换任务">
-          ${campaignOptions.map((item) => `<option value="${item}" ${item === selectedCampaign ? "selected" : ""}>${item}</option>`).join("")}
-        </select>
+      <div class="profile-meta-grid">
+        <div class="profile-meta-item"><span>任务名称</span><strong>${selectedCampaign}</strong></div>
+        <div class="profile-meta-item"><span>广告主</span><strong>${summary?.advertiser || campaignBase.advertiser || "平台官方"}</strong></div>
+        <div class="profile-meta-item"><span>推广平台</span><strong>${campaignBase.platform || summary?.platform || "-"}</strong></div>
+        <div class="profile-meta-item"><span>预算</span><strong>${campaignBase.budget || "-"}</strong></div>
+        <div class="profile-meta-item"><span>任务状态</span><strong>${campaignBase.status || "-"}</strong></div>
+        <div class="profile-meta-item"><span>达人数量</span><strong>${campaignBase.creators || campaignBase.collaborators || rows.length || "-"}</strong></div>
       </div>
-      <span class="campaign-switcher-hint">大量任务不平铺展示，通过搜索、筛选和选择器定位明细。</span>
     </div>
     ${summary ? metrics([
       { label: "广告主", value: summary.advertiser, delta: "当前任务归属" },
@@ -4867,10 +5821,17 @@ function openEmailHistoryModal() {
   );
 }
 
-function renderInfoManagementAdmin() {
+function renderOperationsManagementAdmin() {
   return `
-    ${pageHeader("运营后台", "信息管理", "统一维护平台基础信息、标签体系和后续可配置内容。")}
+    ${pageHeader("运营后台", "运营管理", "统一维护登录页内容和平台运营配置。")}
     <div class="grid two-col">
+      <div class="panel">
+        <div class="section-row">
+          <h2>登录页配置</h2>
+          <button class="primary-button" data-nav="loginPageConfigAdmin">进入配置</button>
+        </div>
+        <p class="subcopy">维护运营端登录页的展示文案、入口信息和可配置模块。</p>
+      </div>
       <div class="panel">
         <div class="section-row">
           <h2>标签管理</h2>
@@ -4878,12 +5839,12 @@ function renderInfoManagementAdmin() {
         </div>
         <p class="subcopy">维护达人标签、游戏类目、内容属性和平台推荐时使用的基础标签。</p>
       </div>
-      <div class="panel">
-        <h2>信息配置</h2>
-        <p class="subcopy">后续可扩展国家地区、平台类型、行业分类等基础数据配置。</p>
-      </div>
     </div>
   `;
+}
+
+function renderLoginPageConfigAdmin() {
+  return `${pageHeader("运营后台", "登录页配置", "维护运营端登录页的文案、视觉素材和入口配置。")}<div class="panel"><p class="subcopy">此页先作为登录页配置占位，后续可补登录页 Banner、欢迎语、版本说明和跳转入口配置。</p></div>`;
 }
 
 function renderGameTagsAdmin() {
@@ -5090,7 +6051,8 @@ const pages = {
   influencerListAdmin: renderInfluencerListAdmin,
   influencerDetailAdmin: renderAdminInfluencerDetailPage,
   emailInvitesAdmin: renderEmailInvitesAdmin,
-  infoManagementAdmin: renderInfoManagementAdmin,
+  operationsManagementAdmin: renderOperationsManagementAdmin,
+  loginPageConfigAdmin: renderLoginPageConfigAdmin,
   gameTagsAdmin: renderGameTagsAdmin,
   usersAdmin: renderUsersAdmin,
   campaignReviewAdmin: renderCampaignReviewAdmin,
@@ -5107,6 +6069,7 @@ const pages = {
   talentManagement: renderTalentManagement,
   collaborators: renderCollaborators,
   talentSearch: renderTalentSearch,
+  myTalents: renderMyTalents,
   account: renderAccount,
   opportunityHall: renderOpportunityHall,
   taskDetail: renderTaskDetail,
@@ -5116,13 +6079,14 @@ const pages = {
   projectProgress: renderProjectProgressPage,
   revenue: renderRevenue,
   socialAuth: renderSocialAuth,
+  notificationRecords: renderNotificationRecords,
   personalCenter: renderPersonalCenter,
 };
 
-function openModal(content, small = false) {
+function openModal(content, small = false, extraClass = "") {
   modalRoot.innerHTML = `
     <div class="modal-backdrop" data-action="close-overlay"></div>
-    <div class="modal ${small ? "small" : ""}" role="dialog" aria-modal="true">
+    <div class="modal ${small ? "small" : ""} ${extraClass}" role="dialog" aria-modal="true">
       ${content}
     </div>
   `;
@@ -5169,7 +6133,6 @@ function openAdminListDrawer(name = "", kind = "advertisers") {
 }
 
 function openSocialAuthModal(platform = "TikTok") {
-  const platforms = ["TikTok", "YouTube", "Instagram", "Twitch", "Twitter", "Facebook", "Others"];
   openModal(
     `
     <div class="modal-head">
@@ -5177,13 +6140,10 @@ function openSocialAuthModal(platform = "TikTok") {
       <button class="close-button" data-action="close-overlay" aria-label="关闭">×</button>
     </div>
     <div class="modal-body">
-      ${field(
-        "认证平台",
-        `<select class="select">${platforms
-          .map((item) => `<option ${item === platform ? "selected" : ""}>${item}</option>`)
-          .join("")}</select>`,
-        true,
-      )}
+      <div class="auth-platform-readonly">
+        <span class="social-auth-icon">${socialPlatformIcon(platform)}</span>
+        <div><span>认证平台</span><strong>${platform}</strong></div>
+      </div>
       <div class="auth-choice-grid">
         <section class="auth-choice-card primary-choice">
           <span class="choice-label">方式一</span>
@@ -5191,7 +6151,6 @@ function openSocialAuthModal(platform = "TikTok") {
             <span class="social-auth-icon">${socialPlatformIcon(platform)}</span>
             <div><strong>第三方平台授权</strong><p>点击后跳转平台完成授权验证。</p></div>
           </div>
-          <p class="muted">平台仅获取账号名称、主页链接与认证所需基础信息，不用于其他目的。</p>
           <button class="secondary-button auth-wide-button" data-action="toast-close" data-message="已发起第三方授权认证">跳转认证</button>
         </section>
         <section class="auth-choice-card">
@@ -5204,7 +6163,6 @@ function openSocialAuthModal(platform = "TikTok") {
             ${field("主页链接", `<input class="input" placeholder="请输入账号主页链接" />`, true, "full")}
             ${field("认证截图", `<button class="ghost-button upload-line" data-action="toast" data-message="截图已加入上传队列">+ 上传主页截图</button>`, true, "full")}
           </div>
-          <p class="muted">截图需清晰展示头像、频道名称或主页名称，请勿提交屏幕拍照。</p>
         </section>
       </div>
       <div class="note-box">同一平台可认证多个账号；提交后进入平台审核。</div>
@@ -5235,6 +6193,9 @@ function openNotificationCenterDrawer() {
         <button class="close-button" data-action="close-overlay" aria-label="关闭">×</button>
       </div>
       <div class="drawer-body">
+        <div class="actions" style="margin-bottom:14px">
+          <button class="secondary-button" data-action="close-and-nav" data-page="notificationRecords">查看全部记录</button>
+        </div>
         ${
           items.length
             ? `<div class="timeline">
@@ -5406,28 +6367,126 @@ function refreshPublishModal() {
   if (state.page === "publishTask") render();
 }
 
+function inviteTalentPool() {
+  return [
+    { name: "Mika Studio", uid: "@mika_studio", platform: "TikTok", category: "游戏 / 生活方式", fans: "744.15万", country: "US / UK", avgViews: "161.10万", engagement: "3.5%", price: "$2,000", history: "6 单 · 履约率 83%", source: "recommend", match: "92%", avatar: assets.talentAvatar1 },
+    { name: "Luna Trend", uid: "@lunatrend_daily", platform: "Instagram", category: "美妆 / 购物零售", fans: "289.40万", country: "US / TH", avgViews: "68.50万", engagement: "6.2%", price: "$1,200", history: "3 单 · 履约率 67%", source: "recommend", match: "90%", avatar: assets.talentAvatar3 },
+    { name: "Daily Miki", uid: "@dailymiki_home", platform: "TikTok", category: "生活 / 家居", fans: "142.10万", country: "TH / VN", avgViews: "31.90万", engagement: "5.8%", price: "$900", history: "2 单 · 履约率 100%", source: "recommend", match: "86%", avatar: assets.talentAvatar1 },
+    { name: "Nova Plays", uid: "@novaplays", platform: "YouTube", category: "科技 / 测评", fans: "161.10万", country: "JP / CN", avgViews: "42.80万", engagement: "4.1%", price: "$800", history: "4 单 · 履约率 75%", source: "favorite", match: "88%", avatar: assets.talentAvatar2 },
+    { name: "Tech Otto", uid: "@tech_otto", platform: "YouTube", category: "科技 / 软件", fans: "305.00万", country: "US / DE", avgViews: "72.60万", engagement: "3.9%", price: "$2,600", history: "收藏未合作", source: "favorite", match: "84%", avatar: assets.talentAvatar2 },
+    { name: "Foodie Nara", uid: "@foodie_nara", platform: "Instagram", category: "食品饮料", fans: "98.50万", country: "JP / KR", avgViews: "15.60万", engagement: "5.1%", price: "$980", history: "1 单 · 履约率 100%", source: "favorite", match: "81%", avatar: assets.talentAvatar3 },
+  ];
+}
+
+function inviteTalentRows() {
+  const source = state.inviteTalentSource || "recommend";
+  const rows = inviteTalentPool().filter((row) => row.source === source);
+  return rows
+    .map(
+      (row) => `
+        <tr>
+          <td><input type="checkbox" ${state.inviteSelectedCreators.includes(row.name) ? "checked" : ""} data-action="toggle-invite-creator" data-name="${encodeURIComponent(row.name)}" aria-label="选择 ${row.name}" /></td>
+          <td>
+            <div class="row-title">
+              <img src="${row.avatar}" alt="" />
+              <span><strong>${row.name}</strong><small>${row.uid} · ${socialPlatformIcon(row.platform)} ${row.platform}</small></span>
+            </div>
+          </td>
+          <td>${row.category}</td>
+          <td>${row.fans}</td>
+          <td>${row.country}</td>
+          <td>${row.avgViews}</td>
+          <td>${row.engagement}</td>
+          <td>${row.price}</td>
+          <td>${row.history}</td>
+          <td><span class="tier-pill">${row.match}</span></td>
+        </tr>
+      `,
+    )
+    .join("");
+}
+
 function openInviteModal() {
+  const source = state.inviteTalentSource || "recommend";
   openModal(
     `
     <div class="modal-head">
-      <div><h2>邀请达人</h2><p class="subcopy">选择推广活动并发送合作邀请。</p></div>
+      <div><h2>邀请达人</h2><p class="subcopy">选择推广活动，并从推荐达人或收藏达人中定向发送合作邀请。</p></div>
       <button class="close-button" data-action="close-overlay" aria-label="关闭">×</button>
     </div>
-    <div class="modal-body">
-      <div class="form-grid">
+    <div class="modal-body invite-talent-body">
+      <div class="form-grid invite-base-form">
         ${field("推广活动名称", `<select class="select">${campaigns.map((row) => `<option>${row.name}</option>`).join("")}</select>`, true)}
-        ${field("合作类型", `<select class="select"><option>短视频</option><option>直播</option><option>曝光</option></select>`)}
+        ${field("合作类型", `<select class="select"><option>短视频</option><option>直播</option><option>曝光</option><option>图文</option></select>`)}
         ${field("报价(USD)", `<input class="input" value="99" />`, true)}
         ${field("期望发布时间", `<input class="input" value="2026-06-20 19:00" />`)}
         ${field("邀请备注", `<textarea class="textarea">欢迎参与新品推广，期待你的创意内容。</textarea>`, false, "full")}
       </div>
+      <div class="invite-talent-section">
+        <div class="section-row">
+          <div>
+            <h3>选择邀约达人</h3>
+            <p class="subcopy">展示达人基础数据、历史合作与匹配度，便于发起定向邀约。</p>
+          </div>
+          <span class="muted">已选 ${state.inviteSelectedCreators.length} 位</span>
+        </div>
+        <div class="tabs">
+          <button class="tab ${source === "recommend" ? "active" : ""}" data-action="set-invite-source" data-source="recommend">推荐达人</button>
+          <button class="tab ${source === "favorite" ? "active" : ""}" data-action="set-invite-source" data-source="favorite">我收藏的达人</button>
+        </div>
+        <div class="table-card invite-talent-table-card">
+          <div class="table-wrap">
+            <table>
+              <thead><tr><th>选择</th><th>达人</th><th>垂类标签</th><th>粉丝体量</th><th>国家/地区</th><th>平均曝光</th><th>互动率</th><th>报价</th><th>历史合作</th><th>匹配度</th></tr></thead>
+              <tbody>${inviteTalentRows()}</tbody>
+            </table>
+          </div>
+        </div>
+      </div>
     </div>
-    <div class="modal-foot">
-      <button class="ghost-button" data-action="close-overlay">取消</button>
-      <button class="primary-button" data-action="confirm-invite">发送邀请</button>
+    <div class="modal-foot modal-foot-split">
+      <div class="modal-foot-left"><span class="muted">将向选中的达人发送合作邀请</span></div>
+      <div class="modal-foot-right">
+        <button class="ghost-button" data-action="close-overlay">取消</button>
+        <button class="primary-button" data-action="confirm-invite">发送邀请</button>
+      </div>
     </div>
   `,
     false,
+    "invite-talent-modal",
+  );
+}
+
+function openMyTalentInviteModal(name = "") {
+  const profile = myTalentRows.find((item) => item.name === name) || myTalentRows[0];
+  openModal(
+    `
+    <div class="modal-head">
+      <div><h2>发起合作邀约</h2><p class="subcopy">当前场景仅发起单个达人的合作邀约，不展示下方达人列表。</p></div>
+      <button class="close-button" data-action="close-overlay" aria-label="关闭">×</button>
+    </div>
+    <div class="modal-body my-talent-invite-body">
+      <div class="my-talent-invite-target">
+        <div class="row-title">
+          <img src="${profile.avatar}" alt="" />
+          <span><strong>${profile.name}</strong><small>${profile.uid} · ${profile.platform} · ${profile.followers}</small></span>
+        </div>
+      </div>
+      <div class="form-grid">
+        ${field("推广活动名称", `<select class="select">${campaigns.map((row) => `<option>${row.name}</option>`).join("")}</select>`, true)}
+        ${field("合作类型", `<select class="select"><option>短视频</option><option>直播</option><option>曝光</option><option>图文</option></select>`, true)}
+        ${field("报价(USD)", `<input class="input" value="${String(profile.baseQuote || "$0").replace("$", "")}" />`, true)}
+        ${field("期望发布时间", `<input class="input" value="2026-06-20 19:00" />`)}
+        ${field("邀约备注", `<textarea class="textarea">基于历史合作表现，邀请你参与本次合作，期待继续配合。</textarea>`, false, "full")}
+      </div>
+    </div>
+    <div class="modal-foot">
+      <button class="ghost-button" data-action="close-overlay">取消</button>
+      <button class="primary-button" data-action="submit-my-talent-invite" data-name="${encodeURIComponent(profile.name)}">发送邀请</button>
+    </div>
+  `,
+    false,
+    "my-talent-invite-modal",
   );
 }
 
@@ -6450,8 +7509,28 @@ function handleAction(action, target) {
     openPageNotesDrawer(target.dataset.page || state.page);
     return;
   }
+  if (action === "close-and-nav") {
+    const page = target.dataset.page || state.page;
+    closeOverlay();
+    go(page);
+    return;
+  }
   if (action === "open-social-auth") {
     openSocialAuthModal(target.dataset.platform || "TikTok");
+    return;
+  }
+  if (action === "set-invite-source") {
+    state.inviteTalentSource = target.dataset.source || "recommend";
+    openInviteModal();
+    return;
+  }
+  if (action === "toggle-invite-creator") {
+    const name = decodeURIComponent(target.dataset.name || "");
+    const next = new Set(state.inviteSelectedCreators || []);
+    if (target.checked) next.add(name);
+    else next.delete(name);
+    state.inviteSelectedCreators = [...next];
+    openInviteModal();
     return;
   }
   if (action === "modal-invite") openInviteModal();
@@ -6488,8 +7567,12 @@ function handleAction(action, target) {
     return;
   }
   if (action === "confirm-invite") {
+    if (!state.inviteSelectedCreators.length) {
+      toast("请先选择至少 1 位达人");
+      return;
+    }
     closeOverlay();
-    toast("合作邀请已发送给达人");
+    toast(`合作邀请已发送给 ${state.inviteSelectedCreators.length} 位达人`);
   }
   if (action === "modal-review") openReviewModal();
   if (action === "modal-apply") {
@@ -6541,6 +7624,57 @@ function handleAction(action, target) {
     const taskName = decodeURIComponent(target.dataset.task || "项目");
     const reason = decodeURIComponent(target.dataset.reason || "暂无被拒原因");
     openRejectReasonModal(taskName, reason);
+  }
+  if (action === "open-my-talent-drawer") {
+    state.myTalentDetail.name = decodeURIComponent(target.dataset.name || "Mika Studio");
+    state.myTalentDetail.tab = "ledger";
+    openMyTalentDrawer(state.myTalentDetail.name);
+    return;
+  }
+  if (action === "open-my-talent-invite") {
+    openMyTalentInviteModal(decodeURIComponent(target.dataset.name || state.myTalentDetail.name || "Mika Studio"));
+    return;
+  }
+  if (action === "submit-my-talent-invite") {
+    const name = decodeURIComponent(target.dataset.name || state.myTalentDetail.name || "达人");
+    closeOverlay();
+    toast(`已向 ${name} 发起合作邀约`);
+    return;
+  }
+  if (action === "set-my-talent-tab") {
+    state.myTalentDetail.tab = target.dataset.tab || "ledger";
+    openMyTalentDrawer(state.myTalentDetail.name || "Mika Studio");
+    return;
+  }
+  if (action === "set-my-talent-filter") {
+    const key = target.dataset.key || "";
+    if (key) state.myTalentFilters[key] = target.dataset.value || "全部";
+    render();
+    return;
+  }
+  if (action === "remove-my-talent-filter") {
+    const key = target.dataset.filterKey || "";
+    if (key && key in state.myTalentFilters) state.myTalentFilters[key] = "全部";
+    render();
+    return;
+  }
+  if (action === "clear-my-talent-selected-filters") {
+    resetMyTalentFilters();
+    render();
+    return;
+  }
+  if (action === "reset-my-talent-filters") {
+    resetMyTalentFilters();
+    render();
+    return;
+  }
+  if (action === "open-my-talent-content") {
+    openMyTalentContentModal(decodeURIComponent(target.dataset.name || ""), decodeURIComponent(target.dataset.campaign || ""));
+    return;
+  }
+  if (action === "open-my-talent-settlement") {
+    openMyTalentSettlementModal(decodeURIComponent(target.dataset.name || ""), decodeURIComponent(target.dataset.campaign || ""));
+    return;
   }
   if (action === "drawer-creator") openCreatorDrawer(target.dataset.name);
   if (action === "drawer-delivery") openDeliveryDrawer(decodeURIComponent(target.dataset.creator || ""));
@@ -6736,12 +7870,28 @@ document.addEventListener("input", (event) => {
   render();
 });
 
+document.addEventListener("input", (event) => {
+  const filterTarget = event.target.closest("[data-my-talent-filter]");
+  if (!filterTarget) return;
+  const key = filterTarget.dataset.myTalentFilter;
+  state.myTalentFilters[key] = filterTarget.value;
+  render();
+});
+
 document.addEventListener("change", (event) => {
   const filterTarget = event.target.closest("[data-talent-filter]");
   if (!filterTarget) return;
   const key = filterTarget.dataset.talentFilter;
   const raw = String(filterTarget.value || "");
   state.talentSearchFilters[key] = raw;
+  render();
+});
+
+document.addEventListener("change", (event) => {
+  const filterTarget = event.target.closest("[data-my-talent-filter]");
+  if (!filterTarget) return;
+  const key = filterTarget.dataset.myTalentFilter;
+  state.myTalentFilters[key] = String(filterTarget.value || "");
   render();
 });
 
@@ -6780,7 +7930,7 @@ globalSearch?.addEventListener("input", (event) => {
 });
 
 window.addEventListener("hashchange", () => {
-  const next = window.location.hash.replace("#", "") || "promotions";
+  const next = normalizePage(window.location.hash.replace("#", "") || "promotions");
   state.page = pages[next] ? next : "promotions";
   render();
 });
@@ -6788,7 +7938,8 @@ window.addEventListener("hashchange", () => {
 if (!window.location.hash) {
   window.location.hash = "promotions";
 } else {
-  state.page = pages[window.location.hash.replace("#", "")] ? window.location.hash.replace("#", "") : "promotions";
+  const next = normalizePage(window.location.hash.replace("#", ""));
+  state.page = pages[next] ? next : "promotions";
 }
 
 render();
