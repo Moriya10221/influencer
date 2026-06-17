@@ -1,4 +1,4 @@
-const state = {
+﻿const state = {
   role: "brand",
   page: "promotions",
   query: "",
@@ -78,6 +78,7 @@ const state = {
     countries: [],
     areas: [],
     productName: "MINISO 香氛系列",
+    productType: "实物商品",
     productLink: "",
     productDesc: "新品香氛系列，适合生活方式与美妆垂类内容。",
     activePlatform: "TikTok",
@@ -187,6 +188,7 @@ const state = {
     invitations: "all",
     myProjects: "active",
     account: "company",
+    emailInvitesAdmin: "inviteList",
     adminReviewHistory: "全部",
   },
   officialTaskFormOpen: false,
@@ -211,6 +213,7 @@ const state = {
     reviewKeyword: "",
     reviewTarget: "全部",
     selectedCampaign: "MINISO 夏季新品内容合作",
+    campaignFulfillmentKeyword: "",
     selectedAdvertiser: "MINISO 官方旗舰店",
     advertiserKeyword: "",
     advertiserEmail: "",
@@ -324,13 +327,48 @@ const applicationDetail = {
     "报价信息填写不完整；请补充“包含几次修改/是否支持素材授权”等说明，并重新提交审核。",
 };
 
+const applicationRecords = [
+  {
+    task: "MINISO 夏季新品内容合作",
+    account: "Mika Studio",
+    reason: "账号内容与美妆生活方式受众匹配，过往测评数据稳定。",
+    statusKey: "approved",
+    feedbackTime: "2026-06-10 09:20",
+    note: "恭喜您报名成功，请等待下一流程。",
+  },
+  {
+    task: "全境封锁2-上线活动",
+    account: "Nova Plays",
+    reason: "过往游戏开箱和上线首发内容表现稳定，受众与任务方向匹配。",
+    statusKey: "platform_review",
+    feedbackTime: "-",
+    note: "",
+  },
+  {
+    task: "Anker 充电配件新品推广",
+    account: "Tech Otto",
+    reason: "科技数码垂类匹配，历史长视频转化表现较好。",
+    statusKey: "brand_review",
+    feedbackTime: "2026-06-11 15:40",
+    note: "",
+  },
+  {
+    task: "椰子水东南亚饮品种草",
+    account: "Daily Miki",
+    reason: "生活方式内容与快消饮品场景匹配，适合东南亚受众传播。",
+    statusKey: "rejected",
+    feedbackTime: "2026-06-09 18:10",
+    note: "当前报价与内容方向不匹配。",
+  },
+];
+
 function applicationStatusView(key) {
   const map = {
     none: { label: "未报名", cls: "draft", tip: "你还未报名该任务，点击按钮即可提交报名信息。" },
-    platform_review: { label: "已报名，待平台审核", cls: "pending", tip: "平台正在校验账号、报价与报名理由。" },
-    brand_review: { label: "待广告主审核", cls: "pending", tip: "平台审核已通过，等待广告主确认合作名单。" },
+    platform_review: { label: "审核中", cls: "pending", tip: "平台正在校验账号、报价与报名理由。" },
+    brand_review: { label: "审核中", cls: "pending", tip: "平台审核已通过，等待广告主确认合作名单。" },
     approved: { label: "报名通过", cls: "success", tip: "报名已通过，任务已进入合作流程，请按要求完成交付。" },
-    rejected: { label: "报名未通过", cls: "rejected", tip: "报名未通过，可查看原因并调整后重新提交。" },
+    rejected: { label: "报名未通过", cls: "rejected", tip: "报名未通过，可查看原因。" },
   };
   return map[key] || map.platform_review;
 }
@@ -594,7 +632,7 @@ const operatorNav = [
   ["campaignReviewAdmin", "活动审核", "活", "child"],
   ["creatorApplicationReviewAdmin", "报名审核", "报", "child"],
   ["creatorDeliverableReviewAdmin", "产物审核", "产", "child"],
-  ["officialTaskCreate", "官方任务", "官", "child", "新"],
+  ["officialTaskCreate", "官方任务", "官", undefined, "新"],
   ["operationsManagementAdmin", "运营管理", "运"],
   ["loginPageConfigAdmin", "登录页配置", "登", "child"],
   ["gameTagsAdmin", "标签管理", "标", "child"],
@@ -1851,7 +1889,7 @@ function resolveOperatorRelatedPage(page = state.page) {
 }
 
 function isGroupedNavItemActive(navItems, id, level) {
-  const currentPage = state.role === "operator" ? resolveOperatorRelatedPage(state.page) : state.page;
+  const currentPage = state.role === "operator" ? resolveOperatorRelatedPage(state.page) : state.page === "myTalentProfile" ? "myTalents" : state.page;
   if (currentPage === id) return true;
   if (level === "child") return false;
   const currentIndex = navItems.findIndex(([navId]) => navId === id);
@@ -2211,8 +2249,8 @@ function talentRows(source = creators) {
         <td>${row.avgViews}</td>
         <td>${row.price || "-"}</td>
         <td>
-          <div class="actions">
-            <button class="link-button" data-action="toast" data-message="已收藏 ${row.name}">收藏</button>
+          <div class="actions talent-row-actions">
+            <button class="icon-link-button ${row.contract === "已收藏" ? "active" : ""}" data-action="toggle-talent-favorite" data-name="${encodeURIComponent(row.name)}" title="${row.contract === "已收藏" ? "取消收藏" : "收藏"}" aria-label="${row.contract === "已收藏" ? "取消收藏" : "收藏"}">${row.contract === "已收藏" ? "♥" : "♡"}</button>
             <button class="link-button" data-action="modal-invite">邀请</button>
           </div>
         </td>
@@ -2362,26 +2400,22 @@ function deliveryRowsForReview() {
 }
 
 function applicationRows() {
-  return `
-    <tr>
-      <td><strong>MINISO 夏季新品内容合作</strong></td>
-      <td>Mika Studio</td>
-      <td>账号内容与美妆生活方式受众匹配，过往测评数据稳定。</td>
-      <td>${status("报名通过", "success")}</td>
-      <td>2026-06-10 09:20</td>
-      <td>平台审核通过，已进入合作流程。</td>
-      <td><button class="link-button" data-action="open-task-detail" data-task="${encodeURIComponent(taskDetailProfile.displayTitle)}">查看任务</button></td>
-    </tr>
-    <tr>
-      <td><strong>任务标题</strong></td>
-      <td>Mika Studio</td>
-      <td>当时填写的报名理由</td>
-      <td>${status("等待平台审核", "pending")}</td>
-      <td>-</td>
-      <td>-</td>
-      <td><button class="link-button" data-action="open-task-detail" data-task="${encodeURIComponent(taskDetailProfile.displayTitle)}">查看任务</button></td>
-    </tr>
-  `;
+  return applicationRecords
+    .map((row) => {
+      const statusView = applicationStatusView(row.statusKey);
+      return `
+        <tr>
+          <td><strong>${row.task}</strong></td>
+          <td>${row.account}</td>
+          <td>${row.reason}</td>
+          <td>${status(statusView.label, statusView.cls)}</td>
+          <td>${row.feedbackTime}</td>
+          <td>${row.note}</td>
+          <td><button class="link-button" data-action="open-task-detail" data-task="${encodeURIComponent(row.task)}" data-status="${row.statusKey}">查看任务</button></td>
+        </tr>
+      `;
+    })
+    .join("");
 }
 
 function invitationRows() {
@@ -2917,6 +2951,7 @@ function publishForm(inModal = true) {
   ];
   const publishPlatformLogos = Object.fromEntries(publishPlatforms.map((item) => [item.name, item.logo]));
   const publishAreas = publishAreaGroups;
+  const productTypeOptions = ["实物商品", "虚拟商品", "应用/软件", "服务体验", "品牌活动"];
   const creatorTypeOptions = ["购物与零售", "游戏", "美妆", "运动户外", "理财与投资", "软件与应用", "食品饮料", "科技数码", "生活方式", "测评"];
   const cooperationTypeOptions = ["全片", "插片", "直播", "长视频", "Shorts", "社区post", "素材授权"];
   const settlementCycleOptions = ["按7天实际曝光量结算", "按3天实际曝光量结算", "按14天实际曝光量结算"];
@@ -3864,10 +3899,16 @@ function myTalentRegionTags(codes = []) {
   return `<div class="country-chips">${codes.map((code) => `<span class="country-chip">${flagMap[code] || "🌐"} ${code}</span>`).join("")}</div>`;
 }
 
+function myTalentRegionText(codes = []) {
+  return `<span class="my-talent-region-text">${(codes || []).join(" / ") || "-"}</span>`;
+}
+
 function renderMyTalents() {
   const filteredRows = filterMyTalents();
   const platforms = ["全部", "TikTok", "YouTube", "Instagram", "Twitch", "Facebook", "Twitter", "Others"];
   const categories = ["全部", "购物零售", "游戏", "美妆", "科技", "生活", "理财", "软件", "食品饮料"];
+  const completionTooltip =
+    "履约完成率 = 已完成履约任务数 / 已确认合作任务总数。已确认合作后被取消、长期逾期或最终未交付的任务，会计入未完成并拉低该比例。";
 
   return `
     ${pageHeader(
@@ -3942,7 +3983,7 @@ function renderMyTalents() {
               <th>垂类标签</th>
               <th>合作总单数</th>
               <th>有效履约单数</th>
-              <th>履约完成率</th>
+              <th><span class="th-label-with-help">履约完成率<button class="th-help-button" type="button" aria-label="查看履约完成率说明"><span class="th-help-icon">i</span><span class="th-help-popover">${completionTooltip}</span></button></span></th>
               <th>平均单条曝光</th>
               <th>平均互动率</th>
               <th>累计投放预算</th>
@@ -4085,6 +4126,7 @@ function renderMyTalents() {
             <tr>
               <th><input type="checkbox" aria-label="全选达人" /></th>
               <th>达人基础信息</th>
+              <th>国家/地区</th>
               <th>粉丝体量</th>
               <th>垂类标签</th>
               <th>合作总单数</th>
@@ -4112,12 +4154,12 @@ function renderMyTalents() {
                                 <img src="${row.avatar}" alt="" />
                               </button>
                               <span class="my-talent-name-stack">
-                                <span class="my-talent-name-row"><strong>${row.name}</strong><span class="my-talent-platform-icon">${socialPlatformIcon(row.platform)}</span></span>
+                              <span class="my-talent-name-row"><strong>${row.name}</strong><span class="my-talent-platform-icon">${socialPlatformIcon(row.platform)}</span></span>
                                 <small>${row.uid} · ${row.platform}</small>
                               </span>
                             </div>
-                            <div class="my-talent-region-line">${myTalentRegionTags(row.region)}</div>
                           </td>
+                          <td>${myTalentRegionText(row.region)}</td>
                           <td>${row.followers}</td>
                           <td><div class="my-talent-tag-line">${simpleChips(row.categories)}</div></td>
                           <td>${row.totalOrders}</td>
@@ -4129,16 +4171,16 @@ function renderMyTalents() {
                           <td>${row.pendingSettlement}</td>
                           <td>
                             <div class="table-actions-inline my-talent-actions">
-                              <button class="link-button" data-action="open-my-talent-drawer" data-name="${encodeURIComponent(row.name)}">查看详情</button>
+                              <button class="link-button" data-action="open-my-talent-profile" data-name="${encodeURIComponent(row.name)}">查看详情</button>
                               <button class="link-button" data-action="open-my-talent-invite" data-name="${encodeURIComponent(row.name)}">发起邀约</button>
-                              <button class="icon-link-button" data-action="toast" data-message="已取消收藏 ${row.name}" title="取消收藏" aria-label="取消收藏">♡</button>
+                              <button class="icon-link-button active" data-action="toggle-talent-favorite" data-name="${encodeURIComponent(row.name)}" title="取消收藏" aria-label="取消收藏">♥</button>
                             </div>
                           </td>
                         </tr>
                       `,
                     )
                     .join("")
-                : emptyRow(12)
+                : emptyRow(13)
             }
           </tbody>
         </table>
@@ -4428,6 +4470,69 @@ function openMyTalentDrawer(name = "Mika Studio") {
   `;
 }
 
+function renderMyTalentProfile() {
+  const profile = myTalentRows.find((item) => item.name === state.myTalentDetail.name) || myTalentRows[0];
+  state.myTalentDetail.name = profile.name;
+  return `
+    ${pageHeader(
+      "合作达人",
+      profile.name,
+      "查看该达人与当前广告主的历史合作、履约表现、交付和结算情况。",
+      `<button class="secondary-button" data-nav="myTalents">返回合作达人</button>`,
+    )}
+    <div class="my-talent-profile-page">
+      <div class="my-talent-overview-grid">
+        <div class="panel">
+          <div class="row-title">
+            <img src="${profile.avatar}" alt="" />
+            <span><strong>${profile.name}</strong><small>${profile.uid} · ${profile.platform} · ${profile.region.join(" / ")}</small></span>
+          </div>
+          <div class="my-talent-summary-stack">
+            <div><span>受众画像</span><strong>${profile.audienceGender} · ${profile.audienceAge}</strong></div>
+            <div><span>受众国家</span>${myTalentRegionTags(profile.audienceCountries)}</div>
+            <div><span>报价信息</span><strong>${profile.baseQuote}</strong><small>${profile.formats.join(" / ")}</small></div>
+            <div><span>达人标签</span>${simpleChips([...profile.categories, ...profile.styleTags])}</div>
+          </div>
+        </div>
+        <div class="panel">
+          <div class="mini-stats">
+            <div class="mini-stat"><span>总对接任务</span><strong>${profile.totalOrders} 单</strong></div>
+            <div class="mini-stat"><span>成功履约发布</span><strong>${profile.validOrders} 单</strong></div>
+            <div class="mini-stat"><span>中途放弃 / 驳回</span><strong>${Math.max(0, profile.totalOrders - profile.validOrders)} 单</strong></div>
+            <div class="mini-stat"><span>履约完成率</span><strong>${profile.completionRate}</strong><small>${profile.qualityTier}</small></div>
+          </div>
+        </div>
+        <div class="panel">
+          <div class="mini-stats">
+            <div class="mini-stat"><span>平均曝光</span><strong>${profile.avgExposure}</strong></div>
+            <div class="mini-stat"><span>平均互动率</span><strong>${profile.avgEngagement}</strong></div>
+            <div class="mini-stat"><span>平均点击跳转</span><strong>${profile.avgClicks}</strong></div>
+          </div>
+        </div>
+        <div class="panel">
+          <div class="mini-stats">
+            <div class="mini-stat"><span>累计消耗总预算</span><strong>${profile.totalBudget}</strong></div>
+            <div class="mini-stat"><span>已结算金额</span><strong>${profile.settledBudget}</strong></div>
+            <div class="mini-stat"><span>待结算金额</span><strong>${profile.pendingSettlement}</strong></div>
+          </div>
+          <div class="filter-action-row" style="margin-top:12px">
+            <button class="secondary-button" data-action="open-my-talent-invite" data-name="${encodeURIComponent(profile.name)}">发起新合作邀约</button>
+            <button class="ghost-button" data-action="toast" data-message="已导出 ${profile.name} 全部合作记录">导出合作记录</button>
+          </div>
+        </div>
+      </div>
+      <div class="tabs my-talent-tabs">
+        <button class="tab ${state.myTalentDetail.tab === "ledger" ? "active" : ""}" data-action="set-my-talent-tab" data-tab="ledger">合作任务台账</button>
+        <button class="tab ${state.myTalentDetail.tab === "deliverables" ? "active" : ""}" data-action="set-my-talent-tab" data-tab="deliverables">交付内容档案</button>
+        <button class="tab ${state.myTalentDetail.tab === "quality" ? "active" : ""}" data-action="set-my-talent-tab" data-tab="quality">履约质量分析</button>
+        <button class="tab ${state.myTalentDetail.tab === "settlements" ? "active" : ""}" data-action="set-my-talent-tab" data-tab="settlements">结算账单明细</button>
+        <button class="tab ${state.myTalentDetail.tab === "communication" ? "active" : ""}" data-action="set-my-talent-tab" data-tab="communication">沟通记录</button>
+      </div>
+      ${renderMyTalentDrawerTab(profile)}
+    </div>
+  `;
+}
+
 function renderAccount() {
   const tab = state.tabs.account;
   return `
@@ -4658,6 +4763,26 @@ function followerPopover() {
 }
 
 function renderOpportunityHall() {
+  const cardApplyStates = [
+    {
+      label: "立即报名",
+      cls: "draft",
+      tip: "你还未报名该任务，可直接提交报名信息进入审核流程。",
+      action: (item) => `<button class="primary-button campaign-apply-button" data-action="modal-apply" data-campaign="${encodeURIComponent(item.name)}">立即报名</button>`,
+    },
+    {
+      label: "已报名：待审核",
+      cls: "pending",
+      tip: "报名信息已提交，平台 / 广告主会按流程继续审核。",
+      action: () => `<span class="status pending">已报名：待审核</span>`,
+    },
+    {
+      label: "报名通过",
+      cls: "success",
+      tip: "报名审核通过后，任务会进入正式合作与交付阶段。",
+      action: () => `<span class="status success">报名通过</span>`,
+    },
+  ];
   return `
     ${pageHeader(
       "",
@@ -4669,7 +4794,9 @@ function renderOpportunityHall() {
     <div class="cards-grid">
       ${creatorCampaigns
         .map(
-          (item) => `
+          (item, index) => {
+            const applyState = cardApplyStates[index] || null;
+            return `
         <article class="campaign-card opportunity-card-clickable" data-action="open-task-detail" data-campaign="${encodeURIComponent(item.name)}">
           <div class="campaign-cover-wrap">
             ${opportunityOfficialBadge(item)}
@@ -4686,9 +4813,11 @@ function renderOpportunityHall() {
               <strong>${item.budget}</strong>
             </div>
             ${
-              state.appliedCampaigns.includes(item.name)
-                ? `<button class="secondary-button campaign-apply-button applied" data-action="toast" data-message="你已报名该任务，当前状态为待平台审核">已报名</button>`
-                : `<button class="primary-button campaign-apply-button" data-action="modal-apply" data-campaign="${encodeURIComponent(item.name)}">报名</button>`
+              applyState
+                ? applyState.action(item)
+                : state.appliedCampaigns.includes(item.name)
+                  ? `<button class="secondary-button campaign-apply-button applied" data-action="toast" data-message="你已报名该任务，当前状态为待平台审核">已报名</button>`
+                  : `<button class="primary-button campaign-apply-button" data-action="modal-apply" data-campaign="${encodeURIComponent(item.name)}">报名</button>`
             }
           </div>
           <div class="mini-stats">
@@ -4697,7 +4826,8 @@ function renderOpportunityHall() {
             <div class="mini-stat region-stat"><span>推广地区</span>${opportunityRegionDisplay(item.region)}</div>
           </div>
         </article>
-      `,
+      `;
+          },
         )
         .join("")}
     </div>
@@ -4743,7 +4873,7 @@ function renderTaskDetailBody() {
             ${
               applicationDetail.statusKey === "none"
                 ? `<button class="primary-button task-apply-button" data-action="modal-apply">立即报名</button>`
-                : `<div class="task-status-block">${status(statusView.label, statusView.cls)}<small>${statusView.tip}</small></div>`
+                : `<div class="task-status-block">${status(statusView.label, statusView.cls)}</div>`
             }
           </div>
         </div>
@@ -4886,7 +5016,7 @@ function renderApplications() {
       `<button class="primary-button" data-nav="opportunityHall">继续找机会</button>`,
     )}
     <div class="table-card">
-      <div class="table-head"><h2>已报名记录</h2><span class="muted">共 2 条</span></div>
+      <div class="table-head"><h2>已报名记录</h2><span class="muted">共 ${applicationRecords.length} 条</span></div>
       <div class="table-wrap">
         <table>
           <thead><tr><th>报名任务</th><th>报名账号</th><th>报名理由</th><th>报名状态</th><th>反馈时间</th><th>备注</th><th>操作</th></tr></thead>
@@ -5379,6 +5509,12 @@ function renderAdvertiserProfile() {
     .filter((row) => !state.adminFilters.advertiserCampaignKeyword || row.name.includes(state.adminFilters.advertiserCampaignKeyword))
     .filter((row) => state.adminFilters.advertiserCampaignStatus === "全部" || row.status === state.adminFilters.advertiserCampaignStatus);
   const profile = adminAdvertiserRows.find((row) => row.name === advertiser);
+  const totalTasks = rows.length;
+  const totalBudget = rows.reduce((sum, row) => sum + parseMoneyUSD(row.budget || "0"), 0);
+  const activeTasks = rows.filter((row) => row.status === "进行中" || row.status === "招募中").length;
+  const partnerCreators = rows.reduce((sum, row) => sum + Number(row.creators || 0), 0);
+  const registeredAt = profile?.joinedAt ? profile.joinedAt.slice(0, 10) : "-";
+  const recentActive = profile?.status === "正常" ? "2天前" : "30天前";
   return `
     ${pageHeader(
       "运营后台",
@@ -5386,15 +5522,23 @@ function renderAdvertiserProfile() {
       "查看广告主基本档案，并继续查看该广告主的全部任务活动列表。",
       `<button class="secondary-button" data-nav="advertiserList">返回广告主列表</button>`,
     )}
-    <div class="panel">
+    <div class="panel advertiser-profile-card">
       <h2>${advertiser}</h2>
-      <div class="profile-meta-grid" style="margin-top:14px">
-        <div class="profile-meta-item"><span>联系人</span><strong>${profile?.contact || "-"}</strong></div>
-        <div class="profile-meta-item"><span>邮箱账号</span><strong>${profile?.email || "-"}</strong></div>
-        <div class="profile-meta-item"><span>公司规模</span><strong>${profile?.companyScale || "-"}</strong></div>
-        <div class="profile-meta-item"><span>行业类型</span><strong>${profile?.industry || "-"}</strong></div>
-        <div class="profile-meta-item"><span>主要投放地区</span><strong>${profile?.region || "-"}</strong></div>
-        <div class="profile-meta-item"><span>当前状态</span><strong>${profile?.status || "-"}</strong></div>
+      <div class="advertiser-kpi-grid">
+        <div class="advertiser-kpi-card"><span>任务数</span><strong>${totalTasks}</strong></div>
+        <div class="advertiser-kpi-card"><span>累计投放金额</span><strong>$${totalBudget.toLocaleString("en-US")}</strong></div>
+        <div class="advertiser-kpi-card"><span>进行中任务</span><strong>${activeTasks}</strong></div>
+        <div class="advertiser-kpi-card"><span>合作达人</span><strong>${partnerCreators}</strong></div>
+      </div>
+      <div class="advertiser-detail-grid">
+        <div class="advertiser-detail-item"><span>联系人</span><strong>${profile?.contact || "-"}</strong></div>
+        <div class="advertiser-detail-item"><span>邮箱</span><strong>${profile?.email || "-"}</strong></div>
+        <div class="advertiser-detail-item"><span>状态</span><strong class="advertiser-status-text"><span class="status-dot ${profile?.statusClass || ""}"></span>${profile?.status || "-"}</strong></div>
+        <div class="advertiser-detail-item"><span>注册时间</span><strong>${registeredAt}</strong></div>
+        <div class="advertiser-detail-item"><span>最近活跃</span><strong>${recentActive}</strong></div>
+        <div class="advertiser-detail-item"><span>公司规模</span><strong>${profile?.companyScale || "-"}</strong></div>
+        <div class="advertiser-detail-item"><span>行业</span><strong>${profile?.industry || "-"}</strong></div>
+        <div class="advertiser-detail-item advertiser-detail-item-wide"><span>主要投放地区</span><strong>${profile?.region || "-"}</strong></div>
       </div>
     </div>
     <div class="table-card" style="margin-top:16px">
@@ -5443,16 +5587,41 @@ function renderAdvertiserCampaigns() {
 }
 
 function renderCampaignFulfillment() {
-  const campaignOptions = [...new Set(adminCampaignFulfillmentRows.map((row) => row.campaign))];
-  const selectedCampaign = state.adminFilters.selectedCampaign || campaignOptions[0];
-  const rows = adminCampaignFulfillmentRows.filter((row) => row.campaign === selectedCampaign);
-  const summary = rows[0];
+  const campaignOptions = [...new Set([...adminCampaignFulfillmentRows.map((row) => row.campaign), ...officialTaskRows.map((row) => row.name)])];
+  const selectedCampaign = campaignOptions.includes(state.adminFilters.selectedCampaign) ? state.adminFilters.selectedCampaign : campaignOptions[0];
   const isOfficialCampaign = officialTaskRows.some((row) => row.name === selectedCampaign);
   const backTarget = isOfficialCampaign ? "officialTaskCreate" : "advertiserProfile";
   const campaignBase =
     adminAdvertiserCampaignRows.find((row) => row.name === selectedCampaign) ||
     officialTaskRows.find((row) => row.name === selectedCampaign) ||
     {};
+  const rows = adminCampaignFulfillmentRows.filter((row) => row.campaign === selectedCampaign);
+  const displayRows = rows.length
+    ? rows
+    : isOfficialCampaign
+      ? [
+          {
+            campaign: selectedCampaign,
+            advertiser: "平台官方",
+            platform: campaignBase.platform || "TikTok",
+            creator: "待匹配达人",
+            creatorId: "AUTO-0002",
+            cooperationStatus: campaignBase.status === "已结束" ? "已完成" : "招募中",
+            deliverableStatus: campaignBase.status === "已结束" ? "已完成" : "未开始",
+            operationReview: "免审核",
+            brandReview: "免审核",
+            publishStatus: campaignBase.published ? "已发布" : "-",
+            trackingStatus: campaignBase.status === "已结束" ? "已完成" : "-",
+            settlementStatus: campaignBase.status === "已结束" ? "已结算" : "未结算",
+            due: state.officialTaskDraft.deadline || "2026-07-05",
+          },
+        ]
+      : [];
+  const summary = displayRows[0];
+  const collaboratorCount = Number(campaignBase.collaborators || displayRows.length || 0);
+  const applicantCount = Number(campaignBase.applicants || campaignBase.creators || collaboratorCount || 0);
+  const settlementCount = displayRows.filter((row) => row.settlementStatus === "待结算").length;
+  const cooperationType = campaignBase.cooperationType || summary?.cooperationType || "-";
   return `
     ${pageHeader(
       "运营后台",
@@ -5460,40 +5629,53 @@ function renderCampaignFulfillment() {
       "按广告主任务查看达人合作、交付、审核、发布与结算状态。",
       `<button class="icon-button page-back-icon" data-nav="${backTarget}" aria-label="返回${isOfficialCampaign ? "官方任务" : "广告主档案"}" title="返回">←</button>`,
     )}
-    <div class="chips campaign-quick-tabs" style="margin-bottom:16px">
-      ${campaignOptions
-        .map((item) => `<button class="chip ${selectedCampaign === item ? "active" : ""}" data-action="select-admin-campaign" data-value="${encodeURIComponent(item)}">${item}</button>`)
-        .join("")}
+    <div class="filter-bar sticky" style="margin-bottom:12px">
+      <select class="select" data-action="select-admin-campaign">
+        <option value="">查看更多任务单</option>
+        ${campaignOptions
+          .map((item) => `<option value="${encodeURIComponent(item)}" ${selectedCampaign === item ? "selected" : ""}>${item}</option>`)
+          .join("")}
+      </select>
     </div>
     <div class="panel campaign-basic-panel">
       <div class="table-head compact-head">
         <h2>任务基础信息</h2>
-        <span class="muted">${isOfficialCampaign ? "官方任务" : "广告主任务"}</span>
       </div>
       <div class="profile-meta-grid">
         <div class="profile-meta-item"><span>任务名称</span><strong>${selectedCampaign}</strong></div>
         <div class="profile-meta-item"><span>广告主</span><strong>${summary?.advertiser || campaignBase.advertiser || "平台官方"}</strong></div>
         <div class="profile-meta-item"><span>推广平台</span><strong>${campaignBase.platform || summary?.platform || "-"}</strong></div>
         <div class="profile-meta-item"><span>预算</span><strong>${campaignBase.budget || "-"}</strong></div>
+        <div class="profile-meta-item"><span>合作方式</span><strong>${cooperationType}</strong></div>
         <div class="profile-meta-item"><span>任务状态</span><strong>${campaignBase.status || "-"}</strong></div>
-        <div class="profile-meta-item"><span>达人数量</span><strong>${campaignBase.creators || campaignBase.collaborators || rows.length || "-"}</strong></div>
+        <div class="profile-meta-item profile-meta-item-counts">
+          <span>达人数量</span>
+          <div class="meta-counts-grid">
+            <div class="meta-count">
+              <small>报名达人</small>
+              <strong>${applicantCount}</strong>
+            </div>
+            <div class="meta-count">
+              <small>合作达人</small>
+              <strong>${collaboratorCount}</strong>
+            </div>
+            <div class="meta-count">
+              <small>结算达人</small>
+              <strong>${settlementCount}</strong>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
-    ${summary ? metrics([
-      { label: "广告主", value: summary.advertiser, delta: "当前任务归属" },
-      { label: "合作达人", value: String(rows.length), delta: "已进入履约链路" },
-      { label: "待处理内容", value: String(rows.filter((row) => ["内容审核中", "待发布"].includes(row.deliverableStatus)).length), delta: "需运营继续跟进" },
-      { label: "待结算达人", value: String(rows.filter((row) => row.settlementStatus === "待结算").length), delta: "可进入结算管理" },
-    ]) : ""}
     <div class="table-card" style="margin-top:16px">
       <div class="table-head"><h2>${selectedCampaign}</h2><span class="muted">达人履单明细</span></div>
       <div class="table-wrap">
         <table>
-          <thead><tr><th>达人基本信息</th><th>合作状态</th><th>交付状态</th><th>平台审核</th><th>广告主审核</th><th>发布状态</th><th>效果追踪</th><th>结算状态</th><th>交付截止</th><th>操作</th></tr></thead>
+          <thead><tr><th>达人基本信息</th><th>合作状态</th><th>交付状态</th><th>平台审核</th>${isOfficialCampaign ? "" : "<th>广告主审核</th>"}<th>发布状态</th><th>效果追踪</th><th>结算状态</th><th>交付截止</th><th>操作</th></tr></thead>
           <tbody>
             ${
-              rows.length
-                ? rows
+              displayRows.length
+                ? displayRows
                     .map(
                       (row) => `
                       <tr>
@@ -5508,7 +5690,7 @@ function renderCampaignFulfillment() {
                         <td>${status(row.cooperationStatus, row.cooperationStatus.includes("待") ? "pending" : "running")}</td>
                         <td>${row.deliverableStatus}</td>
                         <td>${row.operationReview}</td>
-                        <td>${row.brandReview}</td>
+                        ${isOfficialCampaign ? "" : `<td>${row.brandReview}</td>`}
                         <td>${row.publishStatus}</td>
                         <td>${row.trackingStatus}</td>
                         <td>${row.settlementStatus}</td>
@@ -5518,7 +5700,7 @@ function renderCampaignFulfillment() {
                     `,
                     )
                     .join("")
-                : emptyRow(10)
+                : emptyRow(isOfficialCampaign ? 9 : 10)
             }
           </tbody>
         </table>
@@ -5643,6 +5825,7 @@ function renderInfluencerListAdmin() {
 }
 
 function renderEmailInvitesAdmin() {
+  const activeTab = state.tabs.emailInvitesAdmin || "inviteList";
   const inviteRows = [
     ["The Waifu Connoisseur", "tishakouri@gmail.com", "11", "已发送", "done", "2026-5-10 59:20"],
     ["SultanTheDerp", "waifuconnoisseurr@gmail.com", "11", "待发送", "draft", "2026-5-10 59:20"],
@@ -5651,17 +5834,17 @@ function renderEmailInvitesAdmin() {
     ["Anime Pro", "hina.lakki@o2.pl", "11", "待发送", "draft", "-"],
   ];
   const historyRows = [
-    ["2026-6-5 10:59:20", "邀约注册MeetInfluencer", "99", "99 100%", "99 100%", "99 100%"],
-    ["2026-6-4 10:59:20", "邀约注册MeetInfluencer", "60", "60 100%", "60 100%", "60 100%"],
-    ["2026-6-3 10:59:20", "邀约注册MeetInfluencer", "50", "50 100%", "50", "50 100%"],
-    ["2026-6-1 10:59:20", "主题内容", "150", "142 94.7%", "98 69.0%", "76 53.5%"],
+    ["2026-6-5 10:59:20", "官方主题邮件：邀请注册 MeetInfluencer", "99", "99 100%", "99 100%", "99 100%"],
+    ["2026-6-4 10:59:20", "官方主题邮件：TikTok 游戏达人招募", "60", "60 100%", "52 86.7%", "31 51.7%"],
+    ["2026-6-3 10:59:20", "官方主题邮件：英国香氛合作专场", "50", "50 100%", "41 82.0%", "26 52.0%"],
+    ["2026-6-1 10:59:20", "官方主题邮件：平台精选合作主题内容", "150", "142 94.7%", "98 69.0%", "76 53.5%"],
   ];
   return `
     ${pageHeader(
       "运营后台",
       "邮件邀约",
       "批量筛选达人、发送邀约邮件，并跟踪送达、打开、点击和失败重试结果。",
-      `<button class="secondary-button" data-action="modal-email-history">历史邮件</button><button class="primary-button" data-action="modal-email-send">发送邮件</button>`,
+      ``,
     )}
     <div class="email-metrics">
       ${metrics([
@@ -5679,40 +5862,77 @@ function renderEmailInvitesAdmin() {
       <button class="ghost-button" data-action="toast" data-message="列表已刷新">刷新</button>
       <button class="primary-button" data-action="modal-email-send">发送邮件</button>
     </div>
-    <div class="table-card">
-      <div class="table-head">
-        <h2>达人邀约列表</h2>
-        <span class="muted">支持勾选后批量发送</span>
-      </div>
-      <div class="table-wrap">
-        <table class="email-invite-table">
-          <thead>
-            <tr><th><input type="checkbox" aria-label="全选达人" /></th><th>达人</th><th>邮箱</th><th>已发邮件数</th><th>邀约状态</th><th>最近邮件发送时间</th><th>操作</th></tr>
-          </thead>
-          <tbody>
-            ${inviteRows
-              .map(
-                (row) => `
-                  <tr>
-                    <td><input type="checkbox" aria-label="选择 ${row[0]}" /></td>
-                    <td><strong>${row[0]}</strong></td>
-                    <td>${row[1]}</td>
-                    <td>${row[2]}</td>
-                    <td>${status(row[3], row[4])}</td>
-                    <td>${row[5]}</td>
-                    <td><div class="actions"><button class="link-button" data-action="modal-email-detail">发送明细</button><button class="link-button" data-action="modal-email-send">发邮件</button></div></td>
-                  </tr>
-                `,
-              )
-              .join("")}
-          </tbody>
-        </table>
-      </div>
+    <div class="tabs email-admin-tabs">
+      <button class="tab ${activeTab === "inviteList" ? "active" : ""}" data-action="set-email-invite-tab" data-tab="inviteList">达人邀约列表</button>
+      <button class="tab ${activeTab === "history" ? "active" : ""}" data-action="set-email-invite-tab" data-tab="history">历史邮件</button>
     </div>
+    ${
+      activeTab === "inviteList"
+        ? `
+          <div class="table-card">
+            <div class="table-head">
+              <h2>达人邀约列表</h2>
+              <span class="muted">支持勾选后批量发送</span>
+            </div>
+            <div class="table-wrap">
+              <table class="email-invite-table">
+                <thead>
+                  <tr><th><input type="checkbox" aria-label="全选达人" /></th><th>达人</th><th>邮箱</th><th>已发邮件数</th><th>邀约状态</th><th>最近邮件发送时间</th><th>操作</th></tr>
+                </thead>
+                <tbody>
+                  ${inviteRows
+                    .map(
+                      (row) => `
+                        <tr>
+                          <td><input type="checkbox" aria-label="选择 ${row[0]}" /></td>
+                          <td><strong>${row[0]}</strong></td>
+                          <td>${row[1]}</td>
+                          <td>${row[2]}</td>
+                          <td>${status(row[3], row[4])}</td>
+                          <td>${row[5]}</td>
+                          <td><div class="actions"><button class="link-button" data-action="modal-email-detail">发送明细</button><button class="link-button" data-action="modal-email-send">发邮件</button></div></td>
+                        </tr>
+                      `,
+                    )
+                    .join("")}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        `
+        : `
+          <div class="table-card email-history-card">
+            <div class="table-head">
+              <h2>历史邮件</h2>
+              <span class="muted">查看官方按主题内容发送的历史邮件记录，并追踪每次群发的送达、打开和点击表现。</span>
+            </div>
+            <div class="table-wrap">
+              <table>
+                <thead><tr><th>发送时间</th><th>邮件主题</th><th>发送数</th><th>送达数</th><th>打开数</th><th>点击数</th><th>操作</th></tr></thead>
+                <tbody>
+                  ${historyRows
+                    .map(
+                      (row) => `<tr><td>${row[0]}</td><td>${row[1]}</td><td>${row[2]}</td><td>${row[3]}</td><td>${row[4]}</td><td>${row[5]}</td><td><div class="actions"><button class="link-button" data-action="modal-email-detail">发送明细</button><button class="link-button" data-action="toast" data-message="导出任务已创建">导出数据</button></div></td></tr>`,
+                    )
+                    .join("")}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        `
+    }
   `;
 }
 
 function openEmailSendModal() {
+  const recipients = [
+    "全部达人",
+    "The Waifu Connoisseur",
+    "SultanTheDerp",
+    "KitaSean",
+    "Dawn. music",
+    "Anime Pro",
+  ];
   openModal(
     `
     <div class="modal-head">
@@ -5721,7 +5941,8 @@ function openEmailSendModal() {
     </div>
     <div class="modal-body">
       <div class="form-grid">
-        ${field("邮件主题", `<input class="input" placeholder="请输入邮件主题" value="邀约注册MeetInfluencer" />`, true, "full")}
+        ${field("收件人", `<select class="select">${recipients.map((item, index) => `<option value="${item}" ${index === 0 ? "selected" : ""}>${item}</option>`).join("")}</select>`, false)}
+        ${field("邮件主题", `<input class="input" placeholder="请输入邮件主题" value="邀约注册MeetInfluencer" />`, true)}
         ${field("邮件内容", `<textarea class="textarea email-compose-body" placeholder="请输入邮件内容">Hi {{creator_name}}，我们正在邀请优质创作者加入 MeetInfluencer 平台。完成注册后，你可以收到品牌合作邀约并管理合作收益。</textarea>`, true, "full")}
       </div>
     </div>
@@ -5768,20 +5989,16 @@ function openEmailDetailModal() {
     <div class="modal-body">
       <div class="table-wrap">
         <table>
-          <thead><tr><th>序号</th><th>达人邮箱</th><th>状态</th><th>发送时间</th></tr></thead>
+          <thead><tr><th>序号</th><th>邮件主题</th><th>邮件内容</th><th>状态</th><th>发送时间</th></tr></thead>
           <tbody>
-            <tr><td>1</td><td>tishakouri@gmail.com</td><td>${status("已送达", "done")}</td><td>2026-1-5 10:59:20</td></tr>
-            <tr><td>2</td><td>waifuconnoisseurr@gmail.com</td><td>${status("已打开", "running")}</td><td>2026-1-5 10:59:20</td></tr>
-            <tr><td>3</td><td>contact.dawn.music@gmail.com</td><td>${status("已送达", "done")}</td><td>2026-1-5 10:59:20</td></tr>
-            <tr><td>4</td><td>dimivgaming@hotmail.com</td><td>${status("已点击", "done")}</td><td>2026-1-5 10:59:20</td></tr>
-            <tr><td>5</td><td>hina.lakki@o2.pl</td><td>${status("SMTP连接超时", "rejected")}</td><td>2026-1-5 10:59:20</td></tr>
+            <tr><td>1</td><td>邀约注册MeetInfluencer</td><td>Hi {{creator_name}}，我们正在邀请优质创作者加入 MeetInfluencer 平台。</td><td>${status("已送达", "done")}</td><td>2026-1-5 10:59:20</td></tr>
+            <tr><td>2</td><td>邀约注册MeetInfluencer</td><td>Hi {{creator_name}}，完成注册后你可以收到品牌合作邀约并管理合作收益。</td><td>${status("已打开", "running")}</td><td>2026-1-5 10:59:20</td></tr>
+            <tr><td>3</td><td>邀约注册MeetInfluencer</td><td>Hi {{creator_name}}，我们正在邀请优质创作者加入 MeetInfluencer 平台。</td><td>${status("已送达", "done")}</td><td>2026-1-5 10:59:20</td></tr>
+            <tr><td>4</td><td>邀约注册MeetInfluencer</td><td>Hi {{creator_name}}，完成注册后你可以收到品牌合作邀约并管理合作收益。</td><td>${status("已点击", "done")}</td><td>2026-1-5 10:59:20</td></tr>
+            <tr><td>5</td><td>邀约注册MeetInfluencer</td><td>Hi {{creator_name}}，我们正在邀请优质创作者加入 MeetInfluencer 平台。</td><td>${status("SMTP连接超时", "rejected")}</td><td>2026-1-5 10:59:20</td></tr>
           </tbody>
         </table>
       </div>
-    </div>
-    <div class="modal-foot">
-      <button class="ghost-button" data-action="close-overlay">关闭</button>
-      <button class="primary-button" data-action="toast-close" data-message="失败邮件已加入重试队列">重试失败邮件</button>
     </div>
   `,
     false,
@@ -5792,7 +6009,7 @@ function openEmailHistoryModal() {
   openModal(
     `
     <div class="modal-head">
-      <div><h2>历史邮件记录</h2><p class="subcopy">查看历史批量发送任务的数据表现和发送明细。</p></div>
+      <div><h2>历史邮件记录</h2><p class="subcopy">查看官方按主题内容发送的历史邮件记录，并追踪每次群发的送达、打开和点击表现。。</p></div>
       <button class="close-button" data-action="close-overlay" aria-label="关闭">×</button>
     </div>
     <div class="modal-body">
@@ -6063,6 +6280,7 @@ const pages = {
   campaignFulfillment: renderCampaignFulfillment,
   officialTaskCreate: renderOfficialTaskCreate,
   settingsAdmin: renderSettingsAdmin,
+  myTalentProfile: renderMyTalentProfile,
   promotions: renderPromotions,
   publishTask: renderPublishTask,
   taskReview: renderTaskReview,
@@ -7433,6 +7651,16 @@ function handleAction(action, target) {
     render();
     return;
   }
+  if (action === "toggle-talent-favorite") {
+    const name = decodeURIComponent(target.dataset.name || "");
+    const creator = creators.find((item) => item.name === name);
+    if (creator) {
+      creator.contract = creator.contract === "已收藏" ? "未收藏" : "已收藏";
+      toast(creator.contract === "已收藏" ? `已收藏 ${name}` : `已取消收藏 ${name}`);
+    }
+    render();
+    return;
+  }
   if (action === "remove-talent-selected-filter") {
     const key = target.dataset.filterKey;
     if (key && key in state.talentSearchFilters) {
@@ -7443,6 +7671,11 @@ function handleAction(action, target) {
   }
   if (action === "clear-talent-selected-filters") {
     resetTalentSearchFilters();
+    render();
+    return;
+  }
+  if (action === "set-email-invite-tab") {
+    state.tabs.emailInvitesAdmin = target.dataset.tab || "inviteList";
     render();
     return;
   }
@@ -7602,8 +7835,10 @@ function handleAction(action, target) {
   if (action === "open-task-detail") {
     const rawName = target.dataset.campaign || target.dataset.task || "";
     const taskName = decodeURIComponent(rawName);
+    const statusKey = target.dataset.status || "";
     state.creatorTaskDetail.name = taskName || taskDetailProfile.displayTitle;
     state.creatorTaskDetail.backTo = state.page === "myProjects" ? "myProjects" : state.page === "invitations" ? "invitations" : state.page === "applications" ? "applications" : "opportunityHall";
+    if (statusKey) applicationDetail.statusKey = statusKey;
     if (state.page !== "taskDetail") go("taskDetail");
     render();
     return;
@@ -7631,6 +7866,12 @@ function handleAction(action, target) {
     openMyTalentDrawer(state.myTalentDetail.name);
     return;
   }
+  if (action === "open-my-talent-profile") {
+    state.myTalentDetail.name = decodeURIComponent(target.dataset.name || "Mika Studio");
+    state.myTalentDetail.tab = "ledger";
+    go("myTalentProfile");
+    return;
+  }
   if (action === "open-my-talent-invite") {
     openMyTalentInviteModal(decodeURIComponent(target.dataset.name || state.myTalentDetail.name || "Mika Studio"));
     return;
@@ -7643,7 +7884,11 @@ function handleAction(action, target) {
   }
   if (action === "set-my-talent-tab") {
     state.myTalentDetail.tab = target.dataset.tab || "ledger";
-    openMyTalentDrawer(state.myTalentDetail.name || "Mika Studio");
+    if (state.page === "myTalentProfile") {
+      render();
+    } else {
+      openMyTalentDrawer(state.myTalentDetail.name || "Mika Studio");
+    }
     return;
   }
   if (action === "set-my-talent-filter") {
@@ -7842,6 +8087,12 @@ document.addEventListener("input", (event) => {
 });
 
 document.addEventListener("change", (event) => {
+  const actionTarget = event.target.closest("[data-action='select-admin-campaign']");
+  if (actionTarget && actionTarget.value) {
+    state.adminFilters.selectedCampaign = decodeURIComponent(actionTarget.value);
+    render();
+    return;
+  }
   const filterTarget = event.target.closest("[data-admin-filter]");
   if (!filterTarget) return;
   state.adminFilters[filterTarget.dataset.adminFilter] = filterTarget.value;
@@ -7943,3 +8194,5 @@ if (!window.location.hash) {
 }
 
 render();
+
+
