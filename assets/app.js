@@ -168,12 +168,13 @@
   },
   opportunityFilters: {
     platformMenuOpen: false,
+    regionMenuOpen: false,
     tagMenuOpen: false,
     followerMenuOpen: false,
     amountMenuOpen: false,
     platforms: [],
+    regions: [],
     tags: [],
-    region: "",
     followerMin: 0,
     followerMax: 1000000,
     amountMin: 0,
@@ -190,6 +191,7 @@
     account: "company",
     emailInvitesAdmin: "inviteList",
     adminReviewHistory: "全部",
+    payoutAdmin: "all",
   },
   officialTaskFormOpen: false,
   invitationFilters: {
@@ -199,6 +201,23 @@
   creatorTaskDetail: {
     name: "",
     backTo: "opportunityHall",
+  },
+  loginBannerUploadTargetId: "",
+  revenuePayoutDraft: {
+    method: "paypal",
+    holder: "Moriya",
+    currency: "USD",
+    country: "德国",
+    email: "mo********@gmail.com",
+    iban: "DE89 3704 0044 0532 0130 00",
+    bankName: "Deutsche Bank",
+    swift: "DEUTDEFF",
+    note: "请在备注中说明其他收款方式",
+    isDefault: true,
+  },
+  socialAuthDraft: {
+    platform: "TikTok",
+    method: "oauth",
   },
   myTalentDetail: {
     name: "Mika Studio",
@@ -932,7 +951,7 @@ const myTalentRows = [
     formats: ["全片", "切片", "直播"],
     styleTags: ["剧情种草", "开箱测评"],
     taskLedger: [
-      { campaign: "MINISO 夏季新品内容合作", createdAt: "2026-06-02 11:20", platform: "TikTok", region: "英国 / 美国", cooperationStatus: "履约中", flow: "报名→运营初审→广告主复审→内容提交→内容双审", budget: "$2,000", deliverable: "已提交脚本 / 已提交视频", reviewStatus: "待广告主复审", publishLink: "-", exposure: "-", likes: "-", interaction: "-", publishAt: "-", settlementStatus: "待结算" },
+      { campaign: "MINISO 夏季新品内容合作", createdAt: "2026-06-02 11:20", platform: "TikTok", region: "英国 / 美国", cooperationStatus: "履约中", flow: "报名→运营初审→广告主复审→内容提交→内容双审", budget: "$2,000", deliverable: "已提交脚本 / 已提交视频", reviewStatus: "待审核", publishLink: "-", exposure: "-", likes: "-", interaction: "-", publishAt: "-", settlementStatus: "待结算" },
       { campaign: "全境封锁-全球活动", createdAt: "2026-05-18 15:40", platform: "TikTok", region: "美国 / 英国", cooperationStatus: "已完成", flow: "报名→运营初审→广告主复审→内容提交→内容双审→发布确认", budget: "$2,300", deliverable: "已提交脚本 / 已提交视频", reviewStatus: "审核通过", publishLink: "tiktok.com/@mika_studio/video/001", exposure: "126K", likes: "11.2K", interaction: "4.1%", publishAt: "2026-05-29 20:15", settlementStatus: "已结算" },
       { campaign: "Anker 充电配件新品推广", createdAt: "2026-04-09 09:30", platform: "YouTube", region: "德国 / 英国", cooperationStatus: "已完成", flow: "报名→运营初审→广告主复审→内容提交→内容双审→发布确认", budget: "$1,850", deliverable: "已提交脚本 / 已提交视频", reviewStatus: "审核通过", publishLink: "youtube.com/watch?v=anker88", exposure: "98K", likes: "6.1K", interaction: "3.8%", publishAt: "2026-04-18 18:00", settlementStatus: "已结算" },
     ],
@@ -1341,6 +1360,58 @@ const collaborations = [
     note: "终稿已确认，等待达人发布日期。",
   },
   {
+    creator: "Ava Glow",
+    creatorId: "@ava.glow.daily",
+    avatar: assets.creatorAvatarPending,
+    platform: "TikTok",
+    fans: "196.80万",
+    contentTags: ["美妆", "香氛", "生活方式"],
+    audienceRegion: { code: "US", name: "美国" },
+    audienceGender: "女性 84.6%",
+    audienceAge: "18-30 岁",
+    recentVideo: "夏日随身香氛包开箱",
+    avgViews: "36.4万",
+    campaign: "MINISO 夏季新品内容合作",
+    type: "视频",
+    settlement: "固定价",
+    price: "120",
+    status: "进行中",
+    tag: "生活方式达人",
+    statusClass: "running",
+    progress: "待审核",
+    due: "2026-6-13",
+    note: "达人已提交视频终稿，等待广告主确认或提出修改意见。",
+    applyTime: "2026-6-7 10:20:00",
+    approveTime: "2026-6-7 15:40:00",
+    submitTime: "2026-6-12 18:40:00",
+    platformReviewTime: "2026-6-12 20:10:00",
+    deliverables: [
+      {
+        badge: "脚本终稿",
+        title: "60 秒竖版脚本",
+        desc: "已补充前 5 秒品牌露出，并加入香氛卖点与收纳场景说明。",
+        meta: "提交于 2026-6-12 18:40 · v2",
+        link: "https://docs.google.com/doc/miniso-script-v2",
+        attachment: { name: "脚本对照稿_v2.pdf", size: "1.2MB" },
+      },
+      {
+        badge: "视频终稿",
+        title: "主视频 MP4",
+        desc: "封面、口播与字幕已齐备，等待广告主确认后排期发布。",
+        meta: "时长 00:58 · 1080 × 1920",
+        link: "https://drive.google.com/file/d/miniso-video-final",
+        attachment: { name: "视频预览版.mp4", size: "48MB" },
+      },
+      {
+        badge: "发布文案",
+        title: "Caption + Hashtag",
+        desc: "#MINISO夏日香氛 #SummerEssentials #RoomRefresh",
+        meta: "含品牌 @ 提及与落地页链接位",
+        link: "https://docs.google.com/doc/miniso-caption",
+      },
+    ],
+  },
+  {
     creator: "Tech Otto",
     creatorId: "@tech.otto.review",
     avatar: assets.creatorAvatarPending,
@@ -1362,6 +1433,16 @@ const collaborations = [
     progress: "内容审核中",
     due: "2026-6-15",
     note: "已收齐素材包，品牌内部审核中。",
+    deliverables: [
+      {
+        badge: "视频初稿",
+        title: "15 分钟直播切片 MP4",
+        desc: "围绕「幻影」手游核心玩法进行实机演示与讲解，前 30 秒突出画面表现力。",
+        meta: "提交于 2026-6-14 16:20 · 时长 15:02",
+        link: "https://drive.google.com/file/d/techotto-demo",
+        attachment: { name: "直播切片_幻影_v1.mp4", size: "126MB" },
+      },
+    ],
   },
   {
     creator: "Daily Miki",
@@ -1447,6 +1528,7 @@ const creatorCampaigns = [
   {
     name: "Title-任务名",
     tag: "游戏种草",
+    tags: ["游戏种草", "短视频", "剧情互动", "官方任务"],
     requirement: "粉丝数≥50万",
     region: "EN / UK / CN",
     budget: "$9,999",
@@ -1458,6 +1540,7 @@ const creatorCampaigns = [
   {
     name: "MINISO 夏季新品内容合作",
     tag: "购物与零售",
+    tags: ["购物与零售", "种草", "生活方式"],
     requirement: "粉丝数≥20万",
     region: "UK",
     budget: "$2,000",
@@ -1468,6 +1551,7 @@ const creatorCampaigns = [
   {
     name: "全境封锁2-上线活动",
     tag: "直播",
+    tags: ["直播", "游戏", "开黑互动", "赛事热点"],
     requirement: "游戏创作者",
     region: "US / JP",
     budget: "$1,200",
@@ -1478,6 +1562,7 @@ const creatorCampaigns = [
   {
     name: "Anker 充电配件新品推广",
     tag: "科技数码",
+    tags: ["科技数码", "开箱", "长视频测评"],
     requirement: "粉丝数≥30万",
     region: "US / UK / DE / FR / IT / ES",
     budget: "$2,800",
@@ -1489,6 +1574,7 @@ const creatorCampaigns = [
   {
     name: "椰子水夏季饮品种草",
     tag: "食品饮料",
+    tags: ["食品饮料", "生活方式", "短视频", "东南亚本地化"],
     requirement: "生活方式 / 美食达人",
     region: "SG / MY / TH / VN / ID / PH",
     budget: "$1,600",
@@ -1501,7 +1587,7 @@ const creatorCampaigns = [
 const adminReviewHistoryRows = [
   {
     taskName: "MINISO 夏季新品内容合作",
-    target: "广告主任务审核",
+    target: "MINISO 官方旗舰店",
     reviewType: "任务审核",
     result: "已通过",
     reviewer: "运营 · Amy",
@@ -1510,7 +1596,7 @@ const adminReviewHistoryRows = [
   },
   {
     taskName: "Anker 充电配件新品推广",
-    target: "广告主任务审核",
+    target: "Anker",
     reviewType: "任务审核",
     result: "已拒绝",
     reviewer: "运营 · Jerry",
@@ -1552,6 +1638,34 @@ const adminReviewHistoryRows = [
     reviewer: "运营 · Jerry",
     time: "2026-06-14 18:05",
     reason: "首屏露出不足，需补充饮用场景与 Hashtag。",
+  },
+];
+
+const adminDeliverableReviewDetails = [
+  {
+    taskName: "MINISO 夏季新品内容合作",
+    creator: "Mika Studio",
+    platform: "TikTok",
+    submittedAt: "2026-06-14 09:35",
+    version: "v3 终稿",
+    summary: "达人已提交脚本、视频终稿与发布文案，等待运营确认品牌露出、口播顺序与素材规范。",
+    attachments: [
+      { badge: "脚本", title: "60 秒短视频脚本", desc: "已补全前 5 秒品牌露出、产品卖点口播与结尾 CTA。", meta: "文件：MINISO_script_v3.docx" },
+      { badge: "视频", title: "竖版终稿视频", desc: "1080 × 1920，时长 00:58，含字幕、Logo 与片尾落地页引导。", meta: "文件：MINISO_final_v3.mp4" },
+      { badge: "文案", title: "Caption + Hashtag", desc: "#MINISO夏日新品 #RoomRefresh #SummerEssentials，含品牌 @ 提及。", meta: "文件：caption_v3.txt" },
+    ],
+  },
+  {
+    taskName: "椰子水夏季饮品种草",
+    creator: "Daily Miki",
+    platform: "TikTok",
+    submittedAt: "2026-06-14 11:20",
+    version: "v1 初稿",
+    summary: "达人已提交首版视频与文案，当前重点核对首屏露出、饮用场景与 Hashtag 使用是否完整。",
+    attachments: [
+      { badge: "视频", title: "首版视频样片", desc: "展示开箱与饮用片段，但首屏品牌露出仍较弱，待审核决定是否退回修改。", meta: "文件：coconut_v1.mp4" },
+      { badge: "文案", title: "发布说明", desc: "已提交短文案与话题标签，待确认是否补充饮用感受与品牌卖点表达。", meta: "文件：caption_v1.txt" },
+    ],
   },
 ];
 
@@ -1625,9 +1739,9 @@ const adminAdvertiserRows = [
 ];
 
 const adminAdvertiserCampaignRows = [
-  { advertiser: "MINISO 官方旗舰店", name: "MINISO 夏季新品内容合作", platform: "TikTok / YouTube", creators: 3, published: 1, budget: "$8,000", status: "进行中", statusClass: "running" },
-  { advertiser: "MINISO 官方旗舰店", name: "MINISO 英国开学季选品合作", platform: "TikTok", creators: 5, published: 2, budget: "$5,200", status: "招募中", statusClass: "pending" },
-  { advertiser: "Anker", name: "Anker 充电配件新品推广", platform: "YouTube", creators: 1, published: 0, budget: "$3,500", status: "待审核", statusClass: "pending" },
+  { advertiser: "MINISO 官方旗舰店", name: "MINISO 夏季新品内容合作", platform: "TikTok / YouTube", creators: 3, published: 1, budget: "$8,000", status: "进行中", statusClass: "running", requirement: "≥200万粉丝", cooperationType: "定制视频-60秒" },
+  { advertiser: "MINISO 官方旗舰店", name: "MINISO 英国开学季选品合作", platform: "TikTok", creators: 5, published: 2, budget: "$5,200", status: "招募中", statusClass: "pending", requirement: "≥50万粉丝", cooperationType: "短视频种草 / 开箱测评" },
+  { advertiser: "Anker", name: "Anker 充电配件新品推广", platform: "YouTube", creators: 1, published: 0, budget: "$3,500", status: "待审核", statusClass: "pending", requirement: "≥30万粉丝", cooperationType: "长视频测评" },
 ];
 
 const officialTaskRows = [
@@ -1682,6 +1796,7 @@ const publishAreaGroups = [
 const invitations = [
   {
     task: "全境封锁-全球活动",
+    advertiser: "平台官方",
     type: "短视频",
     settlement: "固定价",
     quote: "99",
@@ -1692,6 +1807,7 @@ const invitations = [
   },
   {
     task: "全境封锁2-上线活动",
+    advertiser: "平台官方",
     type: "直播",
     settlement: "固定价",
     quote: "80",
@@ -1709,14 +1825,14 @@ const projectRows = [
     settlement: "固定价",
     quote: "99",
     start: "2026-6-5 10:59:20",
-    progress: "待提交",
+    progress: "待提交产物",
     status: "合作中",
     statusClass: "running",
     timeline: [
-      { time: "2026-06-05 10:59", title: "任务开始合作", detail: "达人已确认合作，等待首次提交产物。", result: "进行中" },
+      { time: "2026-06-05 10:59", title: "任务开始合作", detail: "已与广告主确认合作，等待下一步安排。", result: "确认合作" },
       { time: "2026-06-06 18:20", title: "广告主补充要求", detail: "补充了开场口播与产品露出要求。", result: "待提交产物" },
     ],
-    finalStatus: "待提交产物",
+    finalStatus: "-",
   },
   {
     task: "全境封锁2-上线活动",
@@ -1770,6 +1886,49 @@ const projectRows = [
       { time: "2026-06-03 20:10", title: "最终发布完成", detail: "内容已按计划发布，数据开始回流。", result: "已完成发布" },
     ],
     finalStatus: "已完成发布",
+  },
+];
+
+const loginPageBannerRows = [
+  { id: "banner-1", name: "图1", title: "官方任务与活动招募", size: "900 × 1500", status: "启用中", statusClass: "done", updatedAt: "2026-06-15 10:30", tone: "pink" },
+  { id: "banner-2", name: "图2", title: "品牌合作与达人增长", size: "900 × 1500", status: "启用中", statusClass: "done", updatedAt: "2026-06-12 16:45", tone: "blue" },
+  { id: "banner-3", name: "图3", title: "平台数据与履约管理", size: "900 × 1500", status: "备用", statusClass: "pending", updatedAt: "2026-06-10 09:20", tone: "orange" },
+];
+
+const payoutRows = [
+  {
+    id: "payout-1",
+    campaign: "幻境之门（Gate of Mirage）TK推广",
+    subtitle: "幻境之门（Gate of Mirage）",
+    creator: "645644162",
+    amount: "USD 0",
+    account: "PAYPAL ••••.com",
+    status: "已打款",
+    statusClass: "done",
+    note: "2026-06-11 已完成人工打款登记。",
+  },
+  {
+    id: "payout-2",
+    campaign: "飞行员2.0TK推广",
+    subtitle: "飞行员2.0",
+    creator: "645644162",
+    amount: "USD 0",
+    account: "PAYPAL ••••.com",
+    status: "已打款",
+    statusClass: "done",
+    note: "2026-06-09 已完成人工打款登记。",
+  },
+  {
+    id: "payout-3",
+    campaign: "MINISO 夏季新品内容合作",
+    subtitle: "MINISO 英国站项目",
+    creator: "Mika Studio",
+    amount: "USD 1,200",
+    account: "PAYPAL mika@studio.com",
+    status: "待打款",
+    statusClass: "pending",
+    note: "达人已完成履约，等待运营线下打款。",
+    rejectReason: "",
   },
 ];
 
@@ -2319,7 +2478,7 @@ function collaborationRows() {
                 <td>${row.note || "-"}</td>
                 <td>
                   <div class="actions">
-                    <button class="link-button" data-action="drawer-delivery">查看详情</button>
+                    <button class="link-button" data-action="drawer-delivery" data-creator="${encodeURIComponent(row.creatorId || row.creator)}">查看详情</button>
                   </div>
                 </td>
               </tr>
@@ -2337,7 +2496,7 @@ function collaborationRows() {
                 <td>${row.tracking || "-"}</td>
                 <td>
                   <div class="actions">
-                    <button class="link-button" data-action="drawer-delivery">查看详情</button>
+                    <button class="link-button" data-action="drawer-delivery" data-creator="${encodeURIComponent(row.creatorId || row.creator)}">查看详情</button>
                   </div>
                 </td>
               </tr>
@@ -2442,7 +2601,7 @@ function invitationRows() {
           <div class="actions">
             ${
               row.status === "待接单"
-                ? `<button class="link-button" data-action="accept-invite">确认</button><button class="link-button" data-action="reject-invite">拒绝</button>`
+                ? `<button class="link-button" data-action="accept-invite" data-task="${encodeURIComponent(row.task)}">确认</button><button class="link-button" data-action="reject-invite" data-task="${encodeURIComponent(row.task)}">拒绝</button>`
                 : `<span class="muted">-</span>`
             }
           </div>
@@ -3372,6 +3531,7 @@ function field(label, control, required = false, extra = "") {
 function renderTaskReview() {
   const tab = state.tabs.taskReview;
   const deliveryRowsCount = collaborations.filter((row) => ["进行中", "待审核", "已发布"].includes(row.status)).length;
+  const taskName = "MINISO 夏季新品内容合作";
   return `
     ${pageHeader(
       "任务详情",
@@ -3383,8 +3543,8 @@ function renderTaskReview() {
       <div class="panel hero-strip">
         <img src="${assets.taskDetailBanner}" alt="" />
         <div class="panel-content">
-          <h2>XXXX任务详情</h2>
-          <p class="subcopy">达人要求：≥200万粉丝 · 游戏 / 直播 · 预算固定价 $2000.00 USD。</p>
+          <h2>${taskName}</h2>
+          <p class="subcopy">达人要求：≥200万粉丝 · 游戏 / 直播 · 预算固定价 $2000.00 USD。<button class="inline-link task-review-detail-link" data-action="modal-campaign-info" data-campaign="${encodeURIComponent(taskName)}">任务详情</button></p>
           <div class="mini-stats">
             <div class="mini-stat"><span>全部报名达人</span><strong>55</strong></div>
             <div class="mini-stat"><span>已合作达人</span><strong>${deliveryRowsCount}</strong></div>
@@ -3395,7 +3555,10 @@ function renderTaskReview() {
       <div class="panel">
         <h2>招募价格</h2>
         <p class="subcopy">结算方式：固定价；结算周期：以合作协议为准。</p>
-        <div class="note-box" style="margin-top:12px">预算(固定价) $2000.00 USD · 合作类型：定制视频-60秒</div>
+        <div class="note-box task-review-price-box" style="margin-top:12px">
+          <div><span>预算(固定价)</span><strong>$2000.00 USD</strong></div>
+          <div><span>合作类型</span><strong>定制视频-60秒</strong></div>
+        </div>
       </div>
     </div>
     <div class="table-card" style="margin-top:16px">
@@ -4202,8 +4365,8 @@ function renderMyTalentDrawerTab(profile) {
           <select class="select"><option>全部结算状态</option><option>待结算</option><option>已结算</option></select>
         </div>
         <div class="table-wrap">
-          <table>
-            <thead><tr><th>活动名称</th><th>创建时间</th><th>平台 / 地区</th><th>合作状态</th><th>履约节点进度</th><th>合作预算</th><th>交付信息</th><th>审核状态</th><th>发布数据</th><th>结算状态</th><th>操作</th></tr></thead>
+          <table class="my-talent-ledger-table">
+            <thead><tr><th>活动名称</th><th>合作时间</th><th>平台 / 地区</th><th>合作状态</th><th>当前履约节点</th><th>合作预算</th><th>交付信息</th><th>审核状态</th><th>发布数据</th><th>结算状态</th><th class="sticky-action-col">操作</th></tr></thead>
             <tbody>
               ${
                 profile.taskLedger.length
@@ -4215,13 +4378,13 @@ function renderMyTalentDrawerTab(profile) {
                             <td>${item.createdAt}</td>
                             <td>${item.platform}<br /><small>${item.region}</small></td>
                             <td>${status(item.cooperationStatus, item.cooperationStatus.includes("完成") ? "done" : item.cooperationStatus.includes("拒绝") || item.cooperationStatus.includes("取消") ? "rejected" : "running")}</td>
-                            <td><small>${item.flow}</small></td>
+                            <td>${item.reviewStatus === "待审核" ? "待审核" : item.publishLink === "-" ? "待发布" : "已发布"}</td>
                             <td>${item.budget}</td>
                             <td>${item.deliverable}</td>
                             <td>${item.reviewStatus}</td>
                             <td>${item.publishLink === "-" ? "-" : `${item.exposure} / ${item.interaction}`}</td>
                             <td>${item.settlementStatus}</td>
-                            <td><div class="table-actions-inline"><button class="link-button" data-action="modal-campaign-info" data-campaign="${encodeURIComponent(item.campaign)}">查看任务详情</button><button class="link-button" data-action="open-my-talent-content" data-name="${encodeURIComponent(profile.name)}" data-campaign="${encodeURIComponent(item.campaign)}">查看交付内容</button></div></td>
+                            <td class="sticky-action-col"><div class="table-actions-inline"><button class="link-button" data-action="modal-campaign-info" data-campaign="${encodeURIComponent(item.campaign)}">查看任务详情</button><button class="link-button" data-action="open-my-talent-content" data-name="${encodeURIComponent(profile.name)}" data-campaign="${encodeURIComponent(item.campaign)}">查看交付内容</button></div></td>
                           </tr>
                         `,
                       )
@@ -4239,9 +4402,14 @@ function renderMyTalentDrawerTab(profile) {
     return `
       <div class="panel my-talent-inner-panel">
         <div class="table-head"><h2>交付内容档案</h2><span class="muted">汇总该达人提交过的脚本、视频和图文产物</span></div>
+        <div class="my-talent-tab-filters">
+          <input class="input" value="全部活动内容" />
+          <select class="select"><option>全部审核状态</option><option>待审核</option><option>通过</option><option>驳回</option></select>
+          <select class="select"><option>全部发布状态</option><option>未发布</option><option>已发布</option></select>
+        </div>
         <div class="table-wrap">
-          <table>
-            <thead><tr><th>所属活动</th><th>内容类型</th><th>提交时间</th><th>审核结果</th><th>发布状态</th><th>数据效果</th><th>操作</th></tr></thead>
+          <table class="my-talent-deliverable-table">
+            <thead><tr><th>所属活动</th><th>内容类型</th><th>提交时间</th><th>审核结果</th><th>发布状态</th><th>数据效果</th><th>素材说明</th><th class="sticky-action-col">操作</th></tr></thead>
             <tbody>
               ${
                 profile.deliverables.length
@@ -4255,12 +4423,13 @@ function renderMyTalentDrawerTab(profile) {
                             <td>${status(item.review, item.review === "通过" ? "done" : item.review === "驳回" ? "rejected" : "pending")}${item.rejectReason !== "-" ? `<small class="weak-warning-inline">驳回原因：${item.rejectReason}</small>` : ""}</td>
                             <td>${item.publishStatus}</td>
                             <td>${item.effect}</td>
-                            <td><div class="table-actions-inline"><button class="link-button" data-action="open-my-talent-content" data-name="${encodeURIComponent(profile.name)}" data-campaign="${encodeURIComponent(item.campaign)}">预览内容</button><button class="link-button" data-action="toast" data-message="已下载素材占位文件">下载素材</button></div></td>
+                            <td>${item.type === "短视频" ? "含脚本、视频封面与成片链接" : item.type === "脚本" ? "含脚本正文与镜头说明" : "含图文素材与发布文案"}</td>
+                            <td class="sticky-action-col"><div class="table-actions-inline"><button class="link-button" data-action="open-my-talent-content" data-name="${encodeURIComponent(profile.name)}" data-campaign="${encodeURIComponent(item.campaign)}">预览内容</button><button class="link-button" data-action="toast" data-message="已下载素材占位文件">下载素材</button></div></td>
                           </tr>
                         `,
                       )
                       .join("")
-                  : emptyRow(7)
+                  : emptyRow(8)
               }
             </tbody>
           </table>
@@ -4405,6 +4574,57 @@ function openMyTalentSettlementModal(name = "", campaign = "") {
   `);
 }
 
+function renderMyTalentOverview(profile, isDrawer = false) {
+  return `
+    <div class="my-talent-overview-grid compact">
+      <div class="panel my-talent-hero-panel">
+        <div class="my-talent-hero-head">
+          <div class="row-title">
+            <img src="${profile.avatar}" alt="" />
+            <span>
+              <strong>${profile.name}</strong>
+              <small>${profile.uid} · ${profile.platform} · ${profile.region.join(" / ")}</small>
+            </span>
+          </div>
+          <div class="my-talent-hero-chips">
+            ${profile.statusTags.map((item) => `<span class="simple-chip">${item}</span>`).join("")}
+          </div>
+        </div>
+        <div class="my-talent-hero-meta">
+          <div><span>粉丝体量</span><strong>${profile.followers}</strong></div>
+          <div><span>受众画像</span><strong>${profile.audienceGender} · ${profile.audienceAge}</strong></div>
+          <div><span>受众国家</span>${myTalentRegionTags(profile.audienceCountries)}</div>
+          <div><span>合作报价</span><strong>${profile.baseQuote}</strong><small>${profile.formats.join(" / ")}</small></div>
+        </div>
+        <div class="my-talent-hero-tags">
+          <span>达人标签</span>
+          ${simpleChips([...profile.categories, ...profile.styleTags])}
+        </div>
+      </div>
+      <div class="panel my-talent-business-panel">
+        <div class="my-talent-kpi-grid">
+          <div class="mini-stat"><span>总对接任务</span><strong>${profile.totalOrders} 单</strong></div>
+          <div class="mini-stat"><span>成功履约发布</span><strong>${profile.validOrders} 单</strong></div>
+          <div class="mini-stat"><span>中途放弃 / 驳回</span><strong>${Math.max(0, profile.totalOrders - profile.validOrders)} 单</strong></div>
+          <div class="mini-stat"><span>履约完成率</span><strong>${profile.completionRate}</strong><small>${profile.qualityTier}</small></div>
+        </div>
+        <div class="my-talent-summary-note">
+          <strong>合作判断</strong>
+          <p>${profile.hasActive ? "当前有进行中的合作任务，适合继续跟进审核与交付节奏。" : "当前无进行中的合作任务，适合复盘历史合作表现并评估复投。"}${profile.weakWarning ? " 需关注历史履约风险。" : ""}</p>
+        </div>
+      </div>
+      <div class="panel my-talent-metric-strip">
+        <div class="mini-stat"><span>平均曝光</span><strong>${profile.avgExposure}</strong></div>
+        <div class="mini-stat"><span>平均互动率</span><strong>${profile.avgEngagement}</strong></div>
+        <div class="mini-stat"><span>平均点击跳转</span><strong>${profile.avgClicks}</strong></div>
+        <div class="mini-stat"><span>累计消耗总预算</span><strong>${profile.totalBudget}</strong></div>
+        <div class="mini-stat"><span>已结算金额</span><strong>${profile.settledBudget}</strong></div>
+        <div class="mini-stat"><span>待结算金额</span><strong>${profile.pendingSettlement}</strong></div>
+      </div>
+    </div>
+  `;
+}
+
 function openMyTalentDrawer(name = "Mika Studio") {
   const profile = myTalentRows.find((item) => item.name === name) || myTalentRows[0];
   state.myTalentDetail.name = profile.name;
@@ -4416,47 +4636,7 @@ function openMyTalentDrawer(name = "Mika Studio") {
         <button class="close-button" data-action="close-overlay" aria-label="关闭">×</button>
       </div>
       <div class="drawer-body">
-        <div class="my-talent-overview-grid">
-          <div class="panel">
-            <div class="row-title">
-              <img src="${profile.avatar}" alt="" />
-              <span><strong>${profile.name}</strong><small>${profile.uid} · ${profile.platform}</small></span>
-            </div>
-            <div class="my-talent-summary-stack">
-              <div><span>受众画像</span><strong>${profile.audienceGender} · ${profile.audienceAge}</strong></div>
-              <div><span>受众国家</span>${myTalentRegionTags(profile.audienceCountries)}</div>
-              <div><span>报价信息</span><strong>${profile.baseQuote}</strong><small>${profile.formats.join(" / ")}</small></div>
-              <div><span>达人标签</span>${simpleChips([...profile.categories, ...profile.styleTags])}</div>
-            </div>
-          </div>
-          <div class="panel">
-            <div class="mini-stats">
-              <div class="mini-stat"><span>总对接任务</span><strong>${profile.totalOrders} 单</strong></div>
-              <div class="mini-stat"><span>成功履约发布</span><strong>${profile.validOrders} 单</strong></div>
-              <div class="mini-stat"><span>中途放弃 / 驳回</span><strong>${Math.max(0, profile.totalOrders - profile.validOrders)} 单</strong></div>
-              <div class="mini-stat"><span>履约完成率</span><strong>${profile.completionRate}</strong><small>${profile.qualityTier}</small></div>
-            </div>
-          </div>
-          <div class="panel">
-            <div class="mini-stats">
-              <div class="mini-stat"><span>平均曝光</span><strong>${profile.avgExposure}</strong></div>
-              <div class="mini-stat"><span>平均互动率</span><strong>${profile.avgEngagement}</strong></div>
-              <div class="mini-stat"><span>平均点击跳转</span><strong>${profile.avgClicks}</strong></div>
-            </div>
-          </div>
-          <div class="panel">
-            <div class="mini-stats">
-              <div class="mini-stat"><span>累计消耗总预算</span><strong>${profile.totalBudget}</strong></div>
-              <div class="mini-stat"><span>已结算金额</span><strong>${profile.settledBudget}</strong></div>
-              <div class="mini-stat"><span>待结算金额</span><strong>${profile.pendingSettlement}</strong></div>
-            </div>
-            <div class="filter-action-row" style="margin-top:12px">
-              <button class="secondary-button" data-action="open-my-talent-invite" data-name="${encodeURIComponent(profile.name)}">发起新合作邀约</button>
-              <button class="ghost-button" data-action="toast" data-message="已导出 ${profile.name} 全部合作记录">导出合作记录</button>
-              <button class="ghost-button" data-action="close-overlay">关闭侧滑</button>
-            </div>
-          </div>
-        </div>
+        ${renderMyTalentOverview(profile, true)}
         <div class="tabs my-talent-tabs">
           <button class="tab ${state.myTalentDetail.tab === "ledger" ? "active" : ""}" data-action="set-my-talent-tab" data-tab="ledger">合作任务台账</button>
           <button class="tab ${state.myTalentDetail.tab === "deliverables" ? "active" : ""}" data-action="set-my-talent-tab" data-tab="deliverables">交付内容档案</button>
@@ -4481,53 +4661,7 @@ function renderMyTalentProfile() {
       `<button class="secondary-button" data-nav="myTalents">返回合作达人</button>`,
     )}
     <div class="my-talent-profile-page">
-      <div class="my-talent-overview-grid">
-        <div class="panel">
-          <div class="row-title">
-            <img src="${profile.avatar}" alt="" />
-            <span><strong>${profile.name}</strong><small>${profile.uid} · ${profile.platform} · ${profile.region.join(" / ")}</small></span>
-          </div>
-          <div class="my-talent-summary-stack">
-            <div><span>受众画像</span><strong>${profile.audienceGender} · ${profile.audienceAge}</strong></div>
-            <div><span>受众国家</span>${myTalentRegionTags(profile.audienceCountries)}</div>
-            <div><span>报价信息</span><strong>${profile.baseQuote}</strong><small>${profile.formats.join(" / ")}</small></div>
-            <div><span>达人标签</span>${simpleChips([...profile.categories, ...profile.styleTags])}</div>
-          </div>
-        </div>
-        <div class="panel">
-          <div class="mini-stats">
-            <div class="mini-stat"><span>总对接任务</span><strong>${profile.totalOrders} 单</strong></div>
-            <div class="mini-stat"><span>成功履约发布</span><strong>${profile.validOrders} 单</strong></div>
-            <div class="mini-stat"><span>中途放弃 / 驳回</span><strong>${Math.max(0, profile.totalOrders - profile.validOrders)} 单</strong></div>
-            <div class="mini-stat"><span>履约完成率</span><strong>${profile.completionRate}</strong><small>${profile.qualityTier}</small></div>
-          </div>
-        </div>
-        <div class="panel">
-          <div class="mini-stats">
-            <div class="mini-stat"><span>平均曝光</span><strong>${profile.avgExposure}</strong></div>
-            <div class="mini-stat"><span>平均互动率</span><strong>${profile.avgEngagement}</strong></div>
-            <div class="mini-stat"><span>平均点击跳转</span><strong>${profile.avgClicks}</strong></div>
-          </div>
-        </div>
-        <div class="panel">
-          <div class="mini-stats">
-            <div class="mini-stat"><span>累计消耗总预算</span><strong>${profile.totalBudget}</strong></div>
-            <div class="mini-stat"><span>已结算金额</span><strong>${profile.settledBudget}</strong></div>
-            <div class="mini-stat"><span>待结算金额</span><strong>${profile.pendingSettlement}</strong></div>
-          </div>
-          <div class="filter-action-row" style="margin-top:12px">
-            <button class="secondary-button" data-action="open-my-talent-invite" data-name="${encodeURIComponent(profile.name)}">发起新合作邀约</button>
-            <button class="ghost-button" data-action="toast" data-message="已导出 ${profile.name} 全部合作记录">导出合作记录</button>
-          </div>
-        </div>
-      </div>
-      <div class="tabs my-talent-tabs">
-        <button class="tab ${state.myTalentDetail.tab === "ledger" ? "active" : ""}" data-action="set-my-talent-tab" data-tab="ledger">合作任务台账</button>
-        <button class="tab ${state.myTalentDetail.tab === "deliverables" ? "active" : ""}" data-action="set-my-talent-tab" data-tab="deliverables">交付内容档案</button>
-        <button class="tab ${state.myTalentDetail.tab === "quality" ? "active" : ""}" data-action="set-my-talent-tab" data-tab="quality">履约质量分析</button>
-        <button class="tab ${state.myTalentDetail.tab === "settlements" ? "active" : ""}" data-action="set-my-talent-tab" data-tab="settlements">结算账单明细</button>
-        <button class="tab ${state.myTalentDetail.tab === "communication" ? "active" : ""}" data-action="set-my-talent-tab" data-tab="communication">沟通记录</button>
-      </div>
+      ${renderMyTalentOverview(profile)}
       ${renderMyTalentDrawerTab(profile)}
     </div>
   `;
@@ -4603,11 +4737,18 @@ function accountPanel(tab) {
     </div>`;
   }
   if (tab === "security") {
-    return `<div class="form-grid">
-      ${field("账号邮箱", `<input class="input" value="645644162@gmail.com" />`)}
-      ${field("当前角色", `<input class="input" value="广告主管理员" />`)}
-      <div class="field full"><button class="secondary-button" data-action="toast" data-message="重置密码邮件已发送">重置密码</button></div>
-    </div>`;
+    return `
+      <div class="account-security-panel">
+        <h2>账号信息</h2>
+        <div class="form-grid">
+          ${field("邮箱 *", `<input class="input readonly-input" value="645644162@qq.com" readonly disabled />`, true, "full")}
+          ${field("密码 *", `<input class="input readonly-input" value="******" readonly disabled />`, true, "full")}
+        </div>
+        <div class="account-security-actions">
+          <button class="secondary-button" data-action="toast" data-message="重置密码邮件已发送">重置密码</button>
+        </div>
+      </div>
+    `;
   }
   return `<div class="form-grid">
     ${field("公司名称", `<input class="input" placeholder="请输入公司名称" value="Meetinfluencer Brand Team" />`, true)}
@@ -4620,7 +4761,7 @@ function accountPanel(tab) {
 function opportunityFilters() {
   const filters = state.opportunityFilters;
   const platformLabel = filters.platforms.length ? `推广平台：${filters.platforms.join("、")}` : "推广平台：";
-  const regionLabel = filters.region ? `推广国家/地区：${filters.region}` : "推广国家/地区：";
+  const regionLabel = filters.regions.length ? `推广国家/地区：${filters.regions.join("、")}` : "推广国家/地区：";
   const tagLabel = filters.tags.length ? `类型：${filters.tags.join("、")}` : "类型：";
   const followerLabel =
     filters.followerMin || filters.followerMax !== 1000000
@@ -4628,8 +4769,8 @@ function opportunityFilters() {
       : "粉丝量要求：";
   const amountLabel =
     filters.amountMin || filters.amountMax !== 100000
-      ? `金额范围：${filters.amountMin.toLocaleString()} - ${filters.amountMax.toLocaleString()}`
-      : "金额范围：";
+      ? `预算金额：${filters.amountMin.toLocaleString()} - ${filters.amountMax.toLocaleString()}`
+      : "预算金额：";
   return `
     <div class="opportunity-filter-panel">
       <div class="filter-control dropdown-filter">
@@ -4639,15 +4780,11 @@ function opportunityFilters() {
         ${filters.platformMenuOpen ? opportunityMenu("platform", ["YouTube", "TikTok", "Instagram", "Twitch", "Twitter", "Facebook", "Others"], filters.platforms) : ""}
       </div>
 
-      <div class="filter-control">
-        <select class="filter-trigger native-select" data-filter-field="region" aria-label="推广国家/地区">
-          <option value="">${regionLabel}</option>
-          <option ${filters.region === "美国" ? "selected" : ""}>美国</option>
-          <option ${filters.region === "英国" ? "selected" : ""}>英国</option>
-          <option ${filters.region === "日本" ? "selected" : ""}>日本</option>
-          <option ${filters.region === "中国" ? "selected" : ""}>中国</option>
-          <option ${filters.region === "新加坡" ? "selected" : ""}>新加坡</option>
-        </select>
+      <div class="filter-control dropdown-filter">
+        <button class="filter-trigger" data-action="toggle-opportunity-menu" data-menu="region">
+          <span>${regionLabel}</span><span class="chevron">⌄</span>
+        </button>
+        ${filters.regionMenuOpen ? opportunityMenu("region", ["美国", "英国", "日本", "中国", "新加坡"], filters.regions) : ""}
       </div>
 
       <div class="filter-control dropdown-filter">
@@ -4708,17 +4845,7 @@ function amountPopover() {
   const filters = state.opportunityFilters;
   return `
     <div class="amount-popover">
-      <label class="field">
-        <span>结算方式</span>
-        <select class="select amount-settlement" data-filter-field="settlement">
-          <option value="">请选择结算方式</option>
-          <option ${filters.settlement === "固定价" ? "selected" : ""}>固定价</option>
-          <option ${filters.settlement === "固定CPM" ? "selected" : ""}>固定CPM</option>
-          <option ${filters.settlement === "按曝光量区间现金结算" ? "selected" : ""}>按曝光量区间现金结算</option>
-          <option ${filters.settlement === "虚拟道具" ? "selected" : ""}>虚拟道具</option>
-        </select>
-      </label>
-      <div class="amount-range-title">金额范围</div>
+      <div class="amount-range-title">预算金额</div>
       <div class="amount-input-row">
         <div class="amount-input-wrap"><input class="filter-input" type="number" min="0" max="100000" value="${filters.amountMin}" data-filter-field="amountMin" /><span>USD</span></div>
         <span class="amount-dash">-</span>
@@ -4737,6 +4864,25 @@ function amountPopover() {
           <button class="primary-button" data-action="confirm-amount-filter">确认</button>
         </div>
       </div>
+    </div>
+  `;
+}
+
+function opportunityTagSummary(tags = []) {
+  const visible = tags.slice(0, 3);
+  const hidden = tags.slice(3);
+  return `
+    <div class="campaign-tag-overflow">
+      ${visible.map((item) => `<span class="chip active">${item}</span>`).join("")}
+      ${
+        hidden.length
+          ? `<span class="chip active more">+${hidden.length}</span>
+             <div class="country-popover">
+               <div class="country-popover-title">更多标签</div>
+               <div class="country-popover-list">${hidden.map((item) => `<span class="country-chip">${item}</span>`).join("")}</div>
+             </div>`
+          : ""
+      }
     </div>
   `;
 }
@@ -4763,26 +4909,44 @@ function followerPopover() {
 }
 
 function renderOpportunityHall() {
-  const cardApplyStates = [
-    {
+  const filters = state.opportunityFilters;
+  const regionCodeMap = {
+    美国: "US",
+    英国: "UK",
+    日本: "JP",
+    中国: "CN",
+    新加坡: "SG",
+  };
+  const filteredCampaigns = creatorCampaigns.filter((item) => {
+    const matchesPlatform =
+      !filters.platforms.length || filters.platforms.some((platform) => item.platform.includes(platform));
+    const matchesRegion =
+      !filters.regions.length ||
+      filters.regions.some((region) => item.region.includes(regionCodeMap[region] || region));
+    const matchesTag =
+      !filters.tags.length || filters.tags.some((tag) => (item.tags || [item.tag]).includes(tag));
+    return matchesPlatform && matchesRegion && matchesTag;
+  });
+  const cardApplyStateMap = {
+    "Title-任务名": {
       label: "立即报名",
       cls: "draft",
       tip: "你还未报名该任务，可直接提交报名信息进入审核流程。",
       action: (item) => `<button class="primary-button campaign-apply-button" data-action="modal-apply" data-campaign="${encodeURIComponent(item.name)}">立即报名</button>`,
     },
-    {
+    "MINISO 夏季新品内容合作": {
       label: "已报名：待审核",
       cls: "pending",
       tip: "报名信息已提交，平台 / 广告主会按流程继续审核。",
       action: () => `<span class="status pending">已报名：待审核</span>`,
     },
-    {
+    "全境封锁2-上线活动": {
       label: "报名通过",
       cls: "success",
       tip: "报名审核通过后，任务会进入正式合作与交付阶段。",
       action: () => `<span class="status success">报名通过</span>`,
     },
-  ];
+  };
   return `
     ${pageHeader(
       "",
@@ -4792,19 +4956,19 @@ function renderOpportunityHall() {
     )}
     ${opportunityFilters()}
     <div class="cards-grid">
-      ${creatorCampaigns
+      ${filteredCampaigns
         .map(
-          (item, index) => {
-            const applyState = cardApplyStates[index] || null;
+          (item) => {
+            const applyState = cardApplyStateMap[item.name] || null;
             return `
-        <article class="campaign-card opportunity-card-clickable" data-action="open-task-detail" data-campaign="${encodeURIComponent(item.name)}">
+        <article class="campaign-card opportunity-card-clickable" data-action="open-task-detail" data-campaign="${encodeURIComponent(item.name)}" data-status="${applyState ? (applyState.cls === "draft" ? "none" : applyState.cls === "success" ? "approved" : "platform_review") : state.appliedCampaigns.includes(item.name) ? "platform_review" : "none"}">
           <div class="campaign-cover-wrap">
             ${opportunityOfficialBadge(item)}
             ${opportunityCover(item)}
           </div>
           <h2>${item.name}</h2>
           <div class="campaign-title-tags">
-            <span class="chip active">${item.tag}</span>
+            ${opportunityTagSummary(item.tags || [item.tag])}
             <span class="deadline-chip">截止 ${item.deadline}</span>
           </div>
           <div class="campaign-price-highlight">
@@ -4834,7 +4998,7 @@ function renderOpportunityHall() {
   `;
 }
 
-function renderTaskDetailBody() {
+function renderTaskDetailBody(showApply = true) {
   const statusView = applicationStatusView(applicationDetail.statusKey);
   const selectedTitle = state.creatorTaskDetail.name || taskDetailProfile.displayTitle;
   const matchedCampaign = creatorCampaigns.find((item) => item.name === selectedTitle);
@@ -4871,7 +5035,9 @@ function renderTaskDetailBody() {
           </div>
           <div class="task-hero-action">
             ${
-              applicationDetail.statusKey === "none"
+              !showApply
+                ? ``
+                : applicationDetail.statusKey === "none"
                 ? `<button class="primary-button task-apply-button" data-action="modal-apply">立即报名</button>`
                 : `<div class="task-status-block">${status(statusView.label, statusView.cls)}</div>`
             }
@@ -5089,6 +5255,23 @@ function renderMyProjects() {
 }
 
 function renderRevenue() {
+  const payout = state.revenuePayoutDraft;
+  const methodLabel =
+    payout.method === "paypal"
+      ? "PAYPAL"
+      : payout.method === "bank"
+        ? "Bank Transfer"
+        : payout.method === "wise"
+          ? "Wise"
+          : "Other";
+  const methodHint =
+    payout.method === "paypal"
+      ? payout.email
+      : payout.method === "bank"
+        ? `${payout.bankName} · ${payout.iban.slice(0, 4)}••••`
+        : payout.method === "wise"
+          ? `${payout.email} · ${payout.iban.slice(0, 4)}••••`
+          : payout.note;
   return `
     ${pageHeader(
       "履约数据",
@@ -5102,6 +5285,18 @@ function renderRevenue() {
       { label: "已完成发布", value: "9", delta: "已回传作品" },
       { label: "实际完成值", value: "186K", delta: "曝光" },
     ])}
+    <div class="panel revenue-payout-panel" style="margin-top:16px">
+      <div class="revenue-payout-card">
+        <div>
+          <div class="revenue-payout-label">收款账户</div>
+          <h2>${methodLabel} · ${payout.currency} ${payout.isDefault ? "· 默认" : ""}</h2>
+          <p class="subcopy">${methodHint}</p>
+        </div>
+        <div class="actions">
+          <button class="secondary-button" data-action="open-revenue-payout">配置收款账户</button>
+        </div>
+      </div>
+    </div>
     <div class="panel" style="margin-top:16px">
       <h2>履约数据</h2>
       <div class="table-wrap">
@@ -5116,6 +5311,78 @@ function renderRevenue() {
       </div>
     </div>
   `;
+}
+
+function revenuePayoutMethodCard(value, title, copy, selected = false) {
+  return `
+    <button class="revenue-method-card ${selected ? "active" : ""}" data-action="set-revenue-payout-method" data-value="${value}">
+      <strong>${title}</strong>
+      <span>${copy}</span>
+    </button>
+  `;
+}
+
+function openRevenuePayoutModal() {
+  const payout = state.revenuePayoutDraft;
+  const method = payout.method;
+  const methodFields =
+    method === "paypal"
+      ? `
+        ${field("持有人姓名", `<input class="input" value="${payout.holder}" data-action="set-revenue-payout-field" data-field="holder" />`, true)}
+        ${field("币种", `<input class="input" value="${payout.currency}" data-action="set-revenue-payout-field" data-field="currency" />`, true)}
+        ${field("国家/地区", `<input class="input" value="${payout.country}" data-action="set-revenue-payout-field" data-field="country" />`, true)}
+        ${field("邮箱", `<input class="input" value="${payout.email}" data-action="set-revenue-payout-field" data-field="email" />`, true, "full")}
+      `
+      : method === "bank"
+        ? `
+          ${field("持有人姓名", `<input class="input" value="${payout.holder}" data-action="set-revenue-payout-field" data-field="holder" />`, true)}
+          ${field("币种", `<input class="input" value="${payout.currency}" data-action="set-revenue-payout-field" data-field="currency" />`, true)}
+          ${field("国家/地区", `<input class="input" value="${payout.country}" data-action="set-revenue-payout-field" data-field="country" />`, true)}
+          ${field("银行名称", `<input class="input" value="${payout.bankName}" data-action="set-revenue-payout-field" data-field="bankName" />`, true)}
+          ${field("IBAN", `<input class="input" value="${payout.iban}" data-action="set-revenue-payout-field" data-field="iban" />`, true, "full")}
+          ${field("SWIFT / BIC", `<input class="input" value="${payout.swift}" data-action="set-revenue-payout-field" data-field="swift" />`, true, "full")}
+        `
+        : method === "wise"
+          ? `
+            ${field("持有人姓名", `<input class="input" value="${payout.holder}" data-action="set-revenue-payout-field" data-field="holder" />`, true)}
+            ${field("币种", `<input class="input" value="${payout.currency}" data-action="set-revenue-payout-field" data-field="currency" />`, true)}
+            ${field("国家/地区", `<input class="input" value="${payout.country}" data-action="set-revenue-payout-field" data-field="country" />`, true)}
+            ${field("Wise 邮箱", `<input class="input" value="${payout.email}" data-action="set-revenue-payout-field" data-field="email" />`, true)}
+            ${field("IBAN", `<input class="input" value="${payout.iban}" data-action="set-revenue-payout-field" data-field="iban" />`, false, "full")}
+          `
+          : `
+            ${field("持有人姓名", `<input class="input" value="${payout.holder}" data-action="set-revenue-payout-field" data-field="holder" />`, true)}
+            ${field("币种", `<input class="input" value="${payout.currency}" data-action="set-revenue-payout-field" data-field="currency" />`, true)}
+            ${field("国家/地区", `<input class="input" value="${payout.country}" data-action="set-revenue-payout-field" data-field="country" />`, true)}
+            ${field("说明", `<textarea class="textarea" data-action="set-revenue-payout-field" data-field="note">${payout.note}</textarea>`, true, "full")}
+          `;
+  openModal(
+    `
+      <div class="modal-head">
+        <div>
+          <h2>收款账户</h2>
+          <p class="subcopy">请选择你的收款方式，并补充对应账户信息。</p>
+        </div>
+        <button class="close-button" data-action="close-overlay" aria-label="关闭">×</button>
+      </div>
+      <div class="modal-body">
+        <div class="revenue-account-summary">${methodLabel} · ${payout.currency} · ${payout.isDefault ? "默认" : "未设为默认"} · ${methodHint}</div>
+        <div class="revenue-method-grid">
+          ${revenuePayoutMethodCard("paypal", "PayPal", "默认 · 需要邮箱", method === "paypal")}
+          ${revenuePayoutMethodCard("bank", "Bank Transfer", "需要账户或 IBAN", method === "bank")}
+          ${revenuePayoutMethodCard("wise", "Wise", "需要邮箱或 IBAN", method === "wise")}
+          ${revenuePayoutMethodCard("other", "Other", "需要填写说明", method === "other")}
+        </div>
+        <div class="form-grid" style="margin-top:16px">
+          ${methodFields}
+        </div>
+      </div>
+      <div class="modal-foot">
+        <button class="ghost-button" data-action="close-overlay">取消</button>
+        <button class="primary-button" data-action="save-revenue-payout">保存账户</button>
+      </div>
+    `,
+  );
 }
 
 function renderPersonalCenter() {
@@ -5298,8 +5565,13 @@ function filteredAdminReviewRows() {
 }
 
 function getAdminReviewQueueRows(reviewType, pendingRows) {
+  const historyKeys = new Set(
+    adminReviewHistoryRows.filter((row) => row.reviewType === reviewType).map((row) => `${row.taskName}::${row.target}`),
+  );
   return [
-    ...pendingRows.map((row) => ({ ...row, result: "待审核", reviewer: "-", time: "-", reason: row.reason || "等待运营处理" })),
+    ...pendingRows
+      .filter((row) => !historyKeys.has(`${row.taskName}::${row.target}`))
+      .map((row) => ({ ...row, result: "待审核", reviewer: "-", time: "-", reason: row.reason || "等待运营处理" })),
     ...adminReviewHistoryRows.filter((row) => row.reviewType === reviewType),
   ];
 }
@@ -5385,10 +5657,13 @@ function renderAdminDashboard() {
 
 function renderAdminReviewQueue(pageKey, title, reviewType, pendingRows) {
   const sourceRows = getAdminReviewQueueRows(reviewType, pendingRows);
+  const showTargetFilter = pageKey !== "creatorDeliverableReviewAdmin";
+  const showReviewTypeColumn = pageKey !== "creatorDeliverableReviewAdmin" && pageKey !== "creatorApplicationReviewAdmin" && pageKey !== "campaignReviewAdmin";
+  const targetHeader = pageKey === "creatorDeliverableReviewAdmin" ? "交付达人" : pageKey === "creatorApplicationReviewAdmin" ? "报名达人" : pageKey === "campaignReviewAdmin" ? "广告主信息" : "审核对象";
   const targets = ["全部", ...new Set(sourceRows.map((row) => row.target))];
   const rows = sourceRows
     .filter((row) => state.adminFilters.reviewResult === "全部" || row.result === state.adminFilters.reviewResult)
-    .filter((row) => state.adminFilters.reviewTarget === "全部" || row.target === state.adminFilters.reviewTarget)
+    .filter((row) => !showTargetFilter || state.adminFilters.reviewTarget === "全部" || row.target === state.adminFilters.reviewTarget)
     .filter((row) => !state.adminFilters.reviewKeyword || row.taskName.includes(state.adminFilters.reviewKeyword) || row.target.includes(state.adminFilters.reviewKeyword));
   return `
     ${pageHeader(
@@ -5398,10 +5673,14 @@ function renderAdminReviewQueue(pageKey, title, reviewType, pendingRows) {
       "",
     )}
     <div class="filter-bar sticky">
-      <input class="input" placeholder="搜索任务名称 / 审核对象" value="${state.adminFilters.reviewKeyword}" data-admin-filter="reviewKeyword" />
-      <select class="select" data-admin-filter="reviewTarget">
+      <input class="input" placeholder="${showTargetFilter ? "搜索任务名称 / 审核对象" : "搜索任务名称"}" value="${state.adminFilters.reviewKeyword}" data-admin-filter="reviewKeyword" />
+      ${
+        showTargetFilter
+          ? `<select class="select" data-admin-filter="reviewTarget">
         ${targets.map((item) => `<option value="${item}" ${state.adminFilters.reviewTarget === item ? "selected" : ""}>${item}</option>`).join("")}
-      </select>
+      </select>`
+          : ""
+      }
       <div class="chips">
         ${["全部", "待审核", "已通过", "已拒绝"]
           .map((item) => `<button class="chip ${state.adminFilters.reviewResult === item ? "active" : ""}" data-action="set-admin-review-result" data-value="${item}">${item}</button>`)
@@ -5412,7 +5691,7 @@ function renderAdminReviewQueue(pageKey, title, reviewType, pendingRows) {
       <div class="table-head"><h2>${title}</h2><span class="muted">共 ${rows.length} 条</span></div>
       <div class="table-wrap sticky-cols">
         <table class="review-table">
-          <thead><tr><th>任务名称</th><th>审核对象</th><th>审核类型</th><th>审核结果</th><th>审核人</th><th>审核时间</th><th>驳回 / 说明</th><th>操作</th></tr></thead>
+          <thead><tr><th>任务名称</th><th>${targetHeader}</th>${pageKey === "creatorApplicationReviewAdmin" ? "<th>报名理由</th>" : ""}${showReviewTypeColumn ? "<th>审核类型</th>" : ""}<th>审核结果</th><th>审核人</th><th>审核时间</th><th>驳回 / 说明</th><th>操作</th></tr></thead>
           <tbody>
             ${
               rows.length
@@ -5421,29 +5700,167 @@ function renderAdminReviewQueue(pageKey, title, reviewType, pendingRows) {
                       (row) => `
                       <tr>
                         <td><strong>${row.taskName}</strong></td>
-                        <td>${row.target}</td>
-                        <td>${reviewType}</td>
+                        <td>${pageKey === "campaignReviewAdmin" ? (() => { const advName = adminAdvertiserCampaignRows.find((r) => r.name === row.taskName)?.advertiser || row.target; const advProfile = adminAdvertiserRows.find((a) => a.name === advName); return `<strong>${advName}</strong>${advProfile ? `<br><span class="muted">${advProfile.industry} · ${advProfile.contact}</span>` : ""}`; })() : pageKey === "creatorDeliverableReviewAdmin" ? parseReviewTargetName(row.target) : row.target}</td>
+                        ${pageKey === "creatorApplicationReviewAdmin" ? `<td class="reason-cell">${row.reason || "-"}</td>` : ""}
+                        ${showReviewTypeColumn ? `<td>${reviewType}</td>` : ""}
                         <td>${status(row.result, row.result === "待审核" ? "pending" : row.result === "已通过" ? "done" : "rejected")}</td>
                         <td>${row.reviewer}</td>
                         <td>${row.time}</td>
-                        <td>${row.reason}</td>
+                        <td>${row.result === "待审核" ? "" : row.reason}</td>
                         <td>
                           <div class="table-actions-inline">
-                            <button class="link-button" data-action="toast" data-message="这里可继续补审核详情抽屉">查看详情</button>
-                            ${row.result === "待审核" ? `<button class="link-button" data-action="toast" data-message="已通过当前审核">通过</button><button class="link-button" data-action="toast" data-message="已驳回当前审核">驳回</button>` : ""}
+                            <button class="link-button" data-action="${pageKey === "campaignReviewAdmin" ? "open-admin-task-detail" : "open-admin-review-detail"}" ${pageKey === "campaignReviewAdmin" ? `data-task="${encodeURIComponent(row.taskName)}"` : `data-page-key="${pageKey}" data-task="${encodeURIComponent(row.taskName)}" data-target="${encodeURIComponent(row.target)}"`}>查看详情</button>
+                            ${
+                              row.result === "待审核"
+                                ? pageKey === "campaignReviewAdmin"
+                                  ? `<button class="link-button" data-action="approve-admin-campaign-review" data-task="${encodeURIComponent(row.taskName)}" data-target="${encodeURIComponent(row.target)}">通过</button><button class="link-button" data-action="open-admin-campaign-reject" data-task="${encodeURIComponent(row.taskName)}" data-target="${encodeURIComponent(row.target)}">驳回</button>`
+                                  : pageKey === "creatorDeliverableReviewAdmin"
+                                  ? `<button class="link-button" data-action="approve-admin-deliverable-review" data-task="${encodeURIComponent(row.taskName)}" data-creator="${encodeURIComponent(parseReviewTargetName(row.target))}">通过</button><button class="link-button" data-action="open-admin-deliverable-reject" data-task="${encodeURIComponent(row.taskName)}" data-creator="${encodeURIComponent(parseReviewTargetName(row.target))}">驳回</button>`
+                                  : `<button class="link-button" data-action="toast" data-message="已通过当前审核">通过</button><button class="link-button" data-action="toast" data-message="已驳回当前审核">驳回</button>`
+                                : ""
+                            }
                           </div>
                         </td>
                       </tr>
                     `,
                     )
                     .join("")
-                : emptyRow(8)
+                : emptyRow(pageKey === "creatorApplicationReviewAdmin" || pageKey === "campaignReviewAdmin" ? 7 : showReviewTypeColumn ? 8 : 7)
             }
           </tbody>
         </table>
       </div>
     </div>
   `;
+}
+
+function parseReviewTargetName(target = "") {
+  return target.includes("·") ? target.split("·").pop().trim() : target.trim();
+}
+
+function findAdminDeliverableReviewDetail(taskName = "", creatorName = "") {
+  return (
+    adminDeliverableReviewDetails.find((item) => item.taskName === taskName && item.creator === creatorName) ||
+    adminDeliverableReviewDetails[0]
+  );
+}
+
+function openAdminDeliverableReviewDetail(taskName = "", creatorName = "") {
+  const detail = findAdminDeliverableReviewDetail(taskName, creatorName);
+  const historyRow = adminReviewHistoryRows.find(
+    (row) => row.reviewType === "内容审核" && row.taskName === taskName && parseReviewTargetName(row.target) === creatorName,
+  );
+  const result = historyRow?.result || "待审核";
+  openModal(
+    `
+    <div class="modal-head">
+      <div><h2>产物审核详情</h2><p class="subcopy">${creatorName} · ${taskName}</p></div>
+      <button class="close-button" data-action="close-overlay" aria-label="关闭">×</button>
+    </div>
+    <div class="modal-body">
+      <div class="mini-stats">
+        <div class="mini-stat"><span>提交平台</span><strong>${detail.platform || "-"}</strong></div>
+        <div class="mini-stat"><span>提交时间</span><strong>${detail.submittedAt || "-"}</strong></div>
+        <div class="mini-stat"><span>当前版本</span><strong>${detail.version || "-"}</strong></div>
+      </div>
+      <div class="note-box" style="margin-top:12px">${detail.summary || "达人已提交待审核产物。"}</div>
+      <div class="deliver-placeholders" style="margin-top:16px">
+        ${detail.attachments
+          .map(
+            (item) => `
+            <div class="deliver-item deliver-review-item">
+              <span class="deliver-badge">${item.badge || "附件"}</span>
+              <strong>${item.title || "-"}</strong>
+              <p class="deliver-desc">${item.desc || "-"}</p>
+              <span class="deliver-meta">${item.meta || ""}</span>
+            </div>
+          `,
+          )
+          .join("")}
+      </div>
+      ${historyRow ? `<div class="note-box" style="margin-top:16px">审核结果：${historyRow.result}${historyRow.reason ? `；说明：${historyRow.reason}` : ""}</div>` : ""}
+    </div>
+    <div class="modal-foot">
+      ${
+        result === "待审核"
+          ? `<button class="ghost-button" data-action="open-admin-deliverable-reject" data-task="${encodeURIComponent(taskName)}" data-creator="${encodeURIComponent(creatorName)}">驳回</button>
+             <button class="primary-button" data-action="approve-admin-deliverable-review" data-task="${encodeURIComponent(taskName)}" data-creator="${encodeURIComponent(creatorName)}">通过</button>`
+          : `<button class="ghost-button" data-action="close-overlay">关闭</button>`
+      }
+    </div>
+  `,
+    false,
+  );
+}
+
+function openAdminDeliverableRejectModal(taskName = "", creatorName = "") {
+  openModal(
+    `
+    <div class="modal-head">
+      <div><h2>驳回产物</h2><p class="subcopy">${creatorName} · ${taskName}</p></div>
+      <button class="close-button" data-action="close-overlay" aria-label="关闭">×</button>
+    </div>
+    <div class="modal-body">
+      <div class="note-box" style="margin-bottom:14px">请填写驳回理由，达人会根据意见修改后重新提交产物内容。</div>
+      <textarea class="textarea" id="adminDeliverableRejectReason" placeholder="请输入驳回原因，例如：品牌露出不足、口播顺序不符合要求、素材规范不完整等。"></textarea>
+    </div>
+    <div class="modal-foot">
+      <button class="ghost-button" data-action="close-overlay">取消</button>
+      <button class="danger-button" data-action="submit-admin-deliverable-reject" data-task="${encodeURIComponent(taskName)}" data-creator="${encodeURIComponent(creatorName)}">确认驳回</button>
+    </div>
+  `,
+    true,
+  );
+}
+
+function openAdminCampaignReviewDetail(taskName = "", target = "") {
+  const matched =
+    adminAdvertiserCampaignRows.find((row) => row.name === taskName) ||
+    officialTaskRows.find((row) => row.name === taskName) ||
+    {};
+  openModal(
+    `
+    <div class="modal-head">
+      <div><h2>活动审核详情</h2><p class="subcopy">${taskName}</p></div>
+      <button class="close-button" data-action="close-overlay" aria-label="关闭">×</button>
+    </div>
+    <div class="modal-body">
+      <div class="form-grid">
+        ${field("广告主", `<div class="note-box">${matched.advertiser || "平台官方"}</div>`, false)}
+        ${field("推广平台", `<div class="note-box">${matched.platform || "-"}</div>`, false)}
+        ${field("预算", `<div class="note-box">${matched.budget || "-"}</div>`, false)}
+        ${field("达人粉丝邀请", `<div class="note-box">${matched.requirement || "待确认"}</div>`, false)}
+        ${field("合作方式", `<div class="note-box">${matched.cooperationType || "待确认"}</div>`, false)}
+      </div>
+      <div class="note-box" style="margin-top:12px">这里复用任务基础信息结构，便于运营快速核对活动信息完整性、素材链接和预算配置。</div>
+    </div>
+    <div class="modal-foot">
+      <button class="ghost-button" data-action="close-overlay">关闭</button>
+      <button class="primary-button" data-action="open-admin-task-detail" data-task="${encodeURIComponent(taskName)}">查看任务详情</button>
+    </div>
+  `,
+    false,
+  );
+}
+
+function openAdminCampaignRejectModal(taskName = "", target = "广告主任务审核") {
+  openModal(
+    `
+    <div class="modal-head">
+      <div><h2>驳回活动审核</h2><p class="subcopy">${taskName}</p></div>
+      <button class="close-button" data-action="close-overlay" aria-label="关闭">×</button>
+    </div>
+    <div class="modal-body">
+      <div class="note-box" style="margin-bottom:14px">请填写驳回理由，系统将按该理由回退给广告主补充或修改任务信息。</div>
+      <textarea class="textarea" id="adminCampaignRejectReason" placeholder="请输入驳回原因，例如：产品链接缺失、预算信息不完整、素材说明不清晰等。"></textarea>
+    </div>
+    <div class="modal-foot">
+      <button class="ghost-button" data-action="close-overlay">取消</button>
+      <button class="danger-button" data-action="submit-admin-campaign-reject" data-task="${encodeURIComponent(taskName)}" data-target="${encodeURIComponent(target)}">确认驳回</button>
+    </div>
+  `,
+    true,
+  );
 }
 
 function renderAdvertiserList() {
@@ -6061,7 +6478,54 @@ function renderOperationsManagementAdmin() {
 }
 
 function renderLoginPageConfigAdmin() {
-  return `${pageHeader("运营后台", "登录页配置", "维护运营端登录页的文案、视觉素材和入口配置。")}<div class="panel"><p class="subcopy">此页先作为登录页配置占位，后续可补登录页 Banner、欢迎语、版本说明和跳转入口配置。</p></div>`;
+  return `
+    ${pageHeader("运营后台", "登录页配置", "用于维护官方登录平台左侧 Banner 图配置。")}
+    <div class="table-card login-banner-table-card">
+      <div class="table-head">
+        <div>
+          <h2>Banner 列表</h2>
+          <p class="subcopy">用于 Meetinfluencer 登录页轮播图配置，推荐尺寸 900 × 1500</p>
+        </div>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>图片位置</th>
+              <th>图片</th>
+              <th>图片尺寸</th>
+              <th>最后更新</th>
+              <th>操作</th>
+            </tr>
+          </thead>
+          <tbody>
+            ${loginPageBannerRows
+              .map(
+                (row, index) => `
+                  <tr>
+                    <td><strong>${index + 1}</strong></td>
+                    <td>
+                      <button class="login-banner-thumb login-banner-thumb-${row.tone}" data-action="preview-login-banner" data-id="${row.id}">
+                        <span>${row.title}</span>
+                      </button>
+                    </td>
+                    <td>${row.size}</td>
+                    <td>${row.updatedAt}</td>
+                    <td>
+                      <div class="actions">
+                        <button class="link-button" data-action="edit-login-banner" data-id="${row.id}">修改图片</button>
+                      </div>
+                    </td>
+                  </tr>
+                `,
+              )
+              .join("")}
+          </tbody>
+        </table>
+      </div>
+      <input id="loginBannerUploadInput" type="file" accept="image/*" hidden />
+    </div>
+  `;
 }
 
 function renderGameTagsAdmin() {
@@ -6098,8 +6562,8 @@ function renderReviewCenter() {
 
 function renderCampaignReviewAdmin() {
   const pendingRows = [
-    { taskName: "MINISO 英国开学季选品合作", target: "广告主任务审核", reason: "等待运营确认信息完整性与合规性。" },
-    { taskName: "Anker 充电配件新品推广", target: "广告主任务审核", reason: "等待运营审核产品素材与链接信息。" },
+    { taskName: "MINISO 英国开学季选品合作", target: "MINISO 官方旗舰店", reason: "等待运营确认信息完整性与合规性。" },
+    { taskName: "Anker 充电配件新品推广", target: "Anker", reason: "等待运营审核产品素材与链接信息。" },
   ];
   return renderAdminReviewQueue("campaignReviewAdmin", "活动审核", "任务审核", pendingRows);
 }
@@ -6124,11 +6588,89 @@ function renderCreatorDeliverableReviewAdmin() {
     { taskName: "MINISO 夏季新品内容合作", target: "内容审核 · Mika Studio", reason: "等待审核当前内容版本与品牌露出规范。" },
     { taskName: "椰子水夏季饮品种草", target: "内容审核 · Daily Miki", reason: "等待审核 Hashtag、开场露出与素材规范。" },
   ];
-  return renderAdminReviewQueue("creatorDeliverableReviewAdmin", "内容审核", "内容审核", pendingRows);
+  return renderAdminReviewQueue("creatorDeliverableReviewAdmin", "产物审核", "内容审核", pendingRows);
 }
 
 function renderPayoutAdmin() {
-  return `${pageHeader("运营后台", "结算管理", "查看待结算达人、结算状态与人工标记结果。")}<div class="panel"><p class="subcopy">此页先作为结算管理占位，后续可补结算单生成、导出与状态标记。</p></div>`;
+  const tab = state.tabs.payoutAdmin || "all";
+  const pendingCount = payoutRows.filter((row) => row.status === "待打款").length;
+  const failedCount = payoutRows.filter((row) => row.status === "失败").length;
+  const paidCount = payoutRows.filter((row) => row.status === "已打款").length;
+  const invalidCount = payoutRows.filter((row) => row.status === "已作废").length;
+  const visibleRows = payoutRows.filter((row) => {
+    if (tab === "pending") return row.status === "待打款";
+    if (tab === "paid") return row.status === "已打款";
+    if (tab === "failed") return row.status === "失败";
+    if (tab === "invalid") return row.status === "已作废";
+    return true;
+  });
+  return `
+    ${pageHeader("运营后台", "结算管理", "用于处理线下人工打款记录，并补充打款或驳回标记。")}
+    <div class="grid metrics">
+      <div class="metric-card"><span>待打款</span><strong style="color:#f59e0b">${pendingCount}</strong></div>
+      <div class="metric-card"><span>失败</span><strong>${failedCount}</strong></div>
+      <div class="metric-card"><span>已打款记录</span><strong style="color:#10b981">${paidCount}</strong></div>
+      <div class="metric-card"><span>已作废</span><strong>${invalidCount}</strong></div>
+    </div>
+    <div class="tabs">
+      ${tabButton("payoutAdmin", "all", `全部 ${payoutRows.length}`)}
+      ${tabButton("payoutAdmin", "pending", `待打款 ${pendingCount}`)}
+      ${tabButton("payoutAdmin", "paid", `已打款 ${paidCount}`)}
+      ${tabButton("payoutAdmin", "failed", `失败 ${failedCount}`)}
+      ${tabButton("payoutAdmin", "invalid", `已作废 ${invalidCount}`)}
+    </div>
+    <div class="table-card">
+      <div class="table-head">
+        <div>
+          <h2>手动打款队列</h2>
+          <p class="subcopy">仅线下打款。敏感账户详情需要显式点击查看并会被审计。</p>
+        </div>
+        <button class="ghost-button" data-action="toast" data-message="列表已刷新">刷新</button>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>活动</th>
+              <th>达人</th>
+              <th>金额</th>
+              <th>状态</th>
+              <th>账户</th>
+              <th>操作</th>
+            </tr>
+          </thead>
+          <tbody>
+            ${
+              visibleRows.length
+                ? visibleRows
+                    .map(
+                      (row) => `
+                        <tr>
+                          <td><strong>${row.campaign}</strong><br /><span class="muted">${row.subtitle}</span></td>
+                          <td>${row.creator}</td>
+                          <td class="money">${row.amount}</td>
+                          <td>${status(row.status, row.statusClass)}</td>
+                          <td>${row.account}</td>
+                          <td>
+                            <div class="actions">
+                              ${
+                                row.status === "待打款"
+                                  ? `<button class="link-button" data-action="confirm-payout-paid" data-id="${row.id}">标记打款</button><button class="link-button" data-action="open-payout-reject" data-id="${row.id}">驳回</button>`
+                                  : `<button class="link-button" data-action="open-payout-detail" data-id="${row.id}">查看详情</button>`
+                              }
+                            </div>
+                          </td>
+                        </tr>
+                      `,
+                    )
+                    .join("")
+                : emptyRow(6)
+            }
+          </tbody>
+        </table>
+      </div>
+    </div>
+  `;
 }
 
 function renderSettingsAdmin() {
@@ -6351,6 +6893,8 @@ function openAdminListDrawer(name = "", kind = "advertisers") {
 }
 
 function openSocialAuthModal(platform = "TikTok") {
+  state.socialAuthDraft.platform = platform;
+  const method = state.socialAuthDraft.method || "oauth";
   openModal(
     `
     <div class="modal-head">
@@ -6362,33 +6906,45 @@ function openSocialAuthModal(platform = "TikTok") {
         <span class="social-auth-icon">${socialPlatformIcon(platform)}</span>
         <div><span>认证平台</span><strong>${platform}</strong></div>
       </div>
+      <div class="auth-method-switch">
+        <button class="auth-method-tab ${method === "oauth" ? "active" : ""}" data-action="set-social-auth-method" data-method="oauth">方式一：第三方平台授权</button>
+        <button class="auth-method-tab ${method === "screenshot" ? "active" : ""}" data-action="set-social-auth-method" data-method="screenshot">方式二：主页截图认证</button>
+      </div>
       <div class="auth-choice-grid">
-        <section class="auth-choice-card primary-choice">
-          <span class="choice-label">方式一</span>
-          <div class="auth-choice-title">
-            <span class="social-auth-icon">${socialPlatformIcon(platform)}</span>
-            <div><strong>第三方平台授权</strong><p>点击后跳转平台完成授权验证。</p></div>
-          </div>
-          <button class="secondary-button auth-wide-button" data-action="toast-close" data-message="已发起第三方授权认证">跳转认证</button>
-        </section>
-        <section class="auth-choice-card">
-          <span class="choice-label alt">方式二</span>
-          <div class="auth-choice-title">
-            <span class="social-auth-icon">▧</span>
-            <div><strong>主页截图认证</strong><p>通过账号主页链接和截图完成认证。</p></div>
-          </div>
-          <div class="form-grid compact-form">
-            ${field("主页链接", `<input class="input" placeholder="请输入账号主页链接" />`, true, "full")}
-            ${field("认证截图", `<button class="ghost-button upload-line" data-action="toast" data-message="截图已加入上传队列">+ 上传主页截图</button>`, true, "full")}
-          </div>
-        </section>
+        ${
+          method === "oauth"
+            ? `
+              <section class="auth-choice-card primary-choice selected">
+                <div class="auth-choice-title">
+                  <span class="social-auth-icon">${socialPlatformIcon(platform)}</span>
+                  <div><strong>第三方平台授权</strong><p>点击后跳转平台完成授权验证。</p></div>
+                </div>
+                <button class="secondary-button auth-wide-button" data-action="toast-close" data-message="已发起第三方授权认证">跳转认证</button>
+              </section>
+            `
+            : `
+              <section class="auth-choice-card selected">
+                <div class="auth-choice-title">
+                  <span class="social-auth-icon">▧</span>
+                  <div><strong>主页截图认证</strong><p>通过账号主页链接和截图完成认证。</p></div>
+                </div>
+                <div class="form-grid compact-form">
+                  ${field("主页链接", `<input class="input" placeholder="请输入账号主页链接" />`, true, "full")}
+                  ${field("认证截图", `<button class="ghost-button upload-line" data-action="toast" data-message="截图已加入上传队列">+ 上传主页截图</button>`, true, "full")}
+                </div>
+              </section>
+            `
+        }
       </div>
       <div class="note-box">同一平台可认证多个账号；提交后进入平台审核。</div>
     </div>
-    <div class="modal-foot">
-      <button class="ghost-button" data-action="close-overlay">取消</button>
+    ${
+      method === "screenshot"
+        ? `<div class="modal-foot">
       <button class="primary-button" data-action="toast-close" data-message="认证申请已提交，等待平台审核">提交认证</button>
-    </div>
+    </div>`
+        : ""
+    }
   `,
   );
 }
@@ -6570,13 +7126,45 @@ function openCreatorTaskDetailDrawer(taskName = "") {
         <button class="close-button" data-action="close-overlay" aria-label="关闭">×</button>
       </div>
       <div class="drawer-body">
-        ${renderTaskDetailBody()}
+        ${renderTaskDetailBody(true)}
       </div>
       <div class="drawer-foot">
         <button class="ghost-button" data-action="close-overlay">关闭</button>
       </div>
     </aside>
   `;
+}
+
+function openAdminTaskDetailDrawer(taskName = "", reviewMode = false, reviewTarget = "广告主任务审核") {
+  const previousName = state.creatorTaskDetail.name;
+  const previousBackTo = state.creatorTaskDetail.backTo;
+  state.creatorTaskDetail.name = taskName || taskDetailProfile.displayTitle;
+  const reviewFooter = reviewMode
+    ? `
+      <button class="ghost-button" data-action="open-admin-campaign-reject" data-task="${encodeURIComponent(taskName)}" data-target="${encodeURIComponent(reviewTarget)}">拒绝</button>
+      <button class="primary-button" data-action="approve-admin-campaign-review" data-task="${encodeURIComponent(taskName)}" data-target="${encodeURIComponent(reviewTarget)}">通过</button>
+    `
+    : `<button class="ghost-button" data-action="close-overlay">关闭</button>`;
+  modalRoot.innerHTML = `
+    <div class="drawer-backdrop" data-action="close-overlay"></div>
+    <aside class="drawer task-detail-drawer" role="dialog" aria-modal="true">
+      <div class="drawer-head">
+        <div>
+          <h2>任务详情</h2>
+          <p class="subcopy">${taskName || taskDetailProfile.displayTitle}</p>
+        </div>
+        <button class="close-button" data-action="close-overlay" aria-label="关闭">×</button>
+      </div>
+      <div class="drawer-body">
+        ${renderTaskDetailBody(false)}
+      </div>
+      <div class="drawer-foot">
+        ${reviewFooter}
+      </div>
+    </aside>
+  `;
+  state.creatorTaskDetail.name = previousName;
+  state.creatorTaskDetail.backTo = previousBackTo;
 }
 
 function refreshPublishModal() {
@@ -6790,7 +7378,6 @@ function openProjectProgressDrawer(taskName = "任务") {
       <div class="drawer-head">
         <div>
           <h2>${project.task}</h2>
-          <p class="subcopy">达人交付进度与审核流转详情。</p>
         </div>
         <button class="close-button" data-action="close-overlay" aria-label="关闭">×</button>
       </div>
@@ -6810,7 +7397,7 @@ function openProjectProgressDrawer(taskName = "任务") {
                   <strong>${item.title}</strong>
                   <p>${item.time}</p>
                   <p>${item.detail}</p>
-                  <div class="note-box" style="margin-top:8px">审核结果：${item.result}</div>
+                  <div class="note-box" style="margin-top:8px">${item.result}</div>
                 </div>
               </div>
             `,
@@ -6824,6 +7411,165 @@ function openProjectProgressDrawer(taskName = "任务") {
       </div>
     </aside>
   `;
+}
+
+function openInviteDecisionModal(taskName = "", decision = "accept") {
+  const invite = invitations.find((row) => row.task === taskName);
+  const advertiser = invite?.advertiser || "广告主";
+  const verb = decision === "accept" ? "接受" : "拒绝";
+  const buttonLabel = decision === "accept" ? "接受合作" : "拒绝合作";
+  openModal(
+    `
+      <div class="modal-head">
+        <div>
+          <h2>${verb}合作邀请</h2>
+        </div>
+        <button class="close-button" data-action="close-overlay" aria-label="关闭">×</button>
+      </div>
+      <div class="modal-body">
+        <div class="note-box">是否${verb} ${advertiser}「${taskName}」的合作邀请？</div>
+      </div>
+      <div class="modal-foot">
+        <button class="ghost-button" data-action="close-overlay">取消</button>
+        <button class="${decision === "accept" ? "primary-button" : "danger-button"}" data-action="confirm-invite-decision" data-task="${encodeURIComponent(taskName)}" data-decision="${decision}">${buttonLabel}</button>
+      </div>
+    `,
+    true,
+  );
+}
+
+function openLoginBannerPreviewModal(id = "banner-1") {
+  const banner = loginPageBannerRows.find((item) => item.id === id) || loginPageBannerRows[0];
+  openModal(
+    `
+      <div class="modal-head">
+        <div>
+          <h2>${banner.name} 预览</h2>
+          <p class="subcopy">用于官方登录平台左侧 Banner 展示。</p>
+        </div>
+        <button class="close-button" data-action="close-overlay" aria-label="关闭">×</button>
+      </div>
+      <div class="modal-body">
+        <div class="login-preview-banner login-preview-banner-${banner.tone} login-preview-banner-large">
+          <div class="login-preview-badge">${banner.name}</div>
+          <h3>${banner.title}</h3>
+          <p>推荐尺寸 ${banner.size}，当前状态：${banner.status}。</p>
+        </div>
+      </div>
+      <div class="modal-foot">
+        <button class="ghost-button" data-action="close-overlay">关闭</button>
+      </div>
+    `,
+  );
+}
+
+function openLoginBannerEditModal(id = "banner-1") {
+  const banner = loginPageBannerRows.find((item) => item.id === id) || loginPageBannerRows[0];
+  openModal(
+    `
+      <div class="modal-head">
+        <div>
+          <h2>修改 ${banner.name}</h2>
+          <p class="subcopy">演示原型中仅展示 Banner 替换流程。</p>
+        </div>
+        <button class="close-button" data-action="close-overlay" aria-label="关闭">×</button>
+      </div>
+      <div class="modal-body">
+        <div class="login-banner-edit-grid">
+          <div class="login-preview-banner login-preview-banner-${banner.tone}">
+            <div class="login-preview-badge">${banner.name}</div>
+            <h3>${banner.title}</h3>
+            <p>当前图尺寸 ${banner.size}</p>
+          </div>
+          <div class="note-box">
+            <strong style="display:block;margin-bottom:8px">替换说明</strong>
+            建议上传横版 Banner，保持统一留白与标题安全区。
+            <br />
+            推荐尺寸：${banner.size}
+            <br />
+            支持操作：重新上传、替换当前图、保留现有排序。
+          </div>
+        </div>
+      </div>
+      <div class="modal-foot">
+        <button class="ghost-button" data-action="close-overlay">取消</button>
+        <button class="primary-button" data-action="toast-close" data-message="${banner.name} 图片替换成功">确认修改</button>
+      </div>
+    `,
+  );
+}
+
+function openPayoutDetailModal(id = "payout-1") {
+  const row = payoutRows.find((item) => item.id === id) || payoutRows[0];
+  openModal(
+    `
+      <div class="modal-head">
+        <div>
+          <h2>打款详情</h2>
+          <p class="subcopy">${row.campaign}</p>
+        </div>
+        <button class="close-button" data-action="close-overlay" aria-label="关闭">×</button>
+      </div>
+      <div class="modal-body">
+        <div class="form-grid">
+          ${field("活动", `<div class="note-box">${row.campaign}</div>`, false)}
+          ${field("达人", `<div class="note-box">${row.creator}</div>`, false)}
+          ${field("金额", `<div class="note-box">${row.amount}</div>`, false)}
+          ${field("状态", `<div class="note-box">${row.status}</div>`, false)}
+          ${field("账户", `<div class="note-box">${row.account}</div>`, false, "full")}
+          ${field("备注", `<div class="note-box">${row.rejectReason || row.note || "-"}</div>`, false, "full")}
+        </div>
+      </div>
+      <div class="modal-foot">
+        <button class="ghost-button" data-action="close-overlay">关闭</button>
+      </div>
+    `,
+  );
+}
+
+function openPayoutPaidConfirmModal(id = "payout-1") {
+  const row = payoutRows.find((item) => item.id === id) || payoutRows[0];
+  openModal(
+    `
+      <div class="modal-head">
+        <div>
+          <h2>标记打款</h2>
+        </div>
+        <button class="close-button" data-action="close-overlay" aria-label="关闭">×</button>
+      </div>
+      <div class="modal-body">
+        <div class="note-box">是否确认已向 ${row.creator} 完成「${row.campaign}」的线下打款？</div>
+      </div>
+      <div class="modal-foot">
+        <button class="ghost-button" data-action="close-overlay">取消</button>
+        <button class="primary-button" data-action="submit-payout-paid" data-id="${row.id}">确认打款</button>
+      </div>
+    `,
+    true,
+  );
+}
+
+function openPayoutRejectModal(id = "payout-1") {
+  const row = payoutRows.find((item) => item.id === id) || payoutRows[0];
+  openModal(
+    `
+      <div class="modal-head">
+        <div>
+          <h2>驳回打款</h2>
+          <p class="subcopy">${row.campaign}</p>
+        </div>
+        <button class="close-button" data-action="close-overlay" aria-label="关闭">×</button>
+      </div>
+      <div class="modal-body">
+        <div class="note-box" style="margin-bottom:14px">请确认是否驳回 ${row.creator} 的结算申请，并填写驳回理由。</div>
+        <textarea class="textarea" id="payoutRejectReason" placeholder="请输入驳回原因，例如：收款账户信息不完整、履约状态未最终确认等。"></textarea>
+      </div>
+      <div class="modal-foot">
+        <button class="ghost-button" data-action="close-overlay">取消</button>
+        <button class="danger-button" data-action="submit-payout-reject" data-id="${row.id}">确认驳回</button>
+      </div>
+    `,
+  );
 }
 
 function openProductModal() {
@@ -6869,7 +7615,7 @@ function openRejectReasonModal(taskName = "项目", reason = "暂无被拒原因
   );
 }
 
-function openCreatorDrawer(name = "Mika Studio") {
+function openCreatorDrawer(name = "Mika Studio", showInvite = true) {
   modalRoot.innerHTML = `
     <div class="drawer-backdrop" data-action="close-overlay"></div>
     <aside class="drawer" role="dialog" aria-modal="true">
@@ -6888,7 +7634,7 @@ function openCreatorDrawer(name = "Mika Studio") {
       </div>
       <div class="drawer-foot">
         <button class="ghost-button" data-action="close-overlay">关闭</button>
-        <button class="primary-button" data-action="modal-invite">邀请合作</button>
+        ${showInvite ? `<button class="primary-button" data-action="modal-invite">邀请合作</button>` : ""}
       </div>
     </aside>
   `;
@@ -6935,18 +7681,42 @@ function buildFulfillmentFlow(row) {
     });
 }
 
+function renderCollaboratorDeliverablePanel(row, highlighted = false) {
+  const deliverables = Array.isArray(row.deliverables) && row.deliverables.length ? [row.deliverables[0]] : [];
+  if (!deliverables.length) {
+    return `<div class="deliver-item ${highlighted ? "deliver-review-item deliver-review-highlight" : ""}"><span class="deliver-desc">暂未收到达人提交产物</span></div>`;
+  }
+  return deliverables
+    .map(
+      (item) => `
+        <div class="deliver-item deliver-review-item ${highlighted ? "deliver-review-highlight" : ""}">
+          <p class="deliver-desc" style="margin-bottom:8px">${item.desc || "-"}</p>
+          ${item.link ? `<div class="deliver-link-block" style="margin-bottom:8px"><span class="deliver-link-label">链接：</span><a href="${item.link}" target="_blank" class="deliver-link-url">${item.link}</a></div>` : ""}
+          ${item.attachment ? `<div class="deliver-actions" style="display:flex;gap:8px;flex-wrap:wrap"><button class="ghost-button" data-action="toast" data-message="正在下载 ${item.attachment.name}">📥 下载 ${item.attachment.name} (${item.attachment.size})</button></div>` : ""}
+        </div>
+      `,
+    )
+    .join("");
+}
+
 function openDeliveryDrawer(creatorKey = "") {
   const row =
     collaborations.find((item) => (item.creatorId || item.creator) === creatorKey) ||
     collaborations.find((item) => item.creator === creatorKey) ||
     collaborations[0];
-  const timelineItems = buildFulfillmentFlow(row);
+  const isAdvertiserReviewStage = row.progress === "待审核" || row.progress === "内容审核中" || row.status === "待审核";
+  const deliverableMarkup = renderCollaboratorDeliverablePanel(row, true);
+  const timelineItems = buildFulfillmentFlow(row).map((item) =>
+    isAdvertiserReviewStage && item.title === "内容复审中（广告主）"
+      ? { ...item, deliverablePanel: deliverableMarkup }
+      : item,
+  );
   const footer =
-    row.status === "待审核" || row.progress === "内容审核中"
+    isAdvertiserReviewStage
       ? `
         <div class="drawer-foot">
           <button class="secondary-button" data-action="modal-review">要求修改</button>
-          <button class="primary-button" data-action="toast-close" data-message="已通过当前内容审核">通过审核</button>
+          <button class="primary-button" data-action="approve-collab-delivery" data-creator="${encodeURIComponent(row.creatorId || row.creator)}">确认通过</button>
         </div>
       `
       : `
@@ -6958,13 +7728,21 @@ function openDeliveryDrawer(creatorKey = "") {
     <div class="drawer-backdrop" data-action="close-overlay"></div>
     <aside class="drawer" role="dialog" aria-modal="true">
       <div class="drawer-head">
-        <div><h2>达人交付详情</h2><p class="subcopy">${row.creator} · ${row.progress} · ${row.status}</p></div>
+        <div><h2>达人交付详情</h2><p class="subcopy">${row.creator} · ${row.campaign} · ${row.progress}</p></div>
         <button class="close-button" data-action="close-overlay" aria-label="关闭">×</button>
       </div>
       <div class="drawer-body">
-        <div class="deliver-placeholders single" aria-label="交付内容占位">
-          <div class="deliver-item"><span class="deliver-badge">${row.status === "已发布" ? "发布结果" : "附件"}</span><span class="deliver-desc">${row.status === "已发布" ? row.tracking || "已发布，等待数据回流" : "交付附件（占位）"}</span></div>
+        <div class="mini-stats">
+          <div class="mini-stat"><span>合作类型</span><strong>${row.type || "-"}</strong></div>
+          <div class="mini-stat"><span>结算方式</span><strong>${row.settlement || "-"}</strong></div>
+          <div class="mini-stat"><span>当前进度</span><strong>${row.progress || row.status || "-"}</strong></div>
         </div>
+        ${
+          isAdvertiserReviewStage
+            ? `<div class="note-box" style="margin-top:12px">达人已提交本轮产物，广告主可直接查看交付内容，并选择要求修改或确认通过进入待发布阶段。</div>`
+            : ""
+        }
+        ${isAdvertiserReviewStage ? "" : `<div class="deliver-placeholders single" aria-label="交付内容列表" style="margin-top:16px">${deliverableMarkup}</div>`}
         <div class="fulfillment-flow" aria-label="达人报名与履单状态信息流">
           ${timelineItems
             .map(
@@ -6974,6 +7752,7 @@ function openDeliveryDrawer(creatorKey = "") {
                 <div>
                   <div class="fulfillment-flow-head"><strong>${item.title}</strong>${item.stateClass === "pending" ? "" : `<span>${item.time}</span>`}</div>
                   ${item.stateClass === "pending" ? "" : `<p>${item.desc}</p>`}
+                  ${item.deliverablePanel || ""}
                 </div>
               </div>
             `,
@@ -7432,6 +8211,123 @@ function handleAction(action, target) {
     openAdminFulfillmentDrawer(decodeURIComponent(target.dataset.campaign || ""), decodeURIComponent(target.dataset.creator || ""));
     return;
   }
+  if (action === "open-admin-review-detail") {
+    const pageKey = target.dataset.pageKey || "";
+    const taskName = decodeURIComponent(target.dataset.task || "");
+    const reviewTarget = decodeURIComponent(target.dataset.target || "");
+    const creatorName = parseReviewTargetName(reviewTarget);
+    if (pageKey === "campaignReviewAdmin") {
+      openAdminTaskDetailDrawer(taskName);
+      return;
+    }
+    if (pageKey === "creatorApplicationReviewAdmin") {
+      if (adminInfluencerRows.some((row) => row.name === creatorName)) {
+        state.adminFilters.selectedInfluencer = creatorName;
+        go("influencerDetailAdmin");
+        return;
+      }
+      openCreatorDrawer(creatorName, false);
+      return;
+    }
+    if (pageKey === "creatorDeliverableReviewAdmin") {
+      openAdminDeliverableReviewDetail(taskName, creatorName);
+      return;
+    }
+  }
+  if (action === "approve-admin-campaign-review") {
+    const taskName = decodeURIComponent(target.dataset.task || "");
+    const reviewTarget = decodeURIComponent(target.dataset.target || "广告主任务审核");
+    adminReviewHistoryRows.unshift({
+      taskName,
+      target: reviewTarget,
+      reviewType: "任务审核",
+      result: "已通过",
+      reviewer: "运营 · 当前账号",
+      time: "2026-06-18 11:45",
+      reason: "信息完整，符合平台投放规范。",
+    });
+    render();
+    toast("已通过当前活动审核");
+    return;
+  }
+  if (action === "open-admin-campaign-reject") {
+    openAdminCampaignRejectModal(
+      decodeURIComponent(target.dataset.task || ""),
+      decodeURIComponent(target.dataset.target || "广告主任务审核"),
+    );
+    return;
+  }
+  if (action === "submit-admin-campaign-reject") {
+    const reasonInput = document.getElementById("adminCampaignRejectReason");
+    const reason = reasonInput?.value.trim() || "";
+    if (!reason) {
+      toast("请先填写驳回理由");
+      return;
+    }
+    const taskName = decodeURIComponent(target.dataset.task || "");
+    const reviewTarget = decodeURIComponent(target.dataset.target || "广告主任务审核");
+    adminReviewHistoryRows.unshift({
+      taskName,
+      target: reviewTarget,
+      reviewType: "任务审核",
+      result: "已拒绝",
+      reviewer: "运营 · 当前账号",
+      time: "2026-06-18 11:50",
+      reason,
+    });
+    closeOverlay();
+    render();
+    toast("已驳回当前活动审核");
+    return;
+  }
+  if (action === "approve-admin-deliverable-review") {
+    const taskName = decodeURIComponent(target.dataset.task || "");
+    const creatorName = decodeURIComponent(target.dataset.creator || "");
+    adminReviewHistoryRows.unshift({
+      taskName,
+      target: `内容审核 · ${creatorName}`,
+      reviewType: "内容审核",
+      result: "已通过",
+      reviewer: "运营 · 当前账号",
+      time: "2026-06-18 11:20",
+      reason: "产物内容完整，品牌露出与素材规范符合要求。",
+    });
+    closeOverlay();
+    render();
+    toast("已通过当前产物审核");
+    return;
+  }
+  if (action === "open-admin-deliverable-reject") {
+    openAdminDeliverableRejectModal(decodeURIComponent(target.dataset.task || ""), decodeURIComponent(target.dataset.creator || ""));
+    return;
+  }
+  if (action === "submit-admin-deliverable-reject") {
+    const reasonInput = document.getElementById("adminDeliverableRejectReason");
+    const reason = reasonInput?.value.trim() || "";
+    if (!reason) {
+      toast("请先填写驳回理由");
+      return;
+    }
+    const taskName = decodeURIComponent(target.dataset.task || "");
+    const creatorName = decodeURIComponent(target.dataset.creator || "");
+    adminReviewHistoryRows.unshift({
+      taskName,
+      target: `内容审核 · ${creatorName}`,
+      reviewType: "内容审核",
+      result: "已拒绝",
+      reviewer: "运营 · 当前账号",
+      time: "2026-06-18 11:25",
+      reason,
+    });
+    closeOverlay();
+    render();
+    toast("已驳回当前产物并发送修改意见");
+    return;
+  }
+  if (action === "open-admin-task-detail") {
+    openAdminTaskDetailDrawer(decodeURIComponent(target.dataset.task || ""));
+    return;
+  }
   if (action === "open-admin-influencer-detail") {
     state.adminFilters.selectedInfluencer = decodeURIComponent(target.dataset.name || "");
     go("influencerDetailAdmin");
@@ -7520,6 +8416,7 @@ function handleAction(action, target) {
   if (action === "toggle-opportunity-menu") {
     const menu = target.dataset.menu;
     state.opportunityFilters.platformMenuOpen = menu === "platform" ? !state.opportunityFilters.platformMenuOpen : false;
+    state.opportunityFilters.regionMenuOpen = menu === "region" ? !state.opportunityFilters.regionMenuOpen : false;
     state.opportunityFilters.tagMenuOpen = menu === "tag" ? !state.opportunityFilters.tagMenuOpen : false;
     state.opportunityFilters.followerMenuOpen = menu === "follower" ? !state.opportunityFilters.followerMenuOpen : false;
     state.opportunityFilters.amountMenuOpen = menu === "amount" ? !state.opportunityFilters.amountMenuOpen : false;
@@ -7529,7 +8426,7 @@ function handleAction(action, target) {
   if (action === "toggle-opportunity-option") {
     const type = target.dataset.type;
     const value = target.dataset.value || "";
-    const key = type === "platform" ? "platforms" : "tags";
+    const key = type === "platform" ? "platforms" : type === "region" ? "regions" : "tags";
     const next = new Set(state.opportunityFilters[key]);
     if (next.has(value)) next.delete(value);
     else next.add(value);
@@ -7540,12 +8437,13 @@ function handleAction(action, target) {
   if (action === "reset-opportunity-filters") {
     state.opportunityFilters = {
       platformMenuOpen: false,
+      regionMenuOpen: false,
       tagMenuOpen: false,
       followerMenuOpen: false,
       amountMenuOpen: false,
       platforms: [],
+      regions: [],
       tags: [],
-      region: "",
       followerMin: 0,
       followerMax: 1000000,
       amountMin: 0,
@@ -7579,7 +8477,7 @@ function handleAction(action, target) {
   if (action === "confirm-amount-filter") {
     state.opportunityFilters.amountMenuOpen = false;
     render();
-    toast("金额范围已确认");
+    toast("预设金额已确认");
     return;
   }
   if (action === "apply-opportunity-filters") {
@@ -7749,7 +8647,13 @@ function handleAction(action, target) {
     return;
   }
   if (action === "open-social-auth") {
+    state.socialAuthDraft.method = "oauth";
     openSocialAuthModal(target.dataset.platform || "TikTok");
+    return;
+  }
+  if (action === "set-social-auth-method") {
+    state.socialAuthDraft.method = target.dataset.method || "oauth";
+    openSocialAuthModal(state.socialAuthDraft.platform || "TikTok");
     return;
   }
   if (action === "set-invite-source") {
@@ -7767,6 +8671,81 @@ function handleAction(action, target) {
     return;
   }
   if (action === "modal-invite") openInviteModal();
+  if (action === "preview-login-banner") {
+    openLoginBannerPreviewModal(target.dataset.id || "banner-1");
+    return;
+  }
+  if (action === "edit-login-banner") {
+    state.loginBannerUploadTargetId = target.dataset.id || "banner-1";
+    const fileInput = document.getElementById("loginBannerUploadInput");
+    if (fileInput) fileInput.click();
+    else toast("上传入口初始化失败");
+    return;
+  }
+  if (action === "open-payout-detail") {
+    openPayoutDetailModal(target.dataset.id || "payout-1");
+    return;
+  }
+  if (action === "confirm-payout-paid") {
+    openPayoutPaidConfirmModal(target.dataset.id || "payout-1");
+    return;
+  }
+  if (action === "open-payout-reject") {
+    openPayoutRejectModal(target.dataset.id || "payout-1");
+    return;
+  }
+  if (action === "open-revenue-payout") {
+    openRevenuePayoutModal();
+    return;
+  }
+  if (action === "set-revenue-payout-method") {
+    state.revenuePayoutDraft.method = target.dataset.value || "paypal";
+    openRevenuePayoutModal();
+    return;
+  }
+  if (action === "save-revenue-payout") {
+    closeOverlay();
+    render();
+    toast("收款账户已保存");
+    return;
+  }
+  if (action === "submit-payout-paid") {
+    const row = payoutRows.find((item) => item.id === (target.dataset.id || ""));
+    if (row) {
+      row.status = "已打款";
+      row.statusClass = "done";
+      row.note = "已完成人工打款登记。";
+      row.rejectReason = "";
+    }
+    closeOverlay();
+    render();
+    toast("已标记为已打款");
+    return;
+  }
+  if (action === "submit-payout-reject") {
+    const reasonInput = document.getElementById("payoutRejectReason");
+    const reason = reasonInput ? reasonInput.value.trim() : "";
+    if (!reason) {
+      toast("请先填写驳回理由");
+      return;
+    }
+    const row = payoutRows.find((item) => item.id === (target.dataset.id || ""));
+    if (row) {
+      row.status = "失败";
+      row.statusClass = "rejected";
+      row.rejectReason = reason;
+      row.note = "该笔打款已被人工驳回。";
+    }
+    closeOverlay();
+    render();
+    toast("已驳回该笔结算");
+    return;
+  }
+  if (action === "set-revenue-payout-field") {
+    const fieldName = target.dataset.field || "";
+    if (fieldName) state.revenuePayoutDraft[fieldName] = target.value;
+    return;
+  }
   if (action === "open-notifications") {
     openNotificationCenterDrawer();
     return;
@@ -7838,7 +8817,7 @@ function handleAction(action, target) {
     const statusKey = target.dataset.status || "";
     state.creatorTaskDetail.name = taskName || taskDetailProfile.displayTitle;
     state.creatorTaskDetail.backTo = state.page === "myProjects" ? "myProjects" : state.page === "invitations" ? "invitations" : state.page === "applications" ? "applications" : "opportunityHall";
-    if (statusKey) applicationDetail.statusKey = statusKey;
+    applicationDetail.statusKey = statusKey || "none";
     if (state.page !== "taskDetail") go("taskDetail");
     render();
     return;
@@ -7923,8 +8902,51 @@ function handleAction(action, target) {
   }
   if (action === "drawer-creator") openCreatorDrawer(target.dataset.name);
   if (action === "drawer-delivery") openDeliveryDrawer(decodeURIComponent(target.dataset.creator || ""));
-  if (action === "accept-invite") toast("已确认接单，任务已加入我的项目");
-  if (action === "reject-invite") toast("已拒绝该合作邀请");
+  if (action === "approve-collab-delivery") {
+    const creatorKey = decodeURIComponent(target.dataset.creator || "");
+    const row =
+      collaborations.find((item) => (item.creatorId || item.creator) === creatorKey) ||
+      collaborations.find((item) => item.creator === creatorKey);
+    if (row) {
+      row.progress = "待发布";
+      row.note = "广告主已确认终稿，等待达人按排期发布。";
+      row.brandReviewTime = "2026-06-18 10:30";
+      row.deliverables = [
+        ...(row.deliverables || []),
+        {
+          badge: "审核结果",
+          title: "广告主确认通过",
+          desc: "当前内容版本已通过审核，可进入发布安排。",
+          meta: "确认时间 2026-06-18 10:30",
+        },
+      ];
+    }
+    closeOverlay();
+    render();
+    toast("已确认通过当前达人产物");
+    return;
+  }
+  if (action === "accept-invite") {
+    openInviteDecisionModal(decodeURIComponent(target.dataset.task || ""), "accept");
+    return;
+  }
+  if (action === "reject-invite") {
+    openInviteDecisionModal(decodeURIComponent(target.dataset.task || ""), "reject");
+    return;
+  }
+  if (action === "confirm-invite-decision") {
+    const taskName = decodeURIComponent(target.dataset.task || "");
+    const decision = target.dataset.decision || "accept";
+    const invite = invitations.find((row) => row.task === taskName);
+    if (invite) {
+      invite.status = decision === "accept" ? "已合作" : "已拒绝";
+      invite.statusClass = decision === "accept" ? "running" : "rejected";
+    }
+    closeOverlay();
+    render();
+    toast(decision === "accept" ? `已接受 ${taskName} 的合作邀请` : `已拒绝 ${taskName} 的合作邀请`);
+    return;
+  }
   if (action === "save-account") toast("账户信息已保存");
   if (action === "toggle-chip") target.classList.toggle("active");
   if (action === "toast") toast(message);
@@ -8087,6 +9109,18 @@ document.addEventListener("input", (event) => {
 });
 
 document.addEventListener("change", (event) => {
+  const uploadTarget = event.target.closest("#loginBannerUploadInput");
+  if (uploadTarget) {
+    const matched = loginPageBannerRows.find((item) => item.id === state.loginBannerUploadTargetId) || loginPageBannerRows[0];
+    const fileName = uploadTarget.files?.[0]?.name || "";
+    if (fileName) {
+      matched.updatedAt = "刚刚";
+      toast(`${matched.name} 已选择新图片：${fileName}`);
+      render();
+    }
+    uploadTarget.value = "";
+    return;
+  }
   const actionTarget = event.target.closest("[data-action='select-admin-campaign']");
   if (actionTarget && actionTarget.value) {
     state.adminFilters.selectedCampaign = decodeURIComponent(actionTarget.value);
