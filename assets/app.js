@@ -2330,6 +2330,44 @@ function formatUsdAmount(value) {
   return `USD ${amount.toLocaleString("en-US")}`;
 }
 
+function formatUsdBudget(value) {
+  const amount = normalizeMoneyNumber(value);
+  return `$${amount.toLocaleString("en-US")}`;
+}
+
+function parseBudgetRange(value = "") {
+  const text = String(value || "").replace(/\s+/g, " ").trim();
+  const match = text.match(/\$?\s*([\d,.]+)\s*(?:-|~|—|至|to)\s*\$?\s*([\d,.]+)/i);
+  if (!match) return null;
+  const min = normalizeMoneyNumber(match[1]);
+  const max = normalizeMoneyNumber(match[2]);
+  if (!min || !max || min >= max) return null;
+  return { min, max };
+}
+
+function taskQuoteSpec(taskName = "") {
+  const creatorRow = findCreatorCampaignRecord(taskName) || {};
+  if (creatorRow.quoteType === "range" && creatorRow.quoteMin && creatorRow.quoteMax) {
+    return {
+      mode: "range",
+      min: normalizeMoneyNumber(creatorRow.quoteMin),
+      max: normalizeMoneyNumber(creatorRow.quoteMax),
+    };
+  }
+  if (creatorRow.quoteType === "fixed" && creatorRow.quoteValue) {
+    return {
+      mode: "fixed",
+      value: normalizeMoneyNumber(creatorRow.quoteValue),
+    };
+  }
+  const parsedRange = parseBudgetRange(creatorRow.budget || buildTaskProfile(taskName).budget);
+  if (parsedRange) return { mode: "range", ...parsedRange };
+  return {
+    mode: "fixed",
+    value: normalizeMoneyNumber(creatorRow.budget || buildTaskProfile(taskName).budget),
+  };
+}
+
 function findCampaignRecord(taskName = "") {
   return campaigns.find((item) => item.name === taskName);
 }
@@ -7962,6 +8000,12 @@ function openReviewModal() {
 }
 
 function openApplyModal() {
+  const taskName = state.pendingApplyCampaign || state.creatorTaskDetail.name || taskDetailProfile.displayTitle;
+  const quoteSpec = taskQuoteSpec(taskName);
+  const quoteHint =
+    quoteSpec.mode === "range"
+      ? `商家报价区间 ${formatUsdBudget(quoteSpec.min)} - ${formatUsdBudget(quoteSpec.max)}，请填写区间内的报名报价。`
+      : `商家固定报价为 ${formatUsdBudget(quoteSpec.value)}，将按此金额提交报名。`;
   openModal(
     `
     <div class="modal-head">
@@ -7971,6 +8015,14 @@ function openApplyModal() {
     <div class="modal-body">
       <div class="form-grid">
         ${field("报名账号", `<select class="select" id="applyCreatorSelect"><option value="Mika Studio">Mika Studio · TikTok</option><option value="Nova Plays">Nova Plays · YouTube</option></select>`, true)}
+        ${field(
+          "报名报价",
+          `<div class="money-single">
+            <input class="input" id="applyQuoteInput" inputmode="decimal" value="${quoteSpec.mode === "fixed" ? quoteSpec.value : ""}" placeholder="${quoteSpec.mode === "range" ? `${quoteSpec.min} - ${quoteSpec.max}` : ""}" ${quoteSpec.mode === "fixed" ? "readonly" : ""} />
+            <span class="money-suffix">USD</span>
+          </div><small class="muted">${quoteHint}</small>`,
+          true,
+        )}
         ${field("报名理由", `<textarea class="textarea" id="applyReasonInput">我的频道受众与该活动高度匹配，可在 7 天内完成脚本、拍摄和发布。</textarea>`, true, "full")}
       </div>
     </div>
@@ -8991,7 +9043,7 @@ function handleAction(action, target) {
       reason: "账号垂类与内容方向符合活动要求。",
     });
     ensureCooperationRecords(taskName, creatorName, {
-      quote: findCreatorProfile(creatorName)?.price || "99",
+      quote: record?.quote || findCreatorProfile(creatorName)?.price || "99",
       type: buildTaskProfile(taskName).cooperationType,
     });
     notifyCreator({
@@ -9668,13 +9720,25 @@ function handleAction(action, target) {
   if (action === "submit-apply") {
     const taskName = state.pendingApplyCampaign || state.creatorTaskDetail.name || "";
     const creatorName = document.getElementById("applyCreatorSelect")?.value || "Mika Studio";
+    const quoteSpec = taskQuoteSpec(taskName);
+    const quoteInput = document.getElementById("applyQuoteInput")?.value.trim() || "";
+    const quoteValue = quoteSpec.mode === "fixed" ? quoteSpec.value : normalizeMoneyNumber(quoteInput);
     const reason = document.getElementById("applyReasonInput")?.value.trim() || "我的账号与该活动匹配，期待参与合作。";
+    if (!quoteValue) {
+      toast("请先填写报名报价");
+      return;
+    }
+    if (quoteSpec.mode === "range" && (quoteValue < quoteSpec.min || quoteValue > quoteSpec.max)) {
+      toast(`报名报价需填写在 ${formatUsdBudget(quoteSpec.min)} - ${formatUsdBudget(quoteSpec.max)} 之间`);
+      return;
+    }
     closeOverlay();
     if (taskName && !state.appliedCampaigns.includes(taskName)) state.appliedCampaigns.push(taskName);
     const existing = findApplicationRecord(taskName, creatorName);
     const row = {
       task: taskName,
       account: creatorName,
+      quote: formatUsdBudget(quoteValue),
       reason,
       statusKey: "platform_review",
       feedbackTime: "-",

@@ -1,0 +1,1102 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>功能逻辑与基础规则说明文档 — Meetinfluencer</title>
+<style>
+:root {
+  --bg: #f8f9fc;
+  --bg2: #ffffff;
+  --ink: #1e293b;
+  --muted: #64748b;
+  --rule: #e2e8f0;
+  --accent: #7c3aed;
+  --accent2: #d9468f;
+  --radius: 12px;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  background: var(--bg);
+  color: var(--ink);
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+  font-size: 15px;
+  line-height: 1.7;
+  padding: 2rem 1rem;
+}
+.container {
+  max-width: 1160px;
+  margin: 0 auto;
+  background: var(--bg2);
+  border-radius: var(--radius);
+  box-shadow: 0 4px 24px rgba(0,0,0,0.06);
+  padding: 3rem 2.5rem;
+}
+@media (max-width:720px) {
+  .container { padding: 1.5rem 1rem; }
+}
+h1 {
+  font-size: 2rem;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  color: var(--accent);
+  margin-bottom: 0.3rem;
+}
+h1 + .subtitle {
+  color: var(--muted);
+  font-size: 1rem;
+  margin-bottom: 2.5rem;
+  border-bottom: 2px solid var(--rule);
+  padding-bottom: 1.2rem;
+}
+h2 {
+  font-size: 1.4rem;
+  font-weight: 700;
+  margin: 2.5rem 0 1rem 0;
+  padding-bottom: 0.5rem;
+  border-bottom: 2px solid var(--accent2);
+  color: var(--ink);
+}
+h3 {
+  font-size: 1.1rem;
+  font-weight: 700;
+  margin: 1.8rem 0 0.6rem 0;
+  color: var(--accent);
+}
+h4 {
+  font-size: 0.95rem;
+  font-weight: 700;
+  margin: 1.2rem 0 0.4rem 0;
+  color: var(--ink);
+}
+p { margin-bottom: 0.8rem; }
+.muted { color: var(--muted); font-size: 0.85rem; }
+.tag {
+  display: inline-block;
+  background: rgba(124,58,237,0.1);
+  color: var(--accent);
+  font-size: 0.7rem;
+  font-weight: 700;
+  padding: 2px 8px;
+  border-radius: 999px;
+  margin-right: 4px;
+}
+.tag.amber { background: rgba(217,70,143,0.1); color: var(--accent2); }
+.tag.green { background: rgba(16,185,129,0.1); color: #0fa67f; }
+.tag.blue { background: rgba(59,130,246,0.1); color: #3b82f6; }
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 1rem 0 1.5rem 0;
+  font-size: 0.88rem;
+}
+thead th {
+  background: rgba(124,58,237,0.06);
+  color: var(--accent);
+  font-weight: 700;
+  text-align: left;
+  padding: 10px 12px;
+  border-bottom: 2px solid var(--accent);
+  white-space: nowrap;
+}
+tbody td {
+  padding: 9px 12px;
+  border-bottom: 1px solid var(--rule);
+  vertical-align: top;
+}
+tbody tr:hover { background: rgba(124,58,237,0.03); }
+.table-wrap { overflow-x: auto; margin-bottom: 1rem; }
+
+.callout {
+  background: rgba(124,58,237,0.06);
+  border-left: 4px solid var(--accent);
+  padding: 1rem 1.2rem;
+  border-radius: 0 8px 8px 0;
+  margin: 1rem 0;
+  font-size: 0.9rem;
+}
+.callout.warn { border-left-color: #e79b2d; background: rgba(231,155,45,0.08); }
+.callout.err { border-left-color: #ef5d77; background: rgba(239,93,119,0.07); }
+
+code {
+  font-family: 'SF Mono', Consolas, monospace;
+  font-size: 0.82em;
+  background: rgba(124,58,237,0.07);
+  padding: 2px 6px;
+  border-radius: 4px;
+  color: var(--accent);
+}
+pre {
+  background: #1e293b;
+  color: #e2e8f0;
+  border-radius: 8px;
+  padding: 1rem 1.2rem;
+  overflow-x: auto;
+  font-size: 0.8rem;
+  line-height: 1.5;
+  margin: 0.8rem 0;
+}
+
+ul, ol { padding-left: 1.4rem; margin-bottom: 0.8rem; }
+li { margin-bottom: 0.4rem; }
+
+.page-ref {
+  display: inline-block;
+  background: var(--accent);
+  color: #fff;
+  font-size: 0.7rem;
+  font-weight: 700;
+  padding: 1px 8px;
+  border-radius: 999px;
+  margin-right: 6px;
+}
+.page-ref.brand { background: #d9468f; }
+.page-ref.creator { background: #0fa67f; }
+.page-ref.admin { background: #3b82f6; }
+
+.section-anchor { scroll-margin-top: 20px; }
+</style>
+</head>
+<body>
+<div class="container">
+
+<h1>功能逻辑与基础规则说明文档</h1>
+<div class="subtitle">
+  Meetinfluencer 平台 — 基于原型代码的业务规则分析<br>
+  <span class="muted">版本 1.0 · 2026-06-18 · 角色覆盖：广告主端 / 达人端 / 运营后台</span>
+</div>
+
+<!-- ======================== 目录 ======================== -->
+<nav style="margin-bottom:2.5rem;background:var(--bg);padding:1.2rem 1.5rem;border-radius:var(--radius)">
+  <strong style="display:block;margin-bottom:0.6rem">目录</strong>
+  <ol style="columns:2;column-gap:2rem">
+    <li><a href="#global">全局架构与设计原则</a></li>
+    <li><a href="#page-promotions">广告主 · 活动管理</a></li>
+    <li><a href="#page-publish">广告主 · 创建活动</a></li>
+    <li><a href="#page-taskreview">广告主 · 查看任务</a></li>
+    <li><a href="#page-talent">广告主 · 达人管理</a></li>
+    <li><a href="#page-talentsearch">广告主 · 达人搜索</a></li>
+    <li><a href="#page-mytalents">广告主 · 合作达人</a></li>
+    <li><a href="#page-collaborators">广告主 · 合作管理</a></li>
+    <li><a href="#page-account">广告主 · 账户管理</a></li>
+    <li><a href="#page-opportunity">达人 · 机会大厅</a></li>
+    <li><a href="#page-taskdetail">达人 · 任务详情</a></li>
+    <li><a href="#page-applications">达人 · 报名管理</a></li>
+    <li><a href="#page-invitations">达人 · 合作邀请</a></li>
+    <li><a href="#page-myprojects">达人 · 我的任务</a></li>
+    <li><a href="#page-revenue">达人 · 我的收益</a></li>
+    <li><a href="#page-socialauth">达人 · 社媒认证</a></li>
+    <li><a href="#page-personal">达人 · 个人中心</a></li>
+    <li><a href="#page-notifications">通用 · 通知中心</a></li>
+    <li><a href="#page-admin-dashboard">运营后台 · 数据看板</a></li>
+    <li><a href="#page-admin-review">运营后台 · 审核管理</a></li>
+    <li><a href="#page-admin-advertisers">运营后台 · 广告主管理</a></li>
+    <li><a href="#page-admin-influencers">运营后台 · 达人管理</a></li>
+    <li><a href="#page-admin-official">运营后台 · 官方任务</a></li>
+    <li><a href="#page-admin-email">运营后台 · 达人邀约</a></li>
+    <li><a href="#page-admin-fulfillment">运营后台 · 任务履单</a></li>
+    <li><a href="#page-admin-payout">运营后台 · 结算管理</a></li>
+    <li><a href="#data-flow">数据流转与接口推导</a></li>
+    <li><a href="#anomaly">异常与边界场景</a></li>
+  </ol>
+</nav>
+
+<!-- ======================== 第1章：全局架构 ======================== -->
+<section id="global" class="section-anchor">
+<h2>一、全局架构与设计原则</h2>
+
+<h3>1.1 角色体系</h3>
+<p>平台支持三种角色切换，定义在 state.role 中，通过顶部角色开关控制：</p>
+<table>
+  <thead><tr><th>角色</th><th>标识</th><th>首页路由</th><th>典型操作</th></tr></thead>
+  <tbody>
+    <tr><td>品牌方（广告主）</td><td><code>brand</code></td><td><code>promotions</code></td><td>创建活动、管理达人、审核交付</td></tr>
+    <tr><td>创作者（达人）</td><td><code>creator</code></td><td><code>opportunityHall</code></td><td>查看任务、报名、提交产物</td></tr>
+    <tr><td>运营方（管理员）</td><td><code>operator</code></td><td><code>adminDashboard</code></td><td>审核活动/报名/产物、管理用户</td></tr>
+  </tbody>
+</table>
+
+<h3>1.2 路由机制</h3>
+<p>使用 URL hash 实现页面切换。核心函数 <code>go(page)</code> 设置 <code>window.location.hash = page</code> 触发 <code>hashchange</code> 事件，驱动 <code>render()</code> 重新渲染。当页面不匹配任何已知页面时，降级渲染 <code>promotions</code>。</p>
+
+<h3>1.3 全局状态管理</h3>
+<p>所有状态存储在全局 <code>state</code> 对象中，无状态管理框架。关键全局字段包括：</p>
+<table>
+  <thead><tr><th>字段路径</th><th>类型</th><th>说明</th></tr></thead>
+  <tbody>
+    <tr><td><code>state.role</code></td><td><code>"brand" | "creator" | "operator"</code></td><td>当前角色</td></tr>
+    <tr><td><code>state.page</code></td><td><code>string</code></td><td>当前页面路由 ID</td></tr>
+    <tr><td><code>state.brandNotifications</code></td><td><code>{ unreadCount, items[] }</code></td><td>广告主通知数据</td></tr>
+    <tr><td><code>state.creatorNotifications</code></td><td><code>{ unreadCount, items[] }</code></td><td>达人通知数据</td></tr>
+    <tr><td><code>state.tabs.*</code></td><td><code>Record&lt;string, string&gt;</code></td><td>各页面 Tab 切换状态</td></tr>
+    <tr><td><code>state.*Filters</code></td><td><code>object</code></td><td>各类筛选项配置</td></tr>
+    <tr><td><code>state.appliedCampaigns</code></td><td><code>string[]</code></td><td>达人已报名的任务列表</td></tr>
+  </tbody>
+</table>
+
+<div class="callout">
+  <strong>设计约束：</strong>当前为纯前端原型，无后端 API 调用。所有数据存储于硬编码常量或运行时 state 中，页面切换不丢失数据（DOM 重新渲染但 JS 状态持久）。
+</div>
+
+<h3>1.4 交互事件体系</h3>
+<p>采用全局事件委托 <code>document.addEventListener("click", ...)</code> 处理三类交互：</p>
+<ul>
+  <li><strong>导航</strong>：<code>[data-nav="pageId"]</code> — 点击后调用 <code>go(pageId)</code></li>
+  <li><strong>Tab 切换</strong>：<code>[data-tab]</code> — 更新 <code>state.tabs[tab] = value</code> 后重新渲染</li>
+  <li><strong>动作</strong>：<code>[data-action="actionName"]</code> — 路由到 <code>handleAction(actionName, target)</code>，约 200+ 分支</li>
+</ul>
+
+<h3>1.5 弹窗与抽屉体系</h3>
+<table>
+  <thead><tr><th>组件</th><th>容器</th><th>控制函数</th><th>关闭方式</th></tr></thead>
+  <tbody>
+    <tr><td>Modal 弹窗</td><td><code>#modalRoot</code></td><td><code>openModal(content, small?, extraClass?)</code></td><td>点击蒙层 / <code>closeOverlay()</code></td></tr>
+    <tr><td>Drawer 抽屉</td><td><code>#modalRoot</code></td><td>各 <code>open*Drawer()</code> 函数</td><td>点击蒙层 / <code>closeOverlay()</code></td></tr>
+    <tr><td>Toast 提示</td><td><code>#toastRoot</code></td><td><code>toast(message, title?)</code></td><td>2.6 秒自动消失</td></tr>
+  </tbody>
+</table>
+
+<hr style="margin:2rem 0;border:0;border-top:1px solid var(--rule)">
+</section>
+
+<!-- ======================== 各页面详细规则 ======================== -->
+<!-- 为节省篇幅，以下每页一个 section，结构按：
+     页面概述 → 核心交互与基础逻辑（表格） → 数据与接口 → 异常边界 → 待确认逻辑
+-->
+
+<!-- ================= 2. 广告主·活动管理 ================= -->
+<section id="page-promotions" class="section-anchor">
+<h2>二、广告主 · 活动管理（Promotions）</h2>
+
+<h3>2.1 页面概述</h3>
+<p>广告主工作台首页，集中查看所有推广活动的状态、预算与进展，并支持创建新活动。</p>
+<p><strong>核心模块：</strong>KPI 指标卡 → 筛选栏 → 被驳回活动队列 → 活动列表表格</p>
+
+<h3>2.2 核心交互与基础逻辑</h3>
+<div class="table-wrap">
+<table>
+  <thead><tr><th>字段/元素</th><th>类型/组件</th><th>触发条件/交互动作</th><th>业务处理规则</th></tr></thead>
+  <tbody>
+    <tr><td>KPI 指标卡</td><td>metrics 组件</td><td>首次加载</td><td><code>brandHasCampaigns</code> 为 false 时显示默认值 0/引导文案；为 true 时显示真实累计值</td></tr>
+    <tr><td>活动名称搜索</td><td><code>&lt;input&gt;</code></td><td>输入文本</td><td>实时过滤 <code>campaigns</code>，匹配 name 字段；通过 <code>state.promotionFilters.name</code> 存储</td></tr>
+    <tr><td>活动状态下拉</td><td><code>&lt;select&gt;</code></td><td>选择选项</td><td>精确匹配 status 字段；选项：进行中 / 草稿 / 已到期</td></tr>
+    <tr><td>发起日期选择</td><td><code>&lt;input type="date"&gt;</code></td><td>选择日期</td><td>按 start 字段前缀匹配（<code>YYYY-MM-DD</code> 格式）</td></tr>
+    <tr><td>重置筛选</td><td>ghost-button</td><td>点击</td><td>重置 <code>promotionFilters</code> 三个字段为空</td></tr>
+    <tr><td>活动列表表格</td><td>table（9列）</td><td>数据渲染</td><td>被驳回（status="已驳回"）的活动排在最前；状态列按 statusClass 渲染不同颜色徽章</td></tr>
+    <tr><td>编辑按钮</td><td>link-button</td><td>点击 <code>open-publish</code></td><td>跳转至创建活动页面（当前为新建模式）</td></tr>
+    <tr><td>邀请达人按钮</td><td>link-button</td><td>点击 <code>modal-invite</code></td><td>弹出邀请达人弹窗</td></tr>
+    <tr><td>查看详情按钮</td><td>link-button</td><td>点击 <code>nav taskReview</code></td><td>跳转至查看任务页</td></tr>
+    <tr><td>删除按钮</td><td>link-button</td><td>点击 <code>toast</code></td><td>仅弹出 toast 确认提示，未实际删除</td></tr>
+    <tr><td>被驳回活动队列</td><td>accordion 面板</td><td>存在驳回活动时展示</td><td>展示驳回原因 + 查看原因弹窗 + 修改重提按钮</td></tr>
+    <tr><td>+新建活动</td><td>primary-button</td><td>点击 <code>open-publish</code></td><td>跳转至 <code>publishTask</code> 页面</td></tr>
+  </tbody>
+</table>
+</div>
+
+<h3>2.3 数据与接口推导</h3>
+<table>
+  <thead><tr><th>数据字段</th><th>来源</th><th>对应接口字段（推导）</th><th>说明</th></tr></thead>
+  <tbody>
+    <tr><td><code>campaigns[].name</code></td><td>硬编码</td><td><code>campaign_name</code></td><td>活动名称，筛选核心字段</td></tr>
+    <tr><td><code>campaigns[].status</code></td><td>硬编码</td><td><code>campaign_status</code></td><td>活动状态：进行中/草稿/已到期/已驳回/审核中</td></tr>
+    <tr><td><code>campaigns[].joined</code></td><td>硬编码</td><td><code>joined_creator_count</code></td><td>已参加达人数量</td></tr>
+    <tr><td><code>campaigns[].budget</code></td><td>硬编码</td><td><code>campaign_budget</code></td><td>预算金额（USD）</td></tr>
+    <tr><td><code>campaigns[].start</code></td><td>硬编码</td><td><code>created_at</code></td><td>活动发起时间</td></tr>
+  </tbody>
+</table>
+
+<h3>2.4 异常与边界场景</h3>
+<ul>
+  <li><strong>空数据</strong>：<code>brandHasCampaigns === false</code> 时展示三步引导流程，不显示列表</li>
+  <li><strong>筛选无结果</strong>：展示空状态提示"暂无匹配结果"</li>
+  <li><strong>删除操作</strong>：当前仅弹 Toast 确认，未实现真实删除逻辑</li>
+</ul>
+
+<h3>2.5 待确认逻辑</h3>
+<div class="callout warn">
+  ⚠️ <strong>活动状态机</strong>：当前状态包括"进行中/草稿/已到期/已驳回/审核中"，但状态流转规则尚未定义（例如：草稿→审核中→进行中/已驳回 的完整流转链路需后端配合）。建议需明确：创建活动后是否立即进入"审核中"；被驳回后重提是否重置状态为"审核中"；活动到期后是否有自动状态变更触发。
+</div>
+</section>
+
+<!-- ================= 3. 广告主·创建活动 ================= -->
+<section id="page-publish" class="section-anchor">
+<h2>三、广告主 · 创建活动（PublishTask）</h2>
+
+<h3>3.1 页面概述</h3>
+<p>广告主填写推广信息、配置平台达人要求与预算，创建可报名的合作任务。</p>
+<p><strong>核心模块：</strong>一页式表单（推广信息 → 平台配置 → 交付信息 → 匹配达人）</p>
+
+<h3>3.2 核心交互与基础逻辑</h3>
+<div class="table-wrap">
+<table>
+  <thead><tr><th>字段/元素</th><th>类型</th><th>交互动作</th><th>业务处理规则</th></tr></thead>
+  <tbody>
+    <tr><td>活动名称</td><td>input + 计数器</td><td>输入文本</td><td>最大 200 字，实时显示字数</td></tr>
+    <tr><td>推广平台</td><td>多选下拉</td><td>点击触发菜单 + checkbox 选择</td><td>至少选一个平台；每个平台会生成对应的平台配置卡片</td></tr>
+    <tr><td>推广地区</td><td>多选下拉（区域分组）</td><td>点击展开父子级菜单</td><td>支持按区域批量选择；父级选中时所有子级同时选中</td></tr>
+    <tr><td>推广产品</td><td>input（必填）</td><td>输入文本</td><td>必填字段，校验 <code>canOpenPublishMatch()</code></td></tr>
+    <tr><td>达人粉丝数量</td><td>range input（最低K-最高K）</td><td>输入数值</td><td>按平台单独配置，校验 followerMinK 和 followerMaxK 是否填写</td></tr>
+    <tr><td>达人标签</td><td>多选下拉</td><td>点击展开 + checkbox</td><td>10 种达人标签可选，支持多选；按平台单独配置</td></tr>
+    <tr><td>合作类型</td><td>chips 多选</td><td>点击切换 active 状态</td><td>选项：全片/插片/直播/长视频/Shorts/社区post/素材授权</td></tr>
+    <tr><td>内容要求</td><td>textarea（必填）</td><td>输入文本</td><td>按平台单独配置</td></tr>
+    <tr><td>平台预算</td><td>input + USD 后缀</td><td>输入数值</td><td>按平台单独配置，校验非空</td></tr>
+    <tr><td>单人单价</td><td>range input（最低-最高 + USD）</td><td>输入数值</td><td>可选字段</td></tr>
+    <tr><td>结算方式</td><td>select</td><td>选择</td><td>选项：固定价/固定CPM/按曝光量区间现金结算</td></tr>
+    <tr><td>结算周期</td><td>select</td><td>选择</td><td>选项：按7天/3天/14天实际曝光量结算</td></tr>
+    <tr><td>期望效果</td><td>select</td><td>选择</td><td>选项：曝光/点击/转化</td></tr>
+    <tr><td>沿用上一平台要求</td><td>ghost-button</td><td>点击</td><td>仅第 2+ 个平台显示；复制上一平台全部配置到当前平台</td></tr>
+    <tr><td>查看匹配达人</td><td>secondary-button</td><td>点击</td><td>依赖 <code>canOpenPublishMatch()</code>，7 个基础字段 + 所有平台配置完成才启用</td></tr>
+    <tr><td>保存草稿</td><td>ghost-button</td><td>点击</td><td>仅弹出 Toast 确认，未实现真实草稿持久化</td></tr>
+    <tr><td>确认发布</td><td>primary-button</td><td>点击</td><td>校验通过后调用 <code>submit-publish</code>，将活动加入 campaigns 列表</td></tr>
+  </tbody>
+</table>
+</div>
+
+<h3>2.3 平台配置完整性校验</h3>
+<p><code>publishPlatformConfigStatus(config)</code> 检查 5 个必填项：</p>
+<ol>
+  <li>粉丝范围（followerMinK + followerMaxK）</li>
+  <li>达人标签（creatorTypes 非空）</li>
+  <li>合作类型（cooperationTypes 非空）</li>
+  <li>内容要求（contentRequirement 非空）</li>
+  <li>平台预算（platformBudget 非空）</li>
+</ol>
+<p>完成 0 项 → "未配置"（灰色）、1-4 项 → "待补充"（黄色）、全部完成 → "已完成"（绿色）。</p>
+
+<h3>2.4 数据与接口推导</h3>
+<table>
+  <thead><tr><th>数据字段</th><th>推导接口字段</th><th>说明</th></tr></thead>
+  <tbody>
+    <tr><td><code>publishDraft.campaignName</code></td><td><code>campaign_name</code></td><td>活动名称</td></tr>
+    <tr><td><code>publishDraft.platforms[]</code></td><td><code>platforms[]</code></td><td>选中平台列表</td></tr>
+    <tr><td><code>publishDraft.countries[]</code></td><td><code>target_countries[]</code></td><td>推广国家列表</td></tr>
+    <tr><td><code>publishDraft.platformConfigs[platform]</code></td><td><code>platform_configs[]</code></td><td>每个平台的细分配置（JSON）</td></tr>
+    <tr><td><code>publishDraft.registrationRange</code></td><td><code>registration_start/end</code></td><td>达人报名时间范围</td></tr>
+    <tr><td><code>publishDraft.projectDeadline</code></td><td><code>project_deadline</code></td><td>项目截止日期</td></tr>
+  </tbody>
+</table>
+
+<h3>2.5 异常与边界场景</h3>
+<ul>
+  <li><strong>必填字段校验</strong>：<code>canOpenPublishMatch()</code> 校验 7 个基础字段和平台配置完整性，任一未填则匹配达人按钮禁用</li>
+  <li><strong>平台联动</strong>：切换平台 Tab 时自动保存当前平台配置到 <code>platformConfigs</code></li>
+  <li><strong>重复提交</strong>：发布后活动插入 <code>campaigns</code> 数组，未做去重校验</li>
+</ul>
+
+<h3>2.6 待确认逻辑</h3>
+<div class="callout warn">
+  ⚠️ <strong>表单验证时机</strong>：当前无"提交前全量校验"逻辑，仅在"查看匹配达人"时做部分校验。建议在"确认发布"时增加全量必填校验。此外，草稿保存未实现持久化：刷新页面后草稿数据丢失。
+</div>
+</section>
+
+<!-- ================= 4. 广告主·查看任务 ================= -->
+<section id="page-taskreview" class="section-anchor">
+<h2>四、广告主 · 查看任务（TaskReview）</h2>
+
+<h3>4.1 页面概述</h3>
+<p>广告主查看单个活动的详细数据，审核达人报名，追踪已合作达人的交付状态。</p>
+<p><strong>核心模块：</strong>任务概要 → Tab 切换（全部报名达人 / 已合作达人）→ 表格</p>
+
+<h3>4.2 核心交互与基础逻辑</h3>
+<div class="table-wrap">
+<table>
+  <thead><tr><th>字段/元素</th><th>类型</th><th>交互动作</th><th>业务处理规则</th></tr></thead>
+  <tbody>
+    <tr><td>全部报名达人(Tab)</td><td>tab 按钮</td><td>点击切换</td><td>设置 <code>state.tabs.taskReview = "applicants"</code>，显示报名列表</td></tr>
+    <tr><td>已合作达人(Tab)</td><td>tab 按钮</td><td>点击切换</td><td>设置 <code>state.tabs.taskReview = "deliveries"</code>，显示交付列表</td></tr>
+    <tr><td>报名列表表格</td><td>table（8列）</td><td>渲染 <code>applicantRows()</code></td><td>遍历 <code>creators</code> 数组，每行展示达人信息/受众性别/粉丝数/年龄/平均曝光量/报名理由/状态/操作</td></tr>
+    <tr><td>确认报名</td><td>link-button</td><td>点击 <code>toast</code></td><td>仅弹出 Toast 确认，未实现真实状态变更或通知达人</td></tr>
+    <tr><td>拒绝报名</td><td>link-button</td><td>点击 <code>toast</code></td><td>仅弹出 Toast 确认</td></tr>
+    <tr><td>查看达人</td><td>link-button</td><td>点击 <code>drawer-creator</code></td><td>弹出达人详情抽屉（含粉丝数/曝光量/互动率/受众画像）</td></tr>
+    <tr><td>已合作达人列表</td><td>table（7列）</td><td>渲染 <code>deliveryRowsForReview()</code></td><td>从 <code>collaborations</code> 中筛选 status 为进行中/待审核/已发布 的行</td></tr>
+    <tr><td>查看交付详情</td><td>link-button</td><td>点击 <code>drawer-delivery</code></td><td>弹出交付详情抽屉（<code>openDeliveryDrawer()</code>），展示履单时间线和交付物内容</td></tr>
+  </tbody>
+</table>
+</div>
+
+<h3>4.3 数据与接口推导</h3>
+<table>
+  <thead><tr><th>数据字段</th><th>来源</th><th>推导接口</th><th>说明</th></tr></thead>
+  <tbody>
+    <tr><td><code>taskDetailProfile</code></td><td>硬编码对象</td><td><code>GET /campaign/:id</code></td><td>任务概要数据</td></tr>
+    <tr><td><code>creators[]</code></td><td>硬编码数组</td><td><code>GET /campaign/:id/applicants</code></td><td>报名达人列表</td></tr>
+    <tr><td><code>collaborations[]</code></td><td>硬编码数组</td><td><code>GET /campaign/:id/deliveries</code></td><td>已合作达人交付列表</td></tr>
+  </tbody>
+</table>
+
+<h3>4.4 异常与边界场景</h3>
+<ul>
+  <li><strong>报名达人为空</strong>：<code>creators</code> 数组遍历展示，无需特殊空状态（当前始终有 8 条数据）</li>
+  <li><strong>已合作达人为空</strong>：筛选后无匹配数据时展示空状态</li>
+  <li><strong>确认/拒绝报名</strong>：当前仅为模拟操作，未实际更新数据源</li>
+</ul>
+
+<h3>4.5 待确认逻辑</h3>
+<div class="callout warn">
+  ⚠️ <strong>报名审核流程</strong>：广告主端的"确认/拒绝"操作应同步更新达人端 <code>applicationRecords</code> 中的 <code>statusKey</code>，并触发达人通知，但当前实现仅为 Toast 占位。建议后端接口统一处理报名审核的原子性操作和双向状态同步。
+</div>
+</section>
+
+<!-- ================= 5. 广告主·达人管理 ================= -->
+<section id="page-talent" class="section-anchor">
+<h2>五、广告主 · 达人管理（TalentManagement）</h2>
+
+<h3>5.1 页面概述</h3>
+<p>广告主投前选人的资源总览，展示达人池数据与快捷入口。当前版本为占位页面，核心功能在<strong>达人搜索</strong>和<strong>合作达人</strong>子页面。</p>
+<p>KPI 指标：资源池达人 / 收藏达人 / 可邀约 / 平均互动率。</p>
+
+<p style="margin-top:1rem"><strong>近期达人池表格行交互：</strong></p>
+<div class="table-wrap">
+<table>
+  <thead><tr><th>元素</th><th>触发条件</th><th>处理规则</th></tr></thead>
+  <tbody>
+    <tr><td>达人头像</td><td>点击 <code>drawer-creator</code></td><td>弹出达人详情抽屉</td></tr>
+    <tr><td>收藏/已收藏按钮</td><td>点击 <code>toast</code></td><td>切换文案（收藏⇄已收藏），仅 Toast 确认</td></tr>
+    <tr><td>邀请按钮</td><td>点击 <code>modal-invite</code></td><td>弹出邀请达人弹窗</td></tr>
+  </tbody>
+</table>
+</div>
+
+<h3>5.2 待确认逻辑</h3>
+<div class="callout warn">
+  ⚠️ 当前页面仅展示基础表格，缺少筛选面板、排序和批量操作。需补充达人筛选策略配置入口。
+</div>
+</section>
+
+<!-- ================= 6. 广告主·达人搜索 ================= -->
+<section id="page-talentsearch" class="section-anchor">
+<h2>六、广告主 · 达人搜索（TalentSearch）</h2>
+
+<h3>6.1 页面概述</h3>
+<p>广告主通过多维度筛选条件查找目标达人，支持收藏和发起邀约。</p>
+
+<h3>6.2 核心交互与基础逻辑</h3>
+<div class="table-wrap">
+<table>
+  <thead><tr><th>筛选维度</th><th>组件类型</th><th>选项/范围</th><th>过滤规则</th></tr></thead>
+  <tbody>
+    <tr><td>关键词</td><td>input</td><td>达人名称模糊搜索</td><td><code>row.name.toLowerCase().includes(keyword)</code></td></tr>
+    <tr><td>平台</td><td>chips 单选</td><td>TikTok/YouTube/Twitch/Instagram/Others</td><td>精确匹配</td></tr>
+    <tr><td>国家/地区</td><td>chips 单选</td><td>美国/日本/韩国/印尼等10个</td><td>中文名转国家代码后包含匹配</td></tr>
+    <tr><td>粉丝数</td><td>chips 单选</td><td>0-10万/10-50万/50-200万/200万+</td><td>调用 <code>parseCompactNumber()</code> 解析后区间过滤</td></tr>
+    <tr><td>粉丝性别</td><td>chips 单选</td><td>女性为主/男性为主</td><td>字符串包含匹配</td></tr>
+    <tr><td>粉丝年龄</td><td>chips 单选</td><td>16-24/18-30/30+</td><td>字符串包含匹配</td></tr>
+    <tr><td>近28天涨粉</td><td>chips 单选</td><td>>500/>1000/>1万</td><td>解析数值后阈值过滤</td></tr>
+    <tr><td>报价范围</td><td>chips 单选</td><td>$0-500/$500-1K/$1K-3K/$3K-10K/$10K+</td><td>解析 USD 数值后区间过滤</td></tr>
+    <tr><td>互动率</td><td>chips 单选</td><td>>1%/>3%/>5%/>10%</td><td>解析百分比后阈值过滤</td></tr>
+    <tr><td>达人分类</td><td>chips 多选（可展开）</td><td>10个分类默认显示前8个</td><td>精确匹配；展开后显示全部</td></tr>
+    <tr><td>收藏状态</td><td>select</td><td>全部/已收藏/未收藏</td><td>精确匹配 contract 字段</td></tr>
+  </tbody>
+</table>
+</div>
+
+<h3>6.3 数据与接口推导</h3>
+<p><strong>数据源</strong>：<code>creators</code> 硬编码数组（8条）。<br>
+<strong>推导接口</strong>：<code>GET /creators?keyword=&platform=&region=&follower_range=&price_range=&engagement_min=&category=</code><br>
+<strong>依赖函数</strong>：<code>parseCompactNumber()</code> 解析万/K/M 格式；<code>parseMoneyUSD()</code> 去除 $ 符号；<code>parsePercent()</code> 去除 % 符号。</p>
+
+<h3>6.4 待确认逻辑</h3>
+<div class="callout warn">
+  ⚠️ 筛选结果为全客户端过滤，数据量较小时适用。在生产环境中需改为服务端分页过滤，传递给后端的筛选条件需做参数映射。
+</div>
+</section>
+
+<!-- ================= 7. 广告主·合作达人 ================= -->
+<section id="page-mytalents" class="section-anchor">
+<h2>七、广告主 · 合作达人（MyTalents）</h2>
+
+<h3>7.1 页面概述</h3>
+<p>广告主查看所有有过合作记录的达人，支持多维度筛选、批量邀请和详情查看。</p>
+
+<h3>7.2 筛选维度</h3>
+<div class="table-wrap">
+<table>
+  <thead><tr><th>筛选维度</th><th>组件</th><th>选项</th><th>过滤逻辑</th></tr></thead>
+  <tbody>
+    <tr><td>关键词</td><td>input</td><td>昵称/UID/标签</td><td>多字段模糊匹配（name/uid/platform/category/tags）</td></tr>
+    <tr><td>合作状态</td><td>chips</td><td>全部/有进行中的任务/历史合作</td><td>检查 <code>taskStatus</code> 字段</td></tr>
+    <tr><td>合作次数</td><td>chips</td><td>全部/0次/1次/2-3次/4次+</td><td>区间过滤 <code>cooperationTimes</code></td></tr>
+    <tr><td>平台</td><td>chips</td><td>8个平台</td><td>精确匹配</td></tr>
+    <tr><td>垂类分类</td><td>chips</td><td>多个垂类</td><td>精确匹配</td></tr>
+    <tr><td>平均互动率</td><td>chips</td><td>1%+/>3%/>5%/>10%</td><td>阈值过滤</td></tr>
+    <tr><td>近30天曝光量</td><td>chips</td><td>0-10w/10w-50w/50w-200w/200w+</td><td>区间过滤</td></tr>
+    <tr><td>履约质量</td><td>chips</td><td>S级/A级/B级/C级</td><td>精确匹配 <code>qualityTier</code></td></tr>
+    <tr><td>报价区间</td><td>chips</td><td>$0-500/$500-1K/$1K-3K/$3K-10K/$10K+</td><td>USD 区间过滤</td></tr>
+  </tbody>
+</table>
+</div>
+
+<h3>7.3 核心交互</h3>
+<div class="table-wrap">
+<table>
+  <thead><tr><th>操作</th><th>触发</th><th>规则</th></tr></thead>
+  <tbody>
+    <tr><td>查看达人详情</td><td>点击操作列"查看详情"</td><td>跳转至 <code>myTalentProfile</code> 详情页（含合作台账/交付档案/质量分析/账单/沟通记录 Tab）</td></tr>
+    <tr><td>发起邀约</td><td>点击"发起邀约"</td><td>弹出邀请达人弹窗</td></tr>
+    <tr><td>批量邀请</td><td>勾选多行 + 顶部批量操作栏</td><td>集合 <code>inviteSelectedCreators</code> 批量处理</td></tr>
+    <tr><td>导出列表</td><td>点击"导出"</td><td>目前仅占位 Toast</td></tr>
+  </tbody>
+</table>
+</div>
+</section>
+
+<!-- ================= 8. 广告主·合作管理 ================= -->
+<section id="page-collaborators" class="section-anchor">
+<h2>八、广告主 · 合作管理（Collaborators）</h2>
+
+<h3>8.1 页面概述</h3>
+<p>广告主集中管理已确认合作的达人，按待确认/进行中/已发布三阶段追踪交付进度。</p>
+
+<h3>8.2 核心交互</h3>
+<div class="table-wrap">
+<table>
+  <thead><tr><th>元素</th><th>类型</th><th>交互</th><th>规则</th></tr></thead>
+  <tbody>
+    <tr><td>Tab 切换</td><td>3 个 Tab</td><td>待确认 / 进行中 / 已发布</td><td>通过 <code>state.tabs.collaborators</code> 控制，每个 Tab 有不同的表格列结构</td></tr>
+    <tr><td>推广活动搜索</td><td>input + datalist</td><td>输入文本</td><td>从 <code>uniqueCampaignNames()</code> 获取自动补全选项</td></tr>
+    <tr><td>达人搜索</td><td>input</td><td>输入文本</td><td>按达人名称模糊匹配</td></tr>
+    <tr><td>平台筛选</td><td>多选下拉</td><td>展开 checkbox 列表</td><td>选择后表格按平台过滤</td></tr>
+    <tr><td>待确认 Tab 操作</td><td>确认 / 拒绝</td><td>点击</td><td>"确认"更新 <code>confirmedCollaborators</code> 和 <code>collaborations[].status</code>；"拒绝"仅 Toast</td></tr>
+    <tr><td>进行中 Tab 查看详情</td><td>link-button</td><td>点击 <code>drawer-delivery</code></td><td>打开交付详情抽屉，展示履单时间线和交付物</td></tr>
+    <tr><td>已发布 Tab 查看详情</td><td>link-button</td><td>点击 <code>drawer-delivery</code></td><td>同上，但底部不展示审核操作按钮</td></tr>
+    <tr><td>达人列表行</td><td>row</td><td>显示达人信息</td><td>使用 <code>creatorInfoCell(row, showId=true)</code> 渲染头像+名称+ID+平台</td></tr>
+  </tbody>
+</table>
+</div>
+
+<h3>8.3 状态流转</h3>
+<pre>
+待确认合作 ──[确认]──▶ 进行中 ──[待审核/内容审核中]──▶ ... ──[广告主通过]──▶ 待发布 ──▶ 已发布
+      │
+      └──[拒绝]──▶ 无（当前仅 Toast）
+</pre>
+
+<h3>8.4 数据与接口推导</h3>
+<p><strong>数据源</strong>：<code>collaborations</code> 硬编码数组（10+ 条）。<br>
+<strong>推导接口</strong>：<code>GET /collaborations?campaign=&creator=&platforms=&status=</code> + <code>PUT /collaborations/:id/confirm</code></p>
+
+<h3>8.5 待确认逻辑</h3>
+<div class="callout warn">
+  ⚠️ 待确认→进行中的"确认"操作仅更新前端 <code>confirmedCollaborators</code> 数组和行状态，未触发达人端的通知和 <code>invitations</code> 状态同步。建议后端统一管理合作状态机。
+</div>
+</section>
+
+<!-- ================= 9. 广告主·账户管理 ================= -->
+<section id="page-account" class="section-anchor">
+<h2>九、广告主 · 账户管理（Account）</h2>
+<p><strong>概述</strong>：企业信息/产品信息/联系信息/账号信息四个 Tab 的 CRUD 表单填充页面。</p>
+
+<div class="table-wrap">
+<table>
+  <thead><tr><th>Tab</th><th>字段</th><th>必填</th><th>交互</th></tr></thead>
+  <tbody>
+    <tr><td>企业信息</td><td>公司名称、国家地区、行业、公司规模</td><td>全部必填</td><td>input + select 填充</td></tr>
+    <tr><td>产品信息</td><td>产品列表表格 + "添加产品"按钮</td><td>-</td><td>弹窗添加/修改产品</td></tr>
+    <tr><td>联系信息</td><td>联系人、职位、邮箱、手机号</td><td>姓名和邮箱必填</td><td>手机号含国家区号选择</td></tr>
+    <tr><td>账号信息</td><td>邮箱（只读脱敏）、密码（掩码）</td><td>-</td><td>"重置密码"按钮 → Toast</td></tr>
+  </tbody>
+</table>
+</div>
+</section>
+
+<!-- ================= 10. 达人·机会大厅 ================= -->
+<section id="page-opportunity" class="section-anchor">
+<h2>十、达人 · 机会大厅（OpportunityHall）</h2>
+
+<h3>10.1 页面概述</h3>
+<p>达人浏览和筛选招募中的合作任务，查看详情并提交报名。</p>
+
+<h3>10.2 核心交互</h3>
+<div class="table-wrap">
+<table>
+  <thead><tr><th>元素</th><th>类型</th><th>交互</th><th>规则</th></tr></thead>
+  <tbody>
+    <tr><td>筛选面板</td><td>平台/地区/标签 chips 下拉 + 粉丝量/预算 popover + 交付日期范围</td><td>多选/范围选择</td><td>所有筛选为前端过滤，<code>state.opportunityFilters</code> 存储</td></tr>
+    <tr><td>任务卡片网格</td><td>卡片 grid 布局</td><td>点击卡片跳转详情</td><td>卡片点击触发 <code>open-task-detail</code></td></tr>
+    <tr><td>报名按钮</td><td>primary-button</td><td>点击 <code>modal-apply</code></td><td>弹出报名弹窗（选择账号+填写理由）</td></tr>
+    <tr><td>已报名状态</td><td>disabled button</td><td>-</td><td><code>appliedCampaigns</code> 包含该任务时显示"已报名"且禁用</td></tr>
+    <tr><td>官方任务标识</td><td>official-ribbon</td><td>展示"官方"标签</td><td><code>item.isOfficial</code> 控制显示</td></tr>
+  </tbody>
+</table>
+</div>
+
+<h3>10.3 报名流程</h3>
+<pre>
+[点击"报名"] → openApplyModal() → 选择报名账号 + 填写报名理由 → [提交报名]
+  → submit-apply():
+    1. 校验是否已报名（appliedCampaigns 查重）
+    2. 生成 applicationRecord（statusKey="platform_review"）
+    3. 更新 applicationDetail.statusKey
+    4. 状态：已报名，待平台审核
+</pre>
+
+<h3>10.4 待确认逻辑</h3>
+<div class="callout warn">
+  ⚠️ <strong>报名去重</strong>：前端已阻止重复报名，但无后端校验。报名理由长度和内容无校验。报名后状态流转依赖运营后台的审核操作。
+</div>
+</section>
+
+<!-- ================= 11. 达人·任务详情 ================= -->
+<section id="page-taskdetail" class="section-anchor">
+<h2>十一、达人 · 任务详情（TaskDetail）</h2>
+<p><strong>概述</strong>：展示单条任务的完整信息，包括品牌、内容要求、招募价格等，支持报名。</p>
+
+<table>
+  <thead><tr><th>区域</th><th>内容</th><th>交互</th></tr></thead>
+  <tbody>
+    <tr><td>品牌摘要卡</td><td>品牌 Logo + 名称 + 截止报名时间 + 推广地区 + 推广平台</td><td>右侧"立即报名"按钮 / 状态展示</td></tr>
+    <tr><td>达人要求区</td><td>粉丝量 / 期望达人类型 / 内容形式</td><td>只读展示</td></tr>
+    <tr><td>内容要求区</td><td>产品链接、推广平台、目标国家、详细要求等</td><td>只读展示</td></tr>
+    <tr><td>招募价格区</td><td>报价 / 合作类型 / 结算方式 / 结算周期</td><td>只读展示</td></tr>
+  </tbody>
+</table>
+</section>
+
+<!-- ================= 12. 达人·报名管理 ================= -->
+<section id="page-applications" class="section-anchor">
+<h2>十二、达人 · 报名管理（Applications）</h2>
+<p><strong>概述</strong>：达人查看所有已报名的任务及其审核状态。</p>
+
+<div class="table-wrap">
+<table>
+  <thead><tr><th>字段</th><th>类型</th><th>状态枚举</th><th>交互</th></tr></thead>
+  <tbody>
+    <tr><td>报名任务</td><td>link-text</td><td>-</td><td>点击跳转任务详情</td></tr>
+    <tr><td>报名账号</td><td>text</td><td>-</td><td>展示账号名称</td></tr>
+    <tr><td>报名理由</td><td>text</td><td>-</td><td>提交时填写的内容</td></tr>
+    <tr><td>报名状态</td><td>status 徽章</td><td>审核中(pending) / 报名通过(success) / 报名未通过(rejected)</td><td>由 <code>applicationStatusView(statusKey)</code> 映射</td></tr>
+    <tr><td>反馈时间</td><td>text</td><td>-</td><td>审核结果返回时间</td></tr>
+    <tr><td>备注</td><td>text</td><td>-</td><td>审核不通过时的原因</td></tr>
+  </tbody>
+</table>
+</div>
+
+<h3>状态映射</h3>
+<pre>
+none → "未报名" (draft)
+platform_review → "审核中" (pending) — 平台审核
+brand_review → "审核中" (pending) — 广告主审核
+approved → "报名通过" (success)
+rejected → "报名未通过" (rejected)
+</pre>
+</section>
+
+<!-- ================= 13. 达人·合作邀请 ================= -->
+<section id="page-invitations" class="section-anchor">
+<h2>十三、达人 · 合作邀请（Invitations）</h2>
+<p><strong>概述</strong>：展示广告主主动发起的合作邀请，达人可接受或拒绝。</p>
+
+<table>
+  <thead><tr><th>元素</th><th>交互</th><th>规则</th></tr></thead>
+  <tbody>
+    <tr><td>任务名称搜索</td><td>input 过滤</td><td>按 <code>invitationFilters.keyword</code> 过滤</td></tr>
+    <tr><td>合作类型筛选</td><td>select</td><td>从邀请数据中提取唯一类型列表</td></tr>
+    <tr><td>Tab 切换</td><td>全部 / 待确认接单 / 已合作</td><td>按 <code>state.tabs.invitations</code> 过滤</td></tr>
+    <tr><td>接受邀请</td><td>link-button</td><td>弹出确认弹窗 → 更新 <code>invitations[].status</code> 为 "已合作"</td></tr>
+    <tr><td>拒绝邀请</td><td>link-button</td><td>弹出确认弹窗 → 更新 <code>invitations[].status</code> 为 "已拒绝"</td></tr>
+  </tbody>
+</table>
+</section>
+
+<!-- ================= 14. 达人·我的任务 ================= -->
+<section id="page-myprojects" class="section-anchor">
+<h2>十四、达人 · 我的任务（MyProjects）</h2>
+<p><strong>概述</strong>：达人查看所有合作中/已完成的任务，提交产物和查看交付进度。</p>
+
+<div class="table-wrap">
+<table>
+  <thead><tr><th>元素</th><th>交互</th><th>规则</th></tr></thead>
+  <tbody>
+    <tr><td>Tab 切换</td><td>合作中 / 已完成</td><td>按 <code>state.tabs.myProjects</code> 过滤，已完成筛除 status="已完成"</td></tr>
+    <tr><td>任务名称</td><td>link-text</td><td>点击跳转任务详情</td></tr>
+    <tr><td>提交产物</td><td>link-button / primary-button</td><td>调用 <code>openUploadModal()</code> → 填写说明+链接+附件 → <code>submit-project-deliverable</code><br>更新 <code>projectRows[].progress</code>、"待平台审核"；更新 <code>collaborations[].status</code>="待审核"；更新 <code>adminCampaignFulfillmentRows[].deliverableStatus</code>="内容审核中"</td></tr>
+    <tr><td>查看交付进度</td><td>link-button</td><td>点击 <code>drawer-project-progress</code> 打开抽屉，展示时间线详情</td></tr>
+    <tr><td>审核被拒原因</td><td>inline-link</td><td>弹出 <code>openRejectReasonModal()</code> 展示被拒详情</td></tr>
+  </tbody>
+</table>
+</div>
+
+<h3>产物提交数据流转</h3>
+<pre>
+submit-project-deliverable:
+  1. projectRows[].progress → "待平台审核"
+  2. collaborations[].status → "待审核", .progress → "内容审核中", .deliverables.push(提交记录)
+  3. adminCampaignFulfillmentRows[].deliverableStatus → "内容审核中"
+  4. adminDeliverableReviewDetails 添加审核记录
+</pre>
+
+<h3>待确认逻辑</h3>
+<div class="callout warn">
+  ⚠️ 产物提交同时更新了 4 个数据源，但无事务保证。在多数据源更新的场景下，建议后端提供统一的"提交产物"接口，由服务端完成状态变更。
+</div>
+</section>
+
+<!-- ================= 15-17 达人端较短页面合并 ================= -->
+<section id="page-revenue" class="section-anchor">
+<h2>十五、达人 · 我的收益（Revenue）</h2>
+<p><strong>概述</strong>：展示达人收益数据与收款账户配置。</p>
+<table>
+  <thead><tr><th>元素</th><th>说明</th></tr></thead>
+  <tbody>
+    <tr><td>KPI 指标</td><td>待结算金额 / 本月收益 / 已完成发布 / 实际完成值</td><td>前两项当前展示 "-" 占位</td></tr>
+    <tr><td>收款账户</td><td>展示当前收款方式/币种/默认状态；点击配置可编辑</td><td>支持 PayPal / Bank Transfer / Wise / Other</td></tr>
+    <tr><td>履约数据表格</td><td>任务名称 / 发布状态 / 完成值 / 金额 / 结算状态</td><td>只读展示</td></tr>
+  </tbody>
+</table>
+</section>
+
+<section id="page-socialauth" class="section-anchor">
+<h2>十六、达人 · 社媒认证（SocialAuth）</h2>
+<p><strong>概述</strong>：达人管理已绑定的社交媒体平台账号，支持新平台认证。</p>
+<table>
+  <thead><tr><th>字段</th><th>说明</th></tr></thead>
+  <tbody>
+    <tr><td>平台列表</td><td>TikTok(已认证) / YouTube(已认证) / Instagram(审核中) / Twitch(未认证) / Twitter(未认证) / Facebook(未认证)</td></tr>
+    <tr><td>认证方式</td><td>OAuth 授权 / 截图人工审核</td></tr>
+    <tr><td>状态徽章</td><td>已认证(success) / 审核中(pending) / 未认证(muted)</td></tr>
+  </tbody>
+</table>
+</section>
+
+<section id="page-personal" class="section-anchor">
+<h2>十七、达人 · 个人中心（PersonalCenter）</h2>
+<p><strong>概述</strong>：达人的账号资料编辑与信息总览。</p>
+<p>表单字段：达人名称 / 联系人 / 邮箱 / 手机号（含区号） / 系统识别标签（只读） / 个人简介</p>
+<p>右侧面板：平台账号概览（已认证平台列表）+ 快捷跳转至社媒认证页。</p>
+</section>
+
+<!-- ================= 18. 通用·通知中心 ================= -->
+<section id="page-notifications" class="section-anchor">
+<h2>十八、通用 · 通知中心（Notifications）</h2>
+
+<h3>18.1 页面概述</h3>
+<p>系统站内信中心，根据角色展示不同类型的通知，支持点击跳转至对应处理页面。</p>
+
+<h3>18.2 通知抽屉（openNotificationCenterDrawer）</h3>
+<table>
+  <thead><tr><th>角色</th><th>通知源</th><th>未读数标记</th></tr></thead>
+  <tbody>
+    <tr><td>广告主</td><td><code>state.brandNotifications.items[]</code></td><td>🔔 红点（topbar-notice-dot）</td></tr>
+    <tr><td>达人</td><td><code>state.creatorNotifications.items[]</code></td><td>🔔 红点</td></tr>
+  </tbody>
+</table>
+
+<h3>18.3 通知类型与跳转逻辑</h3>
+<div class="table-wrap">
+<table>
+  <thead><tr><th>角色</th><th>通知类型</th><th>触发动作</th><th>跳转目标</th></tr></thead>
+  <tbody>
+    <tr><td>广告主</td><td><code>campaign_approved</code></td><td>活动审核通过</td><td><code>go("promotions")</code></td></tr>
+    <tr><td>广告主</td><td><code>campaign_rejected</code></td><td>活动审核被驳回</td><td><code>go("promotions")</code></td></tr>
+    <tr><td>广告主</td><td><code>applicant</code></td><td>有人报名</td><td><code>taskReview</code> → applicants Tab</td></tr>
+    <tr><td>广告主</td><td><code>deliverable</code></td><td>有人提交产物</td><td><code>taskReview</code> → deliveries Tab</td></tr>
+    <tr><td>达人</td><td><code>apply_approved</code></td><td>报名通过</td><td><code>go("applications")</code></td></tr>
+    <tr><td>达人</td><td><code>apply_rejected</code></td><td>报名被拒</td><td><code>go("applications")</code> + 更新 statusKey</td></tr>
+    <tr><td>达人</td><td><code>deliverable_approved</code></td><td>产物审核通过</td><td><code>go("projectProgress")</code></td></tr>
+    <tr><td>达人</td><td><code>deliverable_rejected</code></td><td>产物被拒</td><td><code>go("projectProgress")</code></td></tr>
+  </tbody>
+</table>
+</div>
+
+<h3>18.4 待确认逻辑</h3>
+<div class="callout warn">
+  ⚠️ 通知为硬编码静态数据，关闭抽屉时清空未读数但未消除通知项。需后端提供通知列表 API、已读/未读管理。
+</div>
+</section>
+
+<!-- ================= 19. 运营后台·数据看板 ================= -->
+<section id="page-admin-dashboard" class="section-anchor">
+<h2>十九、运营后台 · 数据看板（AdminDashboard）</h2>
+<p><strong>概述</strong>：运营后台首页，展示全局统计数据并提供各管理模块的快捷跳转入口。</p>
+
+<table>
+  <thead><tr><th>KPI 指标</th><th>数据来源</th><th>可跳转</th></tr></thead>
+  <tbody>
+    <tr><td>广告主数（正常账号数）</td><td><code>adminAdvertiserRows.length</code></td><td>→ 广告主管理</td></tr>
+    <tr><td>已认证达人数</td><td><code>adminInfluencerRows.filter(status=正常).length</code></td><td>→ 达人管理</td></tr>
+    <tr><td>任务数（去重）</td><td><code>new Set(adminCampaignFulfillmentRows + officialTaskRows).size</code></td><td>→ 任务履单</td></tr>
+    <tr><td>待处理审核数</td><td>3 种审核类型待审核队列合计</td><td>→ 审核管理</td></tr>
+    <tr><td>履约跟进中</td><td>deliverableStatus 为内容审核中/待发布/效果追踪 的行</td><td>→ 任务履单</td></tr>
+    <tr><td>已发布任务</td><td>官方任务中已结束的 + 履单中已发布的</td><td>→ 任务履单</td></tr>
+  </tbody>
+</table>
+</section>
+
+<!-- ================= 20. 运营后台·审核管理 ================= -->
+<section id="page-admin-review" class="section-anchor">
+<h2>二十、运营后台 · 审核管理（ReviewCenter）</h2>
+
+<h3>20.1 页面概述</h3>
+<p>运营人员的审核工作台，统一处理活动审核、达人报名审核和产物审核三类任务。</p>
+
+<h3>20.2 统一审核队列模板（renderAdminReviewQueue）</h3>
+<p>三种审核类型共享同一渲染函数 <code>renderAdminReviewQueue(pageKey, title, reviewType, pendingRows)</code>，通过 <code>pageKey</code> 区分：</p>
+
+<table>
+  <thead><tr><th>pageKey</th><th>审核类型</th><th>页面标题</th><th>审核对象表头</th><th>附加列</th></tr></thead>
+  <tbody>
+    <tr><td><code>campaignReviewAdmin</code></td><td>活动审核</td><td>"活动审核"</td><td>"广告主信息"</td><td>-（无审核类型列）</td></tr>
+    <tr><td><code>creatorApplicationReviewAdmin</code></td><td>报名审核</td><td>"报名审核"</td><td>"报名达人"</td><td>+ 报名理由列</td></tr>
+    <tr><td><code>creatorDeliverableReviewAdmin</code></td><td>产物审核</td><td>"产物审核"</td><td>"交付达人"</td><td>-</td></tr>
+  </tbody>
+</table>
+
+<h3>20.3 筛选与操作</h3>
+<div class="table-wrap">
+<table>
+  <thead><tr><th>筛选维度</th><th>组件</th><th>选项</th></tr></thead>
+  <tbody>
+    <tr><td>搜索关键词</td><td>input</td><td>按任务名称或审核对象模糊匹配</td></tr>
+    <tr><td>审核对象</td><td>select（部分类型显示）</td><td>从数据源提取唯一对象列表</td></tr>
+    <tr><td>审核结果</td><td>chips</td><td>全部 / 待审核 / 已通过 / 已拒绝</td></tr>
+  </tbody>
+</table>
+</div>
+
+<h3>20.4 审核操作的数据流转</h3>
+<pre>
+活动审核 — approve:
+  → adminReviewHistoryRows.unshift({ result:"已通过", ... })
+  → campaigns[].status → "进行中"
+  → adminAdvertiserCampaignRows[].status → "招募中"
+  → creatorCampaigns 添加任务（可见于达人机会大厅）
+  → brandNotifications 添加通知
+
+活动审核 — reject:
+  → adminReviewHistoryRows.unshift({ result:"已拒绝", ... })
+  → campaigns[].status → "已驳回"
+  → adminAdvertiserCampaignRows[].status → "已拒绝"
+  → brandNotifications 添加通知
+
+产物审核 — approve:
+  → adminDeliverableReviewDetails[].status → "通过"
+  → adminCampaignFulfillmentRows[].deliverableStatus → "待发布"
+  → collaborations[].progress → "待发布"
+  → creatorNotifications 添加通知
+</pre>
+
+<h3>20.5 待确认逻辑</h3>
+<div class="callout warn">
+  ⚠️ 当前审核操作在多个独立数据源中更新状态，无事务保障。在并发场景下可能出现状态不一致。建议后端提供原子化的审核接口。
+</div>
+</section>
+
+<!-- ================= 21. 运营后台·广告主管理 ================= -->
+<section id="page-admin-advertisers" class="section-anchor">
+<h2>二十一、运营后台 · 广告主管理（AdvertiserList）</h2>
+<p><strong>概述</strong>：运营人员查看和管理所有注册广告主。</p>
+
+<table>
+  <thead><tr><th>筛选维度</th><th>组件</th></tr></thead>
+  <tbody>
+    <tr><td>广告主名称</td><td>input 模糊搜索</td></tr>
+    <tr><td>邮箱</td><td>input 模糊搜索</td></tr>
+    <tr><td>状态</td><td>select：全部 / 正常 / 停用</td></tr>
+    <tr><td>注册时间范围</td><td>2× datetime-local</td></tr>
+  </tbody>
+</table>
+<p>列表包含 9 列：广告主 / 邮箱 / 联系人 / 公司规模 / 行业类型 / 进行中任务 / 状态 / 注册时间 / 操作。</p>
+</section>
+
+<!-- ================= 22. 运营后台·达人管理 ================= -->
+<section id="page-admin-influencers" class="section-anchor">
+<h2>二十二、运营后台 · 达人管理（InfluencerListAdmin）</h2>
+<p><strong>概述</strong>：运营人员查看和管理所有注册达人。</p>
+<p>筛选：搜索达人昵称 + 平台下拉 + 状态下拉（正常/停用）。<br>
+列表 8 列：达人基本信息 / 平台 / 达人标签 / 粉丝数 / 状态 / 合作广告主 / 合作任务 / 操作。</p>
+<p>交互：点击操作列可查看合作广告主清单抽屉和任务明细抽屉。</p>
+</section>
+
+<!-- ================= 23. 运营后台·官方任务 ================= -->
+<section id="page-admin-official" class="section-anchor">
+<h2>二十三、运营后台 · 官方任务（OfficialTaskCreate）</h2>
+<p><strong>概述</strong>：运营人员创建和管理平台官方招募任务。</p>
+
+<h3>创建表单（展开/收起）</h3>
+<div class="table-wrap">
+<table>
+  <thead><tr><th>面板</th><th>字段</th></tr></thead>
+  <tbody>
+    <tr><td>任务信息</td><td>任务名称 / 推广平台 / 推广国家 / 推广产品 / 产品链接 / 产品描述</td></tr>
+    <tr><td>达人要求</td><td>达人类型 / 合作人数 / 粉丝数要求 / 合作类型 / 内容要求</td></tr>
+    <tr><td>预算计划</td><td>总预算 / 期望效果 / 结算方式 / 结算周期 / 报名时间 / 截止日期 / 运营备注</td></tr>
+  </tbody>
+</table>
+</div>
+
+<h3>操作</h3>
+<ul>
+  <li>保存草稿（Toast 仅占位）</li>
+  <li>发布官方任务（加入 <code>officialTaskRows</code>）</li>
+  <li>官方任务跳过审核，发布后直接在达人端展示</li>
+</ul>
+</section>
+
+<!-- ================= 24. 运营后台·达人邀约 ================= -->
+<section id="page-admin-email" class="section-anchor">
+<h2>二十四、运营后台 · 达人邀约（EmailInvitesAdmin）</h2>
+<p><strong>概述</strong>：运营人员管理邮件邀约，跟踪发送和送达状态。</p>
+<p>KPI 指标：可邀约达人 / 今日发送 / 待发送 / 失败待重试。</p>
+<p>两个 Tab 切换：达人邀约列表（含全选/批量操作） / 历史邮件。</p>
+<p>交互：支持发送邮件（填写模板）、查看发送/打开/点击数据。</p>
+</section>
+
+<!-- ================= 25. 运营后台·任务履单 ================= -->
+<section id="page-admin-fulfillment" class="section-anchor">
+<h2>二十五、运营后台 · 任务履单明细（CampaignFulfillment）</h2>
+<p><strong>概述</strong>：查看单个任务下所有达人的合作、交付、审核和结算状态。</p>
+<p>任务筛选：下拉选择切换不同任务。<br>
+达人履单表格：10+ 列，包括合作状态 / 交付状态 / 平台审核 / 广告主审核 / 发布状态 / 效果追踪 / 结算状态等。</p>
+<p>交互：点击"查看详情"打开达人履单详情抽屉，展示完整时间线和状态流转。</p>
+</section>
+
+<!-- ================= 26. 运营后台·结算管理 ================= -->
+<section id="page-admin-payout" class="section-anchor">
+<h2>二十六、运营后台 · 结算管理（PayoutAdmin）</h2>
+<p><strong>概述</strong>：处理线下打款记录，支持标记打款和驳回操作。</p>
+<p>KPI 指标：待打款 / 失败 / 已打款 / 已作废。<br>
+Tab 切换：全部 / 待打款 / 已打款 / 失败 / 已作废。<br>
+表格 6 列：活动 / 达人 / 金额 / 状态 / 账户 / 操作。</p>
+</section>
+
+<!-- ======================== 数据流转与接口推导 ======================== -->
+<section id="data-flow" class="section-anchor">
+<h2>二十七、数据流转与接口推导</h2>
+
+<h3>27.1 核心数据实体关系</h3>
+<pre>
+Campaign (活动)
+  ├── CreatorCampaign (达人端展示的任务)
+  ├── Collaboration (合作记录)
+  │     ├── Deliverable (交付内容)
+  │     └── FulfillmentFlow (履单时间线)
+  ├── Application (报名记录)
+  └── AdminCampaignFulfillment (运营端履单视图)
+
+User (用户)
+  ├── Advertiser (广告主)
+  │     └── Campaign (创建的活动)
+  └── Creator (达人)
+        ├── Application (报名)
+        ├── Invitation (受邀)
+        └── Project (任务)
+</pre>
+
+<h3>27.2 推导接口列表</h3>
+<div class="table-wrap">
+<table>
+  <thead><tr><th>接口方法</th><th>接口 URI</th><th>用途</th><th>涉及页面</th></tr></thead>
+  <tbody>
+    <tr><td>GET</td><td><code>/campaigns</code></td><td>获取广告主活动列表</td><td>活动管理</td></tr>
+    <tr><td>POST</td><td><code>/campaigns</code></td><td>创建新活动</td><td>创建活动</td></tr>
+    <tr><td>GET</td><td><code>/campaigns/:id</code></td><td>获取活动详情</td><td>查看任务</td></tr>
+    <tr><td>GET</td><td><code>/campaigns/:id/applicants</code></td><td>获取报名达人列表</td><td>查看任务</td></tr>
+    <tr><td>PUT</td><td><code>/campaigns/:id/applicants/:uid</code></td><td>审核报名（通过/拒绝）</td><td>查看任务</td></tr>
+    <tr><td>GET</td><td><code>/campaigns/:id/deliveries</code></td><td>获取已合作达人交付列表</td><td>查看任务</td></tr>
+    <tr><td>GET</td><td><code>/creators</code></td><td>达人搜索（多维度筛选）</td><td>达人搜索</td></tr>
+    <tr><td>GET</td><td><code>/collaborations</code></td><td>获取合作管理列表</td><td>合作管理</td></tr>
+    <tr><td>PUT</td><td><code>/collaborations/:id/confirm</code></td><td>确认合作</td><td>合作管理</td></tr>
+    <tr><td>GET</td><td><code>/opportunities</code></td><td>获取机会大厅任务列表</td><td>机会大厅</td></tr>
+    <tr><td>POST</td><td><code>/applications</code></td><td>达人提交报名</td><td>机会大厅/任务详情</td></tr>
+    <tr><td>GET</td><td><code>/applications</code></td><td>获取报名记录</td><td>报名管理</td></tr>
+    <tr><td>GET</td><td><code>/invitations</code></td><td>获取合作邀请列表</td><td>合作邀请</td></tr>
+    <tr><td>PUT</td><td><code>/invitations/:id</code></td><td>接受/拒绝邀请</td><td>合作邀请</td></tr>
+    <tr><td>GET</td><td><code>/projects</code></td><td>获取我的任务列表</td><td>我的任务</td></tr>
+    <tr><td>POST</td><td><code>/deliverables</code></td><td>提交产物</td><td>我的任务</td></tr>
+    <tr><td>GET</td><td><code>/admin/review-queue</code></td><td>获取审核队列（按类型）</td><td>审核管理</td></tr>
+    <tr><td>PUT</td><td><code>/admin/review/:id/approve</code></td><td>审核通过</td><td>审核管理</td></tr>
+    <tr><td>PUT</td><td><code>/admin/review/:id/reject</code></td><td>审核驳回</td><td>审核管理</td></tr>
+    <tr><td>GET</td><td><code>/admin/advertisers</code></td><td>广告主列表（运营端）</td><td>广告主管理</td></tr>
+    <tr><td>GET</td><td><code>/admin/influencers</code></td><td>达人列表（运营端）</td><td>达人管理</td></tr>
+    <tr><td>GET</td><td><code>/admin/campaign-fulfillment</code></td><td>任务履单明细</td><td>任务履单</td></tr>
+    <tr><td>POST</td><td><code>/admin/official-tasks</code></td><td>创建官方任务</td><td>官方任务</td></tr>
+    <tr><td>GET</td><td><code>/notifications</code></td><td>获取通知列表</td><td>通知中心</td></tr>
+    <tr><td>PUT</td><td><code>/notifications/read</code></td><td>标记已读</td><td>通知中心</td></tr>
+    <tr><td>GET</td><td><code>/payouts</code></td><td>打款记录</td><td>结算管理</td></tr>
+    <tr><td>PUT</td><td><code>/payouts/:id</code></td><td>标记打款/驳回</td><td>结算管理</td></tr>
+  </tbody>
+</table>
+</div>
+
+<h3>27.3 状态字段枚举</h3>
+<div class="table-wrap">
+<table>
+  <thead><tr><th>实体</th><th>字段</th><th>枚举值</th></tr></thead>
+  <tbody>
+    <tr><td>Campaign</td><td>status</td><td>草稿 / 审核中 / 招募中 / 进行中 / 已到期 / 已驳回</td></tr>
+    <tr><td>Application</td><td>statusKey</td><td>none / platform_review / brand_review / approved / rejected</td></tr>
+    <tr><td>Collaboration</td><td>status</td><td>待确认合作 / 进行中 / 待审核 / 已发布</td></tr>
+    <tr><td>Collaboration</td><td>progress</td><td>待确认合作 / 内容制作中 / 内容审核中 / 待发布 / 效果追踪</td></tr>
+    <tr><td>Fulfillment</td><td>deliverableStatus</td><td>未开始 / 内容审核中 / 待发布 / 效果追踪 / 已完成</td></tr>
+    <tr><td>Invitation</td><td>status</td><td>待确认接单 / 已合作 / 已拒绝</td></tr>
+    <tr><td>Notification</td><td>type</td><td>applicant / deliverable / campaign_approved / campaign_rejected / apply_approved / apply_rejected / deliverable_approved / deliverable_rejected</td></tr>
+    <tr><td>Payout</td><td>status</td><td>待打款 / 已打款 / 失败 / 已作废</td></tr>
+  </tbody>
+</table>
+</div>
+</section>
+
+<!-- ======================== 异常与边界场景 ======================== -->
+<section id="anomaly" class="section-anchor">
+<h2>二十八、异常与边界场景</h2>
+
+<h3>28.1 通用异常处理</h3>
+<div class="table-wrap">
+<table>
+  <thead><tr><th>场景</th><th>当前行为</th><th>建议</th></tr></thead>
+  <tbody>
+    <tr><td>接口请求失败</td><td>无接口调用，数据为硬编码</td><td>增加 <code>try/catch</code>，展示错误提示和重试按钮</td></tr>
+    <tr><td>加载中状态</td><td>无加载态处理</td><td>增加 Skeleton 骨架屏或 loading spinner</td></tr>
+    <tr><td>空数据</td><td>部分页面有空状态提示</td><td>统一空状态组件：<code>emptyState(icon, title, description, action?)</code></td></tr>
+    <tr><td>分页</td><td>无分页，全量加载</td><td>增加服务端分页参数 <code>page&page_size</code>，前端展示分页组件</td></tr>
+    <tr><td>超长文本</td><td>表格/卡片中直接展示，会撑破布局</td><td>报名理由等字段使用 <code>max-width + text-overflow: ellipsis</code>，hover 展开或弹窗查看</td></tr>
+    <tr><td>重复提交</td><td>报名/提交产物未做防抖</td><td>按钮提交后立即置为 loading/disabled 状态</td></tr>
+    <tr><td>权限不足</td><td>角色切换直接展示不同页面</td><td>后端需校验 JWT token 角色权限，前端 401/403 统一跳转</td></tr>
+  </tbody>
+</table>
+</div>
+
+<h3>28.2 业务流程异常</h3>
+<div class="table-wrap">
+<table>
+  <thead><tr><th>场景</th><th>当前处理</th><th>缺失处理</th></tr></thead>
+  <tbody>
+    <tr><td>达人重复报名同一任务</td><td>有前端校验</td><td>后端需幂等性校验</td></tr>
+    <tr><td>活动已截止仍可报名</td><td>无截止时间校验</td><td>提交报名时应校验 deadline</td></tr>
+    <tr><td>超范围输入（金额/粉丝数）</td><td>无校验</td><td>增加 min/max 边界值校验</td></tr>
+    <tr><td>审核并发操作</td><td>无并发控制</td><td>乐观锁或状态机校验</td></tr>
+    <tr><td>多数据源状态不一致</td><td>多个数组独立更新</td><td>统一由后端状态机管理</td></tr>
+    <tr><td>草稿丢失</td><td>页面刷新即丢失</td><td>localStorage 暂存或后端草稿接口</td></tr>
+  </tbody>
+</table>
+</div>
+
+<h3>28.3 待确认逻辑汇总</h3>
+<div class="callout warn">
+  <strong>以下为代码中无法明确判断、需产品/后端确认的规则：</strong>
+</div>
+<ol>
+  <li><strong>活动状态机</strong>：草稿→审核中→进行中/已驳回 的完整状态流转规则需定义。</li>
+  <li><strong>报名审核的双向同步</strong>：广告主确认/拒绝报名后，达人端状态和通知的联动机制。</li>
+  <li><strong>产物提交后的审核链路</strong>：平台初审→广告主复审→通过/驳回 的流程归属和权限边界。</li>
+  <li><strong>结算规则</strong>：固定价/CPM/曝光量区间三种结算方式的具体计算逻辑和结算触发条件。</li>
+  <li><strong>通知推送</strong>：站内信的生产者、消费者和已读/未读管理策略。</li>
+  <li><strong>权限体系</strong>：运营后台的子角色划分（如审核员/管理员/财务）和操作权限。</li>
+  <li><strong>数据持久化</strong>：草稿保存的存储策略（localStorage/后端草稿接口/自动保存间隔）。</li>
+  <li><strong>多平台配置联动</strong>："同步到所有平台"按钮批量更新时的冲突处理（当某平台已有不同配置时是否覆盖）。</li>
+  <li><strong>分页策略</strong>：达人搜索/合作达人等列表页的分页方式和每页数量。</li>
+  <li><strong>数据分析</strong>：数据看板的统计数据是否需要实时计算，数据更新频率要求。</li>
+</ol>
+</section>
+
+<!-- ======================== 页脚 ======================== -->
+<footer style="margin-top:3rem;padding-top:1.5rem;border-top:2px solid var(--rule);color:var(--muted);font-size:0.85rem">
+  <p><strong>版本记录</strong>：v1.0 — 2026-06-18 — 基于 Meetinfluencer 原型代码（app.js 9,998 行）生成。</p>
+  <p><strong>文档覆盖</strong>：38 个页面 × 所有 3 个角色 × 100+ data-action 交互分支 × 25 个数据实体。</p>
+  <p><strong>使用说明</strong>：本文档可作为前端组件开发、后端接口定义和测试用例编写的统一参考基线。</p>
+</footer>
+
+</div>
+</body>
+</html>
