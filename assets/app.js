@@ -354,6 +354,7 @@ const applicationRecords = [
   {
     task: "MINISO 夏季新品内容合作",
     account: "Mika Studio",
+    quote: "$2,000",
     reason: "账号内容与美妆生活方式受众匹配，过往测评数据稳定。",
     statusKey: "approved",
     feedbackTime: "2026-06-10 09:20",
@@ -362,6 +363,7 @@ const applicationRecords = [
   {
     task: "全境封锁2-上线活动",
     account: "Nova Plays",
+    quote: "$800",
     reason: "过往游戏开箱和上线首发内容表现稳定，受众与任务方向匹配。",
     statusKey: "platform_review",
     feedbackTime: "-",
@@ -370,6 +372,7 @@ const applicationRecords = [
   {
     task: "Anker 充电配件新品推广",
     account: "Tech Otto",
+    quote: "$2,600",
     reason: "科技数码垂类匹配，历史长视频转化表现较好。",
     statusKey: "brand_review",
     feedbackTime: "2026-06-11 15:40",
@@ -378,6 +381,7 @@ const applicationRecords = [
   {
     task: "椰子水东南亚饮品种草",
     account: "Daily Miki",
+    quote: "$950",
     reason: "生活方式内容与快消饮品场景匹配，适合东南亚受众传播。",
     statusKey: "rejected",
     feedbackTime: "2026-06-09 18:10",
@@ -390,7 +394,7 @@ function applicationStatusView(key) {
     none: { label: "未报名", cls: "draft", tip: "你还未报名该任务，点击按钮即可提交报名信息。" },
     platform_review: { label: "审核中", cls: "pending", tip: "平台正在校验账号、报价与报名理由。" },
     brand_review: { label: "审核中", cls: "pending", tip: "平台审核已通过，等待广告主确认合作名单。" },
-    approved: { label: "报名通过", cls: "success", tip: "报名已通过，任务已进入合作流程，请按要求完成交付。" },
+    approved: { label: "报名成功", cls: "success", tip: "报名已通过，任务已进入合作流程，请按要求完成交付。" },
     rejected: { label: "报名未通过", cls: "rejected", tip: "报名未通过，可查看原因。" },
   };
   return map[key] || map.platform_review;
@@ -488,7 +492,8 @@ function opportunityRegionDisplay(region = "") {
 }
 
 function simpleChips(items) {
-  return `<div class="simple-chips">${items.map((item) => `<span class="simple-chip">${item}</span>`).join("")}</div>`;
+  const list = Array.isArray(items) ? items : items ? [items] : [];
+  return `<div class="simple-chips">${list.map((item) => `<span class="simple-chip">${item}</span>`).join("")}</div>`;
 }
 
 function platformLogo(platformName = "") {
@@ -591,10 +596,10 @@ function regionBadge(region) {
   `;
 }
 
-function creatorInfoCell(row, showId = true) {
+function creatorInfoCell(row, showId = true, showInvite = true) {
   return `
     <div class="row-title collab-creator-two-lines">
-      <button class="avatar-button" data-action="drawer-creator" data-name="${row.creator}" aria-label="查看 ${row.creator} 达人详情">
+      <button class="avatar-button" data-action="drawer-creator" data-name="${row.creator}" data-show-invite="${showInvite ? "true" : "false"}" aria-label="查看 ${row.creator} 达人详情">
         <img src="${row.avatar || assets.creatorPreview}" alt="" />
       </button>
       <span>
@@ -606,7 +611,7 @@ function creatorInfoCell(row, showId = true) {
 }
 
 function uniqueCampaignNames() {
-  return [...new Set(collaborations.map((x) => x.campaign))].sort((a, b) => a.localeCompare(b, "zh-CN"));
+  return [...new Set(collaborations.map((x) => String(x?.campaign || "").trim()).filter(Boolean))].sort((a, b) => a.localeCompare(b, "zh-CN"));
 }
 
 function applyCollaboratorFilters(rows) {
@@ -614,9 +619,9 @@ function applyCollaboratorFilters(rows) {
   const creatorQ = state.collaboratorFilters.creator.trim().toLowerCase();
   const platforms = state.collaboratorFilters.platforms;
   return rows
-    .filter((row) => !campaignQ || row.campaign.toLowerCase().includes(campaignQ))
-    .filter((row) => !creatorQ || row.creator.toLowerCase().includes(creatorQ))
-    .filter((row) => !platforms.length || platforms.includes(row.platform));
+    .filter((row) => !campaignQ || String(row?.campaign || "").toLowerCase().includes(campaignQ))
+    .filter((row) => !creatorQ || String(row?.creator || "").toLowerCase().includes(creatorQ))
+    .filter((row) => !platforms.length || platforms.includes(String(row?.platform || "")));
 }
 
 function collaboratorKey(row) {
@@ -1414,6 +1419,41 @@ const collaborations = [
         link: "https://docs.google.com/doc/miniso-caption",
       },
     ],
+    submissionHistory: [
+      {
+        round: 1,
+        submittedAt: "2026-6-10 16:10:00",
+        version: "v1",
+        summary: "提交第一版脚本与视频初稿，等待广告主审核。",
+        attachments: [
+          { badge: "脚本初稿", title: "第一版脚本", desc: "首屏品牌露出较弱，香氛卖点表达不足。", meta: "提交于 2026-6-10 16:10 · v1" },
+          { badge: "视频初稿", title: "第一版主视频", desc: "已提交 58 秒初版视频，待广告主反馈。", meta: "时长 00:58 · 1080 × 1920" },
+        ],
+        reviewResult: "运营已通过",
+        reviewTime: "2026-6-10 18:30:00",
+        reviewReason: "内容完整，进入广告主复审。",
+        brandReviewResult: "广告主已拒绝",
+        brandReviewTime: "2026-6-11 11:20:00",
+        brandReviewReason: "首屏品牌露出不足，需要补充卖点与场景说明。",
+      },
+      {
+        round: 2,
+        submittedAt: "2026-6-12 18:40:00",
+        version: "v2",
+        summary: "已按广告主意见补充前 5 秒露出与香氛卖点，等待广告主再次审核。",
+        attachments: [
+          { badge: "脚本终稿", title: "60 秒竖版脚本", desc: "已补充前 5 秒品牌露出，并加入香氛卖点与收纳场景说明。", meta: "提交于 2026-6-12 18:40 · v2", link: "https://docs.google.com/doc/miniso-script-v2" },
+          { badge: "视频终稿", title: "主视频 MP4", desc: "封面、口播与字幕已齐备，等待广告主确认后排期发布。", meta: "时长 00:58 · 1080 × 1920", link: "https://drive.google.com/file/d/miniso-video-final" },
+          { badge: "发布文案", title: "Caption + Hashtag", desc: "#MINISO夏日香氛 #SummerEssentials #RoomRefresh", meta: "含品牌 @ 提及与落地页链接位", link: "https://docs.google.com/doc/miniso-caption" },
+        ],
+        reviewResult: "运营已通过",
+        reviewTime: "2026-6-12 20:10:00",
+        reviewReason: "已通过运营初审，待广告主复审。",
+        brandReviewResult: "待广告主审核",
+        brandReviewTime: "-",
+        brandReviewReason: "",
+      },
+    ],
   },
   {
     creator: "Tech Otto",
@@ -1683,7 +1723,7 @@ const adminCampaignFulfillmentRows = [
     cooperationStatus: "已确认合作",
     deliverableStatus: "内容审核中",
     operationReview: "已通过",
-    brandReview: "审核中（待广告主确认）",
+    brandReview: "待审核",
     publishStatus: "待发布",
     trackingStatus: "未开始",
     settlementStatus: "未结算",
@@ -1856,7 +1896,7 @@ const projectRows = [
     quote: "99",
     start: "2026-6-5 10:59:20",
     progress: "待提交产物",
-    status: "合作中",
+    status: "履约中",
     statusClass: "running",
     timeline: [
       { time: "2026-06-05 10:59", title: "任务开始合作", detail: "已与广告主确认合作，等待下一步安排。", result: "确认合作" },
@@ -1871,7 +1911,7 @@ const projectRows = [
     quote: "80",
     start: "2026-6-4 10:59:20",
     progress: "待平台审核",
-    status: "合作中",
+    status: "履约中",
     statusClass: "pending",
     timeline: [
       { time: "2026-06-04 10:59", title: "任务开始合作", detail: "达人接单成功，进入直播素材准备阶段。", result: "进行中" },
@@ -1887,7 +1927,7 @@ const projectRows = [
     quote: "99",
     start: "2026-6-2 10:59:20",
     progress: "审核被拒",
-    status: "合作中",
+    status: "履约中",
     statusClass: "rejected",
     rejectReason:
       "内容露出时长不足：需在前 10 秒清晰展示产品并口播核心卖点；同时检测到背景音乐存在版权风险。请按规范修改后重新提交。",
@@ -2099,7 +2139,12 @@ function getActiveNav() {
 }
 
 function go(page) {
-  window.location.hash = page;
+  const next = normalizePage(page || "promotions");
+  state.page = pages[next] ? next : "promotions";
+  if (window.location.hash.replace("#", "") !== state.page) {
+    window.location.hash = state.page;
+  }
+  render();
 }
 
 function setRole(role) {
@@ -2335,6 +2380,28 @@ function formatUsdBudget(value) {
   return `$${amount.toLocaleString("en-US")}`;
 }
 
+function displayUsdQuote(value) {
+  const text = String(value || "").trim();
+  if (!text) return "-";
+  if (/^(?:USD\s*|\$|€|£|¥|￥)/i.test(text)) return text;
+  const amount = normalizeMoneyNumber(text);
+  return amount ? `$${amount.toLocaleString("en-US")}` : text;
+}
+
+function revenuePayoutMethodLabel(method = "paypal") {
+  if (method === "bank") return "BANK TRANSFER";
+  if (method === "wise") return "WISE";
+  if (method === "other") return "OTHER";
+  return "PAYPAL";
+}
+
+function revenuePayoutMethodHint(payout = state.revenuePayoutDraft) {
+  if (payout.method === "bank") return `${payout.bankName || "未设置银行"} · ${payout.iban ? `${String(payout.iban).slice(0, 4)}••••` : "需要账户或 IBAN"}`;
+  if (payout.method === "wise") return `${payout.email || "未设置邮箱"}${payout.iban ? ` · ${String(payout.iban).slice(0, 4)}••••` : " · 需要邮箱或 IBAN"}`;
+  if (payout.method === "other") return payout.note || "请补充其他收款方式说明";
+  return payout.email || "请填写 PayPal 邮箱";
+}
+
 function parseBudgetRange(value = "") {
   const text = String(value || "").replace(/\s+/g, " ").trim();
   const match = text.match(/\$?\s*([\d,.]+)\s*(?:-|~|—|至|to)\s*\$?\s*([\d,.]+)/i);
@@ -2382,6 +2449,13 @@ function findCreatorCampaignRecord(taskName = "") {
 
 function findApplicationRecord(taskName = "", account = "") {
   return applicationRecords.find((item) => item.task === taskName && (!account || item.account === account));
+}
+
+function applicationQuote(taskName = "", account = "") {
+  const record = findApplicationRecord(taskName, account);
+  if (record?.quote) return record.quote;
+  const fallback = applicationRecords.find((item) => item.task === taskName);
+  return fallback?.quote || "";
 }
 
 function findProjectRecord(taskName = "") {
@@ -2572,7 +2646,7 @@ function ensureCooperationRecords(taskName = "", creatorName = "", options = {})
       settlement: "固定价",
       quote: quoteNumber,
       progress: project.progress === "已完成发布" ? project.progress : "待提交产物",
-      status: project.status === "已完成" ? project.status : "合作中",
+      status: project.status === "已完成" ? project.status : "履约中",
       statusClass: project.status === "已完成" ? project.statusClass : "running",
       finalStatus: project.status === "已完成" ? project.finalStatus : "-",
     });
@@ -2584,7 +2658,7 @@ function ensureCooperationRecords(taskName = "", creatorName = "", options = {})
       quote: quoteNumber,
       start: formatNow(),
       progress: "待提交产物",
-      status: "合作中",
+      status: "履约中",
       statusClass: "running",
       timeline: [
         { time: formatNow(), title: "任务开始合作", detail: "运营已确认合作，达人进入内容创作阶段。", result: "确认合作" },
@@ -2675,7 +2749,7 @@ function creatorCampaignWorkflowState(taskName = "") {
   if (project) {
     if (project.progress === "待发布") return { label: "待发布", cls: "pending", statusKey: "approved" };
     if (project.progress === "审核被拒") return { label: "报名失败", cls: "rejected", statusKey: "rejected" };
-    return { label: "合作中", cls: "success", statusKey: "approved" };
+    return { label: "报名成功", cls: "success", statusKey: "approved" };
   }
   const application = applicationRecords.find((item) => item.task === taskName);
   if (!application) return { label: "立即报名", cls: "draft", statusKey: "none" };
@@ -3032,9 +3106,10 @@ function collaborationRows() {
   const activeTab = state.tabs.collaborators;
   const visible = applyCollaboratorFilters(
     collaborations.filter((row) => {
-      if (activeTab === "pending") return row.status.includes("待确认") && !isConfirmedCollaboration(row);
-      if (activeTab === "active") return row.status === "进行中" || isConfirmedCollaboration(row);
-      if (activeTab === "published") return row.status === "已发布";
+      const rowStatus = String(row?.status || "");
+      if (activeTab === "pending") return rowStatus.includes("待确认") && !isConfirmedCollaboration(row);
+      if (activeTab === "active") return rowStatus === "进行中" || isConfirmedCollaboration(row);
+      if (activeTab === "published") return rowStatus === "已发布";
       return true;
     }),
   );
@@ -3045,7 +3120,7 @@ function collaborationRows() {
           ? `
             <tr>
               <td>
-                ${creatorInfoCell(row, true)}
+                ${creatorInfoCell(row, true, false)}
               </td>
               <td>${row.fans || "-"}</td>
               <td>${row.contentTags ? `<div class="tag-nowrap">${simpleChips(row.contentTags)}</div>` : "-"}</td>
@@ -3064,7 +3139,7 @@ function collaborationRows() {
               </td>
               <td>${row.acceptTime || "-"}</td>
               <td>${row.settlement}</td>
-              <td class="money">${row.price}</td>
+              <td class="money">${displayUsdQuote(row.price)}</td>
               <td>${status("申请报名", "pending")}</td>
               <td>
                 <div class="actions">
@@ -3078,12 +3153,13 @@ function collaborationRows() {
           activeTab === "active"
             ? `
               <tr>
-                <td>${creatorInfoCell(row, true)}</td>
+                <td>${creatorInfoCell(row, true, false)}</td>
                 <td><button class="link-button" data-action="modal-campaign-info" data-campaign="${encodeURIComponent(row.campaign)}">${row.campaign}</button></td>
                 <td>${row.type}</td>
                 <td>${row.settlement}</td>
+                <td class="money">${displayUsdQuote(row.price)}</td>
                 <td>${row.due}</td>
-                <td>${row.progress === "待确认合作" ? "合作中" : row.progress}</td>
+                <td>${collaborationProgressCell(row)}</td>
                 <td>${row.note || "-"}</td>
                 <td>
                   <div class="actions">
@@ -3094,10 +3170,11 @@ function collaborationRows() {
             `
             : `
               <tr>
-                <td>${creatorInfoCell(row, true)}</td>
+                <td>${creatorInfoCell(row, true, false)}</td>
                 <td><button class="link-button" data-action="modal-campaign-info" data-campaign="${encodeURIComponent(row.campaign)}">${row.campaign}</button></td>
                 <td>${row.type}</td>
                 <td>${row.settlement}</td>
+                <td class="money">${displayUsdQuote(row.price)}</td>
                 <td>${row.progress}</td>
                 <td>${row.publishTime || "-"}</td>
                 <td class="money">${row.settleAmount || "-"}</td>
@@ -3129,6 +3206,7 @@ function applicantRows() {
         <td>${row.fans}</td>
         <td>${row.age}</td>
         <td>${row.avgViews}</td>
+        <td class="money">${row.price}</td>
         <td>显示达人报名信息..</td>
         <td>${status("申请报名", "pending")}</td>
         <td>
@@ -3152,7 +3230,7 @@ function deliveryRowsForReview() {
       <tr>
         <td>${creatorInfoCell(row, true)}</td>
         <td>${row.type}</td>
-        <td>${row.progress}</td>
+        <td>${collaborationProgressCell(row)}</td>
         <td>${row.due}</td>
         <td>${row.status === "已发布" ? "2026-6-1 19:00:03" : "-"}</td>
         <td>${status(row.status, row.statusClass)}</td>
@@ -3167,6 +3245,29 @@ function deliveryRowsForReview() {
     .join("");
 }
 
+function collaborationProgressCell(row) {
+  const submitCount = deliverableSubmissionCount(row.campaign, row.creator, row);
+  const latestSubmission = latestDeliverableSubmission(row.campaign, row.creator, row);
+  const hasSubmitted = submitCount > 0;
+  const needsBrandReview = row.progress === "待审核" || row.progress === "待广告主审核";
+  const awaitingOperator = row.status === "待审核" || row.progress === "内容审核中";
+  const badge = needsBrandReview
+    ? `<span class="simple-chip" style="background:#fff2f2;color:#e11d48;border-color:#fecdd3">已提交待广告主审核</span>`
+    : awaitingOperator
+      ? `<span class="simple-chip" style="background:#fff8e6;color:#b45309;border-color:#fde68a">已提交待运营审核</span>`
+      : hasSubmitted
+        ? `<span class="simple-chip" style="background:#eef6ff;color:#2563eb;border-color:#bfdbfe">已提交产物</span>`
+        : "";
+  const round = submitCount ? `<span class="muted">第 ${submitCount} 次提交</span>` : "";
+  return `
+    <div class="progress-cell">
+      <span>${row.progress === "待确认合作" ? "合作中" : row.progress}</span>
+      ${badge || round ? `<div class="simple-chips" style="margin-top:6px">${badge}${round}</div>` : ""}
+      ${latestSubmission?.submittedAt ? `<small class="muted">${latestSubmission.submittedAt}</small>` : ""}
+    </div>
+  `;
+}
+
 function applicationRows() {
   return applicationRecords
     .map((row) => {
@@ -3176,6 +3277,7 @@ function applicationRows() {
           <td><strong>${row.task}</strong></td>
           <td>${row.account}</td>
           <td>${row.reason}</td>
+          <td class="money">${displayUsdQuote(row.quote)}</td>
           <td>${status(statusView.label, statusView.cls)}</td>
           <td>${row.feedbackTime}</td>
           <td>${row.note}</td>
@@ -4205,7 +4307,7 @@ function renderTaskReview() {
       <div class="table-wrap">
         ${
           tab === "applicants"
-            ? `<table><thead><tr><th>达人基本信息</th><th>受众性别</th><th>粉丝数</th><th>受众年龄</th><th>平均曝光量</th><th>报名理由</th><th>状态</th><th>操作</th></tr></thead><tbody>${applicantRows()}</tbody></table>`
+            ? `<table><thead><tr><th>达人基本信息</th><th>受众性别</th><th>粉丝数</th><th>受众年龄</th><th>平均曝光量</th><th>报价</th><th>报名理由</th><th>状态</th><th>操作</th></tr></thead><tbody>${applicantRows()}</tbody></table>`
             : `<table><thead><tr><th>达人基本信息</th><th>合作类型</th><th>交付状态</th><th>交付截至日期</th><th>预约发布日期</th><th>状态</th><th>操作</th></tr></thead><tbody>${deliveryRowsForReview()}</tbody></table>`
         }
       </div>
@@ -4328,13 +4430,13 @@ function renderTalentManagement() {
 function renderCollaborators() {
   const activeTab = state.tabs.collaborators;
   const pendingCols = 15;
-  const activeCols = 8;
-  const publishedCols = 10;
+  const activeCols = 9;
+  const publishedCols = 11;
   const platformOptions = ["YouTube", "TikTok", "Instagarm", "Twitch", "Twitter", "Facebook", "Others"];
   const selectedPlatforms = state.collaboratorFilters.platforms;
-  const basePendingCount = collaborations.filter((row) => row.status.includes("待确认")).length;
-  const baseActiveCount = collaborations.filter((row) => row.status === "进行中").length;
-  const basePublishedCount = collaborations.filter((row) => row.status === "已发布").length;
+  const basePendingCount = collaborations.filter((row) => String(row?.status || "").includes("待确认")).length;
+  const baseActiveCount = collaborations.filter((row) => String(row?.status || "") === "进行中").length;
+  const basePublishedCount = collaborations.filter((row) => String(row?.status || "") === "已发布").length;
   const confirmedCount = state.confirmedCollaborators.length;
   return `
     ${pageHeader(
@@ -4413,8 +4515,8 @@ function renderCollaborators() {
               activeTab === "pending"
                 ? `<tr><th>达人基本信息</th><th>粉丝数</th><th>内容标签</th><th>国家/地区</th><th>受众性别</th><th>受众年龄</th><th>最近发布视频</th><th>平均曝光量</th><th>所属任务</th><th>报名理由</th><th>接单时间</th><th>结算方式</th><th>报价(USD)</th><th>状态</th><th>操作</th></tr>`
                 : activeTab === "active"
-                  ? `<tr><th>达人基本信息</th><th>所属任务</th><th>合作类型</th><th>结算方式</th><th>预计交付日期</th><th>交付进度</th><th>备注</th><th>操作</th></tr>`
-                  : `<tr><th>达人基本信息</th><th>所属任务</th><th>合作类型</th><th>结算方式</th><th>交付进度</th><th>发布时间</th><th>结算金额</th><th>备注</th><th>效果追踪</th><th>操作</th></tr>`
+                  ? `<tr><th>达人基本信息</th><th>所属任务</th><th>合作类型</th><th>结算方式</th><th>报价(USD)</th><th>预计交付日期</th><th>交付进度</th><th>备注</th><th>操作</th></tr>`
+                  : `<tr><th>达人基本信息</th><th>所属任务</th><th>合作类型</th><th>结算方式</th><th>报价(USD)</th><th>交付进度</th><th>发布时间</th><th>结算金额</th><th>备注</th><th>效果追踪</th><th>操作</th></tr>`
             }
           </thead>
           <tbody>${
@@ -5821,7 +5923,7 @@ function renderApplications() {
       <div class="table-head"><h2>已报名记录</h2><span class="muted">共 ${applicationRecords.length} 条</span></div>
       <div class="table-wrap">
         <table>
-          <thead><tr><th>报名任务</th><th>报名账号</th><th>报名理由</th><th>报名状态</th><th>反馈时间</th><th>备注</th><th>操作</th></tr></thead>
+          <thead><tr><th>报名任务</th><th>报名账号</th><th>报名理由</th><th>报价(USD)</th><th>报名状态</th><th>反馈时间</th><th>备注</th><th>操作</th></tr></thead>
           <tbody>${applicationRows()}</tbody>
         </table>
       </div>
@@ -5896,22 +5998,8 @@ function renderMyProjects() {
 
 function renderRevenue() {
   const payout = state.revenuePayoutDraft;
-  const methodLabel =
-    payout.method === "paypal"
-      ? "PAYPAL"
-      : payout.method === "bank"
-        ? "Bank Transfer"
-        : payout.method === "wise"
-          ? "Wise"
-          : "Other";
-  const methodHint =
-    payout.method === "paypal"
-      ? payout.email
-      : payout.method === "bank"
-        ? `${payout.bankName} · ${payout.iban.slice(0, 4)}••••`
-        : payout.method === "wise"
-          ? `${payout.email} · ${payout.iban.slice(0, 4)}••••`
-          : payout.note;
+  const methodLabel = revenuePayoutMethodLabel(payout.method);
+  const methodHint = revenuePayoutMethodHint(payout);
   return `
     ${pageHeader(
       "履约数据",
@@ -5965,36 +6053,38 @@ function revenuePayoutMethodCard(value, title, copy, selected = false) {
 function openRevenuePayoutModal() {
   const payout = state.revenuePayoutDraft;
   const method = payout.method;
+  const methodLabel = revenuePayoutMethodLabel(method);
+  const methodHint = revenuePayoutMethodHint(payout);
   const methodFields =
     method === "paypal"
       ? `
-        ${field("持有人姓名", `<input class="input" value="${payout.holder}" data-action="set-revenue-payout-field" data-field="holder" />`, true)}
-        ${field("币种", `<input class="input" value="${payout.currency}" data-action="set-revenue-payout-field" data-field="currency" />`, true)}
-        ${field("国家/地区", `<input class="input" value="${payout.country}" data-action="set-revenue-payout-field" data-field="country" />`, true)}
-        ${field("邮箱", `<input class="input" value="${payout.email}" data-action="set-revenue-payout-field" data-field="email" />`, true, "full")}
+        ${field("持有人姓名", `<input class="input" value="${payout.holder}" data-revenue-payout-field="holder" />`, true)}
+        ${field("币种", `<input class="input" value="${payout.currency}" data-revenue-payout-field="currency" />`, true)}
+        ${field("国家/地区", `<input class="input" value="${payout.country}" data-revenue-payout-field="country" />`, true)}
+        ${field("邮箱", `<input class="input" value="${payout.email}" data-revenue-payout-field="email" />`, true, "full")}
       `
       : method === "bank"
         ? `
-          ${field("持有人姓名", `<input class="input" value="${payout.holder}" data-action="set-revenue-payout-field" data-field="holder" />`, true)}
-          ${field("币种", `<input class="input" value="${payout.currency}" data-action="set-revenue-payout-field" data-field="currency" />`, true)}
-          ${field("国家/地区", `<input class="input" value="${payout.country}" data-action="set-revenue-payout-field" data-field="country" />`, true)}
-          ${field("银行名称", `<input class="input" value="${payout.bankName}" data-action="set-revenue-payout-field" data-field="bankName" />`, true)}
-          ${field("IBAN", `<input class="input" value="${payout.iban}" data-action="set-revenue-payout-field" data-field="iban" />`, true, "full")}
-          ${field("SWIFT / BIC", `<input class="input" value="${payout.swift}" data-action="set-revenue-payout-field" data-field="swift" />`, true, "full")}
+          ${field("持有人姓名", `<input class="input" value="${payout.holder}" data-revenue-payout-field="holder" />`, true)}
+          ${field("币种", `<input class="input" value="${payout.currency}" data-revenue-payout-field="currency" />`, true)}
+          ${field("国家/地区", `<input class="input" value="${payout.country}" data-revenue-payout-field="country" />`, true)}
+          ${field("银行名称", `<input class="input" value="${payout.bankName}" data-revenue-payout-field="bankName" />`, true)}
+          ${field("IBAN", `<input class="input" value="${payout.iban}" data-revenue-payout-field="iban" />`, true, "full")}
+          ${field("SWIFT / BIC", `<input class="input" value="${payout.swift}" data-revenue-payout-field="swift" />`, true, "full")}
         `
         : method === "wise"
           ? `
-            ${field("持有人姓名", `<input class="input" value="${payout.holder}" data-action="set-revenue-payout-field" data-field="holder" />`, true)}
-            ${field("币种", `<input class="input" value="${payout.currency}" data-action="set-revenue-payout-field" data-field="currency" />`, true)}
-            ${field("国家/地区", `<input class="input" value="${payout.country}" data-action="set-revenue-payout-field" data-field="country" />`, true)}
-            ${field("Wise 邮箱", `<input class="input" value="${payout.email}" data-action="set-revenue-payout-field" data-field="email" />`, true)}
-            ${field("IBAN", `<input class="input" value="${payout.iban}" data-action="set-revenue-payout-field" data-field="iban" />`, false, "full")}
+            ${field("持有人姓名", `<input class="input" value="${payout.holder}" data-revenue-payout-field="holder" />`, true)}
+            ${field("币种", `<input class="input" value="${payout.currency}" data-revenue-payout-field="currency" />`, true)}
+            ${field("国家/地区", `<input class="input" value="${payout.country}" data-revenue-payout-field="country" />`, true)}
+            ${field("Wise 邮箱", `<input class="input" value="${payout.email}" data-revenue-payout-field="email" />`, true)}
+            ${field("IBAN", `<input class="input" value="${payout.iban}" data-revenue-payout-field="iban" />`, false, "full")}
           `
           : `
-            ${field("持有人姓名", `<input class="input" value="${payout.holder}" data-action="set-revenue-payout-field" data-field="holder" />`, true)}
-            ${field("币种", `<input class="input" value="${payout.currency}" data-action="set-revenue-payout-field" data-field="currency" />`, true)}
-            ${field("国家/地区", `<input class="input" value="${payout.country}" data-action="set-revenue-payout-field" data-field="country" />`, true)}
-            ${field("说明", `<textarea class="textarea" data-action="set-revenue-payout-field" data-field="note">${payout.note}</textarea>`, true, "full")}
+            ${field("持有人姓名", `<input class="input" value="${payout.holder}" data-revenue-payout-field="holder" />`, true)}
+            ${field("币种", `<input class="input" value="${payout.currency}" data-revenue-payout-field="currency" />`, true)}
+            ${field("国家/地区", `<input class="input" value="${payout.country}" data-revenue-payout-field="country" />`, true)}
+            ${field("说明", `<textarea class="textarea" data-revenue-payout-field="note">${payout.note}</textarea>`, true, "full")}
           `;
   openModal(
     `
@@ -6008,10 +6098,10 @@ function openRevenuePayoutModal() {
       <div class="modal-body">
         <div class="revenue-account-summary">${methodLabel} · ${payout.currency} · ${payout.isDefault ? "默认" : "未设为默认"} · ${methodHint}</div>
         <div class="revenue-method-grid">
-          ${revenuePayoutMethodCard("paypal", "PayPal", "默认 · 需要邮箱", method === "paypal")}
-          ${revenuePayoutMethodCard("bank", "Bank Transfer", "需要账户或 IBAN", method === "bank")}
-          ${revenuePayoutMethodCard("wise", "Wise", "需要邮箱或 IBAN", method === "wise")}
-          ${revenuePayoutMethodCard("other", "Other", "需要填写说明", method === "other")}
+          ${revenuePayoutMethodCard("paypal", "PayPal", `${method === "paypal" && payout.isDefault ? "默认" : "未设置"} · 需要邮箱`, method === "paypal")}
+          ${revenuePayoutMethodCard("bank", "Bank Transfer", `${method === "bank" ? "当前配置" : "未设置"} · 需要账户或 IBAN`, method === "bank")}
+          ${revenuePayoutMethodCard("wise", "Wise", `${method === "wise" ? "当前配置" : "未设置"} · 需要邮箱或 IBAN`, method === "wise")}
+          ${revenuePayoutMethodCard("other", "Other", `${method === "other" ? "当前配置" : "未设置"} · 需要填写说明`, method === "other")}
         </div>
         <div class="form-grid" style="margin-top:16px">
           ${methodFields}
@@ -6204,7 +6294,8 @@ function filteredAdminReviewRows() {
     .filter((row) => state.adminFilters.reviewResult === "全部" || row.result === state.adminFilters.reviewResult);
 }
 
-function getAdminReviewQueueRows(reviewType, pendingRows) {
+function getAdminReviewQueueRows(reviewType, pendingRows, pageKey = "") {
+  if (pageKey === "creatorDeliverableReviewAdmin") return buildDeliverableQueueRows();
   return [
     ...pendingRows
       .map((row) => ({ ...row, result: "待审核", reviewer: "-", time: "-", reason: row.reason || "等待运营处理" })),
@@ -6292,9 +6383,11 @@ function renderAdminDashboard() {
 }
 
 function renderAdminReviewQueue(pageKey, title, reviewType, pendingRows) {
-  const sourceRows = getAdminReviewQueueRows(reviewType, pendingRows);
+  const sourceRows = getAdminReviewQueueRows(reviewType, pendingRows, pageKey);
   const showTargetFilter = pageKey !== "creatorDeliverableReviewAdmin";
   const showReviewTypeColumn = pageKey !== "creatorDeliverableReviewAdmin" && pageKey !== "creatorApplicationReviewAdmin" && pageKey !== "campaignReviewAdmin";
+  const showQuoteColumn = pageKey === "creatorApplicationReviewAdmin";
+  const showSubmittedAtColumn = pageKey === "creatorDeliverableReviewAdmin";
   const targetHeader = pageKey === "creatorDeliverableReviewAdmin" ? "交付达人" : pageKey === "creatorApplicationReviewAdmin" ? "报名达人" : pageKey === "campaignReviewAdmin" ? "广告主信息" : "审核对象";
   const targets = ["全部", ...new Set(sourceRows.map((row) => row.target))];
   const filteredRows = sourceRows
@@ -6335,17 +6428,22 @@ function renderAdminReviewQueue(pageKey, title, reviewType, pendingRows) {
       <div class="table-head"><h2>${title}</h2><span class="muted">共 ${rows.length} 条</span></div>
       <div class="table-wrap sticky-cols">
         <table class="review-table">
-          <thead><tr><th>任务名称</th><th>${targetHeader}</th>${pageKey === "creatorApplicationReviewAdmin" ? "<th>报名理由</th>" : ""}${showReviewTypeColumn ? "<th>审核类型</th>" : ""}<th>审核结果</th><th>审核人</th><th>审核时间</th><th>驳回 / 说明</th><th>操作</th></tr></thead>
+          <thead><tr><th>任务名称</th><th>${targetHeader}</th>${showSubmittedAtColumn ? "<th>提交时间</th>" : ""}${pageKey === "creatorApplicationReviewAdmin" ? "<th>报名理由</th>" : ""}${showQuoteColumn ? "<th>报价(USD)</th>" : ""}${showReviewTypeColumn ? "<th>审核类型</th>" : ""}<th>审核结果</th><th>审核人</th><th>审核时间</th><th>驳回 / 说明</th><th>操作</th></tr></thead>
           <tbody>
             ${
               rows.length
                 ? rows
                     .map(
-                      (row) => `
+                      (row) => {
+                        const reviewAccount = showQuoteColumn ? parseReviewTargetName(row.target) : "";
+                        const reviewQuote = showQuoteColumn ? displayUsdQuote(row.quote || applicationQuote(row.taskName, reviewAccount)) : "";
+                        return `
                       <tr>
                         <td><strong>${row.taskName}</strong></td>
                         <td>${pageKey === "campaignReviewAdmin" ? (() => { const advName = adminAdvertiserCampaignRows.find((r) => r.name === row.taskName)?.advertiser || row.target; const advProfile = adminAdvertiserRows.find((a) => a.name === advName); return `<strong>${advName}</strong>${advProfile ? `<br><span class="muted">${advProfile.industry} · ${advProfile.contact}</span>` : ""}`; })() : pageKey === "creatorDeliverableReviewAdmin" ? parseReviewTargetName(row.target) : row.target}</td>
+                        ${showSubmittedAtColumn ? `<td>${row.submittedAt || "-"}</td>` : ""}
                         ${pageKey === "creatorApplicationReviewAdmin" ? `<td class="reason-cell">${row.reason || "-"}</td>` : ""}
+                        ${showQuoteColumn ? `<td class="money">${reviewQuote}</td>` : ""}
                         ${showReviewTypeColumn ? `<td>${reviewType}</td>` : ""}
                         <td>${status(row.result, row.result === "待审核" ? "pending" : row.result === "已通过" ? "done" : "rejected")}</td>
                         <td>${row.reviewer}</td>
@@ -6360,16 +6458,17 @@ function renderAdminReviewQueue(pageKey, title, reviewType, pendingRows) {
                                   ? `<button class="link-button" data-action="approve-admin-campaign-review" data-task="${encodeURIComponent(row.taskName)}" data-target="${encodeURIComponent(row.target)}">通过</button><button class="link-button" data-action="open-admin-campaign-reject" data-task="${encodeURIComponent(row.taskName)}" data-target="${encodeURIComponent(row.target)}">驳回</button>`
                                   : pageKey === "creatorDeliverableReviewAdmin"
                                   ? `<button class="link-button" data-action="approve-admin-deliverable-review" data-task="${encodeURIComponent(row.taskName)}" data-creator="${encodeURIComponent(parseReviewTargetName(row.target))}">通过</button><button class="link-button" data-action="open-admin-deliverable-reject" data-task="${encodeURIComponent(row.taskName)}" data-creator="${encodeURIComponent(parseReviewTargetName(row.target))}">驳回</button>`
-                                  : `<button class="link-button" data-action="approve-admin-application-review" data-task="${encodeURIComponent(row.taskName)}" data-creator="${encodeURIComponent(parseReviewTargetName(row.target))}">通过</button><button class="link-button" data-action="open-admin-application-reject" data-task="${encodeURIComponent(row.taskName)}" data-creator="${encodeURIComponent(parseReviewTargetName(row.target))}">驳回</button>`
+                                  : `<button class="link-button" data-action="open-admin-application-approve" data-task="${encodeURIComponent(row.taskName)}" data-creator="${encodeURIComponent(parseReviewTargetName(row.target))}">通过</button><button class="link-button" data-action="open-admin-application-reject" data-task="${encodeURIComponent(row.taskName)}" data-creator="${encodeURIComponent(parseReviewTargetName(row.target))}">驳回</button>`
                                 : ""
                             }
                           </div>
                         </td>
                       </tr>
-                    `,
+                    `;
+                      },
                     )
                     .join("")
-                : emptyRow(pageKey === "creatorApplicationReviewAdmin" || pageKey === "campaignReviewAdmin" ? 7 : showReviewTypeColumn ? 8 : 7)
+                : emptyRow(pageKey === "creatorDeliverableReviewAdmin" ? 8 : pageKey === "creatorApplicationReviewAdmin" ? 8 : pageKey === "campaignReviewAdmin" ? 7 : showReviewTypeColumn ? 8 : 7)
             }
           </tbody>
         </table>
@@ -6383,18 +6482,146 @@ function parseReviewTargetName(target = "") {
 }
 
 function findAdminDeliverableReviewDetail(taskName = "", creatorName = "") {
-  return (
-    adminDeliverableReviewDetails.find((item) => item.taskName === taskName && item.creator === creatorName) ||
-    adminDeliverableReviewDetails[0]
+  return adminDeliverableReviewDetails.find((item) => item.taskName === taskName && item.creator === creatorName) || null;
+}
+
+function deliverableHistoryFor(taskName = "", creatorName = "", rowOverride = null) {
+  const row = rowOverride || findCollaborationRecord(taskName, creatorName);
+  const detail = findAdminDeliverableReviewDetail(taskName, creatorName);
+  if (Array.isArray(detail?.submissions) && detail.submissions.length) return detail.submissions;
+  if (Array.isArray(row?.submissionHistory) && row.submissionHistory.length) return row.submissionHistory;
+  if (Array.isArray(detail?.attachments) && detail.attachments.length) {
+    return [
+      {
+        round: 1,
+        submittedAt: detail.submittedAt || row?.contentSubmitTime || "-",
+        version: detail.version || "v1",
+        summary: detail.summary || row?.note || "达人已提交待审核产物。",
+        attachments: detail.attachments,
+        reviewResult: row?.status === "待审核" ? "待运营审核" : "已通过",
+        reviewTime: row?.platformReviewTime || "-",
+        reviewReason: "",
+        brandReviewResult: row?.progress === "待审核" ? "待广告主审核" : row?.progress === "待发布" ? "广告主已通过" : "-",
+        brandReviewTime: row?.brandReviewTime || "-",
+        brandReviewReason: row?.rejectReason || "",
+      },
+    ];
+  }
+  if (Array.isArray(row?.deliverables) && row.deliverables.length) {
+    return [
+      {
+        round: 1,
+        submittedAt: row.contentSubmitTime || row.submitTime || "-",
+        version: "v1",
+        summary: row.note || "达人已提交待审核产物。",
+        attachments: row.deliverables,
+        reviewResult: row.status === "待审核" ? "待运营审核" : "已通过",
+        reviewTime: row.platformReviewTime || "-",
+        reviewReason: "",
+        brandReviewResult: row.progress === "待审核" ? "待广告主审核" : row.progress === "待发布" ? "广告主已通过" : "-",
+        brandReviewTime: row.brandReviewTime || "-",
+        brandReviewReason: row.rejectReason || "",
+      },
+    ];
+  }
+  return [];
+}
+
+function latestDeliverableSubmission(taskName = "", creatorName = "", rowOverride = null) {
+  const history = deliverableHistoryFor(taskName, creatorName, rowOverride);
+  return history.length ? history[history.length - 1] : null;
+}
+
+function deliverableSubmissionCount(taskName = "", creatorName = "", rowOverride = null) {
+  return deliverableHistoryFor(taskName, creatorName, rowOverride).length;
+}
+
+function syncDeliverableDetailState(taskName = "", creatorName = "", updater) {
+  if (!taskName || !creatorName || typeof updater !== "function") return null;
+  const row = findCollaborationRecord(taskName, creatorName);
+  const currentHistory = deliverableHistoryFor(taskName, creatorName, row).map((item) => ({ ...item, attachments: [...(item.attachments || [])] }));
+  const nextHistory = updater(currentHistory) || currentHistory;
+  let detail = findAdminDeliverableReviewDetail(taskName, creatorName);
+  const latest = nextHistory.length ? nextHistory[nextHistory.length - 1] : null;
+  if (!detail) {
+    detail = {
+      taskName,
+      creator: creatorName,
+      platform: row?.platform || "TikTok",
+      submittedAt: latest?.submittedAt || "-",
+      version: latest?.version || "v1",
+      summary: latest?.summary || "达人已提交待审核产物。",
+      attachments: latest?.attachments || [],
+      submissions: nextHistory,
+    };
+    adminDeliverableReviewDetails.unshift(detail);
+  } else {
+    detail.platform = detail.platform || row?.platform || "TikTok";
+    detail.submittedAt = latest?.submittedAt || detail.submittedAt || "-";
+    detail.version = latest?.version || detail.version || "v1";
+    detail.summary = latest?.summary || detail.summary || "达人已提交待审核产物。";
+    detail.attachments = latest?.attachments || detail.attachments || [];
+    detail.submissions = nextHistory;
+  }
+  if (row) {
+    row.submissionHistory = nextHistory;
+    row.deliverables = latest?.attachments || row.deliverables || [];
+    row.contentSubmitTime = latest?.submittedAt || row.contentSubmitTime || row.submitTime || "-";
+  }
+  return detail;
+}
+
+function currentDeliverableReviewReason(taskName = "", creatorName = "") {
+  const latest = adminReviewHistoryRows.find(
+    (row) => row.reviewType === "内容审核" && row.taskName === taskName && parseReviewTargetName(row.target) === creatorName,
   );
+  return latest?.reason || "";
+}
+
+function fulfillmentReviewResult(row) {
+  if (row.operationReview === "待审核") return "待审核";
+  if (row.operationReview === "已拒绝") return "已拒绝";
+  if (row.operationReview === "已通过") return "已通过";
+  return row.operationReview || "待审核";
+}
+
+function buildDeliverableQueueRows() {
+  return adminCampaignFulfillmentRows
+    .map((row) => {
+      const latestSubmission = latestDeliverableSubmission(row.campaign, row.creator);
+      const latestHistory = adminReviewHistoryRows.find(
+        (item) => item.reviewType === "内容审核" && item.taskName === row.campaign && parseReviewTargetName(item.target) === row.creator,
+      );
+      const result = fulfillmentReviewResult(row);
+      const submitCount = deliverableSubmissionCount(row.campaign, row.creator);
+      return {
+        taskName: row.campaign,
+        target: row.creator,
+        submittedAt: latestSubmission?.submittedAt || "-",
+        result,
+        reviewer: latestHistory?.reviewer || (row.operationReview === "待审核" ? "-" : "运营 · 当前账号"),
+        time: latestHistory?.time || (row.operationReview === "待审核" ? "-" : latestSubmission?.reviewTime || "-"),
+        reason:
+          result === "待审核"
+            ? submitCount > 1
+              ? `第 ${submitCount} 次提交，等待运营审核。`
+              : latestSubmission?.summary || "达人已提交产物，等待运营审核。"
+            : latestHistory?.reason || latestSubmission?.reviewReason || currentDeliverableReviewReason(row.campaign, row.creator) || "",
+        submitCount,
+      };
+    })
+    .sort((a, b) => {
+      const rank = { 待审核: 0, 已拒绝: 1, 已通过: 2 };
+      return (rank[a.result] ?? 9) - (rank[b.result] ?? 9);
+    });
 }
 
 function openAdminDeliverableReviewDetail(taskName = "", creatorName = "") {
   const detail = findAdminDeliverableReviewDetail(taskName, creatorName);
-  const historyRow = adminReviewHistoryRows.find(
-    (row) => row.reviewType === "内容审核" && row.taskName === taskName && parseReviewTargetName(row.target) === creatorName,
-  );
-  const result = historyRow?.result || "待审核";
+  const row = findCollaborationRecord(taskName, creatorName);
+  const submissionHistory = deliverableHistoryFor(taskName, creatorName, row);
+  const latestSubmission = submissionHistory.length ? submissionHistory[submissionHistory.length - 1] : null;
+  const result = findFulfillmentRecord(taskName, creatorName)?.operationReview === "已拒绝" ? "已拒绝" : findFulfillmentRecord(taskName, creatorName)?.operationReview === "已通过" ? "已通过" : "待审核";
   openModal(
     `
     <div class="modal-head">
@@ -6403,13 +6630,14 @@ function openAdminDeliverableReviewDetail(taskName = "", creatorName = "") {
     </div>
     <div class="modal-body">
       <div class="mini-stats">
-        <div class="mini-stat"><span>提交平台</span><strong>${detail.platform || "-"}</strong></div>
-        <div class="mini-stat"><span>提交时间</span><strong>${detail.submittedAt || "-"}</strong></div>
-        <div class="mini-stat"><span>当前版本</span><strong>${detail.version || "-"}</strong></div>
+        <div class="mini-stat"><span>提交平台</span><strong>${detail?.platform || row?.platform || "-"}</strong></div>
+        <div class="mini-stat"><span>提交时间</span><strong>${latestSubmission?.submittedAt || detail?.submittedAt || "-"}</strong></div>
+        <div class="mini-stat"><span>当前版本</span><strong>${latestSubmission?.version || detail?.version || "-"}</strong></div>
+        <div class="mini-stat"><span>提交次数</span><strong>${submissionHistory.length || 0} 次</strong></div>
       </div>
-      <div class="note-box" style="margin-top:12px">${detail.summary || "达人已提交待审核产物。"}</div>
+      <div class="note-box" style="margin-top:12px">${latestSubmission?.summary || detail?.summary || "达人已提交待审核产物。"}</div>
       <div class="deliver-placeholders" style="margin-top:16px">
-        ${detail.attachments
+        ${(latestSubmission?.attachments || detail?.attachments || [])
           .map(
             (item) => `
             <div class="deliver-item deliver-review-item">
@@ -6422,7 +6650,28 @@ function openAdminDeliverableReviewDetail(taskName = "", creatorName = "") {
           )
           .join("")}
       </div>
-      ${historyRow ? `<div class="note-box" style="margin-top:16px">审核结果：${historyRow.result}${historyRow.reason ? `；说明：${historyRow.reason}` : ""}</div>` : ""}
+      ${
+        submissionHistory.length
+          ? `<div class="timeline" style="margin-top:16px">
+              ${submissionHistory
+                .map(
+                  (item) => `
+                    <div class="timeline-item">
+                      <span class="timeline-dot"></span>
+                      <div>
+                        <strong>第 ${item.round || 1} 次提交</strong>
+                        <p>${item.submittedAt || "-"} · ${item.version || "-"}</p>
+                        <p>${item.summary || "-"}</p>
+                        <div class="note-box" style="margin-top:8px">运营审核：${item.reviewResult || "待运营审核"}${item.reviewReason ? `；说明：${item.reviewReason}` : ""}</div>
+                        ${item.brandReviewResult && item.brandReviewResult !== "-" ? `<div class="note-box" style="margin-top:8px">广告主审核：${item.brandReviewResult}${item.brandReviewReason ? `；说明：${item.brandReviewReason}` : ""}</div>` : ""}
+                      </div>
+                    </div>
+                  `,
+                )
+                .join("")}
+            </div>`
+          : ""
+      }
     </div>
     <div class="modal-foot">
       ${
@@ -6521,6 +6770,25 @@ function openAdminApplicationRejectModal(taskName = "", creatorName = "") {
     <div class="modal-foot">
       <button class="ghost-button" data-action="close-overlay">取消</button>
       <button class="danger-button" data-action="submit-admin-application-reject" data-task="${encodeURIComponent(taskName)}" data-creator="${encodeURIComponent(creatorName)}">确认驳回</button>
+    </div>
+  `,
+    true,
+  );
+}
+
+function openAdminApplicationApproveModal(taskName = "", creatorName = "") {
+  openModal(
+    `
+    <div class="modal-head">
+      <div><h2>确认通过达人报名</h2><p class="subcopy">${creatorName} · ${taskName}</p></div>
+      <button class="close-button" data-action="close-overlay" aria-label="关闭">×</button>
+    </div>
+    <div class="modal-body">
+      <div class="note-box">确认通过后，该达人将进入合作流程，广告主和达人都会收到状态更新通知。</div>
+    </div>
+    <div class="modal-foot">
+      <button class="ghost-button" data-action="close-overlay">取消</button>
+      <button class="primary-button" data-action="approve-admin-application-review" data-task="${encodeURIComponent(taskName)}" data-creator="${encodeURIComponent(creatorName)}">确认通过</button>
     </div>
   `,
     true,
@@ -7248,6 +7516,7 @@ function renderCreatorApplicationReviewAdmin() {
     .map((row) => ({
       taskName: row.task,
       target: `达人报名审核 · ${row.account}`,
+      quote: row.quote,
       reason: row.reason || "等待审核达人标签、内容方向与履约表现。",
     }));
   return renderAdminReviewQueue("creatorApplicationReviewAdmin", "报名审核", "达人报名", pendingRows);
@@ -8373,7 +8642,8 @@ function buildFulfillmentFlow(row) {
 }
 
 function renderCollaboratorDeliverablePanel(row, highlighted = false) {
-  const deliverables = Array.isArray(row.deliverables) && row.deliverables.length ? [row.deliverables[0]] : [];
+  const latestSubmission = latestDeliverableSubmission(row.campaign, row.creator, row);
+  const deliverables = latestSubmission?.attachments || [];
   if (!deliverables.length) {
     return `<div class="deliver-item ${highlighted ? "deliver-review-item deliver-review-highlight" : ""}"><span class="deliver-desc">暂未收到达人提交产物</span></div>`;
   }
@@ -8398,6 +8668,8 @@ function openDeliveryDrawer(creatorKey = "") {
   state.currentReviewCreatorKey = row.creatorId || row.creator;
   const isAdvertiserReviewStage = row.progress === "待审核" || row.progress === "内容审核中" || row.status === "待审核";
   const deliverableMarkup = renderCollaboratorDeliverablePanel(row, true);
+  const submitCount = deliverableSubmissionCount(row.campaign, row.creator, row);
+  const submissionHistory = deliverableHistoryFor(row.campaign, row.creator, row);
   const timelineItems = buildFulfillmentFlow(row).map((item) =>
     isAdvertiserReviewStage && item.title === "内容复审中（广告主）"
       ? { ...item, deliverablePanel: deliverableMarkup }
@@ -8427,7 +8699,9 @@ function openDeliveryDrawer(creatorKey = "") {
         <div class="mini-stats">
           <div class="mini-stat"><span>合作类型</span><strong>${row.type || "-"}</strong></div>
           <div class="mini-stat"><span>结算方式</span><strong>${row.settlement || "-"}</strong></div>
+          <div class="mini-stat"><span>任务报价</span><strong>${displayUsdQuote(row.price)}</strong></div>
           <div class="mini-stat"><span>当前进度</span><strong>${row.progress || row.status || "-"}</strong></div>
+          <div class="mini-stat"><span>提交次数</span><strong>${submitCount || 0} 次</strong></div>
         </div>
         ${
           isAdvertiserReviewStage
@@ -8435,6 +8709,28 @@ function openDeliveryDrawer(creatorKey = "") {
             : ""
         }
         ${isAdvertiserReviewStage ? "" : `<div class="deliver-placeholders single" aria-label="交付内容列表" style="margin-top:16px">${deliverableMarkup}</div>`}
+        ${
+          submissionHistory.length
+            ? `<div class="timeline" style="margin-top:16px">
+                ${submissionHistory
+                  .map(
+                    (item) => `
+                      <div class="timeline-item">
+                        <span class="timeline-dot"></span>
+                        <div>
+                          <strong>第 ${item.round || 1} 次提交</strong>
+                          <p>${item.submittedAt || "-"} · ${item.version || "-"}</p>
+                          <p>${item.summary || "-"}</p>
+                          <div class="note-box" style="margin-top:8px">运营审核：${item.reviewResult || "待运营审核"}${item.reviewReason ? `；说明：${item.reviewReason}` : ""}</div>
+                          ${item.brandReviewResult && item.brandReviewResult !== "-" ? `<div class="note-box" style="margin-top:8px">广告主审核：${item.brandReviewResult}${item.brandReviewReason ? `；说明：${item.brandReviewReason}` : ""}</div>` : ""}
+                        </div>
+                      </div>
+                    `,
+                  )
+                  .join("")}
+              </div>`
+            : ""
+        }
         <div class="fulfillment-flow" aria-label="达人报名与履单状态信息流">
           ${timelineItems
             .map(
@@ -9055,12 +9351,17 @@ function handleAction(action, target) {
       cta: "查看报名",
       statusKey: "approved",
     });
+    closeOverlay();
     render();
     toast("已通过当前达人报名");
     return;
   }
   if (action === "open-admin-application-reject") {
     openAdminApplicationRejectModal(decodeURIComponent(target.dataset.task || ""), decodeURIComponent(target.dataset.creator || ""));
+    return;
+  }
+  if (action === "open-admin-application-approve") {
+    openAdminApplicationApproveModal(decodeURIComponent(target.dataset.task || ""), decodeURIComponent(target.dataset.creator || ""));
     return;
   }
   if (action === "submit-admin-application-reject") {
@@ -9103,19 +9404,20 @@ function handleAction(action, target) {
   if (action === "approve-admin-deliverable-review") {
     const taskName = decodeURIComponent(target.dataset.task || "");
     const creatorName = decodeURIComponent(target.dataset.creator || "");
+    const reviewedAt = formatNow();
     adminReviewHistoryRows.unshift({
       taskName,
       target: `内容审核 · ${creatorName}`,
       reviewType: "内容审核",
       result: "已通过",
       reviewer: "运营 · 当前账号",
-      time: formatNow(),
+      time: reviewedAt,
       reason: "产物内容完整，品牌露出与素材规范符合要求。",
     });
     const project = findProjectRecord(taskName);
     if (project) {
       project.progress = "待广告主审核";
-      project.status = "合作中";
+      project.status = "履约中";
       project.statusClass = "pending";
       project.finalStatus = "待广告主审核";
     }
@@ -9131,9 +9433,30 @@ function handleAction(action, target) {
     if (fulfillment) {
       fulfillment.deliverableStatus = "待广告主复审";
       fulfillment.operationReview = "已通过";
-      fulfillment.brandReview = "审核中（待广告主确认）";
+      fulfillment.brandReview = "待审核";
     }
     appendFulfillmentTimeline(taskName, fulfillment?.creatorId || collab?.creatorId, "运营初审通过", "内容已流转至广告主复审。");
+    syncDeliverableDetailState(taskName, creatorName, (history) => {
+      if (!history.length) return history;
+      const next = [...history];
+      const latest = { ...next[next.length - 1] };
+      latest.reviewResult = "运营已通过";
+      latest.reviewTime = reviewedAt;
+      latest.reviewReason = "产物内容完整，品牌露出与素材规范符合要求。";
+      latest.brandReviewResult = "待广告主审核";
+      latest.brandReviewTime = "-";
+      latest.brandReviewReason = "";
+      next[next.length - 1] = latest;
+      return next;
+    });
+    notifyBrand({
+      id: `brand-deliverable-review-${Date.now()}`,
+      type: "deliverable",
+      task: taskName,
+      title: "待审核产物提醒",
+      content: `${creatorName} 提交的「${taskName}」产物已通过运营初审，等待你进行广告主复审。`,
+      cta: "去验收",
+    });
     closeOverlay();
     render();
     toast("已通过当前产物审核");
@@ -9152,19 +9475,20 @@ function handleAction(action, target) {
     }
     const taskName = decodeURIComponent(target.dataset.task || "");
     const creatorName = decodeURIComponent(target.dataset.creator || "");
+    const reviewedAt = formatNow();
     adminReviewHistoryRows.unshift({
       taskName,
       target: `内容审核 · ${creatorName}`,
       reviewType: "内容审核",
       result: "已拒绝",
       reviewer: "运营 · 当前账号",
-      time: formatNow(),
+      time: reviewedAt,
       reason,
     });
     const project = findProjectRecord(taskName);
     if (project) {
       project.progress = "审核被拒";
-      project.status = "合作中";
+      project.status = "履约中";
       project.statusClass = "rejected";
       project.rejectReason = reason;
       project.finalStatus = "审核被拒";
@@ -9185,6 +9509,19 @@ function handleAction(action, target) {
       fulfillment.brandReview = "-";
     }
     appendFulfillmentTimeline(taskName, fulfillment?.creatorId || collab?.creatorId, "运营初审驳回", `驳回原因：${reason}`);
+    syncDeliverableDetailState(taskName, creatorName, (history) => {
+      if (!history.length) return history;
+      const next = [...history];
+      const latest = { ...next[next.length - 1] };
+      latest.reviewResult = "运营已拒绝";
+      latest.reviewTime = reviewedAt;
+      latest.reviewReason = reason;
+      latest.brandReviewResult = "-";
+      latest.brandReviewTime = "-";
+      latest.brandReviewReason = "";
+      next[next.length - 1] = latest;
+      return next;
+    });
     notifyCreator({
       id: `creator-deliverable-rejected-${Date.now()}`,
       type: "deliverable_rejected",
@@ -9851,27 +10188,19 @@ function handleAction(action, target) {
     const creatorName = findFulfillmentRecord(taskName)?.creator || findCollaborationRecord(taskName)?.creator || "Mika Studio";
     if (project) {
       project.progress = "待平台审核";
-      project.status = "合作中";
+      project.status = "履约中";
       project.statusClass = "pending";
       project.finalStatus = "待平台审核";
     }
     appendProjectTimeline(taskName, "达人提交产物", summary, "待平台审核");
     const collab = findCollaborationRecord(taskName, creatorName);
+    const submittedAt = formatNow();
     if (collab) {
       collab.status = "待审核";
       collab.statusClass = "pending";
       collab.progress = "内容审核中";
-      collab.contentSubmitTime = formatNow();
+      collab.contentSubmitTime = submittedAt;
       collab.note = "达人已提交产物，等待运营初审。";
-      collab.deliverables = [
-        {
-          badge: "最新提交",
-          title: "达人提交产物",
-          desc: summary,
-          link,
-          meta: `提交时间 ${formatNow()}`,
-        },
-      ];
     }
     const fulfillment = findFulfillmentRecord(taskName, creatorName);
     if (fulfillment) {
@@ -9882,25 +10211,25 @@ function handleAction(action, target) {
       fulfillment.publishStatus = "-";
     }
     appendFulfillmentTimeline(taskName, fulfillment?.creatorId || collab?.creatorId, "提交产物", "达人已提交内容，等待运营初审。");
-    const detail = adminDeliverableReviewDetails.find((item) => item.taskName === taskName && item.creator === creatorName);
-    if (detail) {
-      detail.submittedAt = formatNow();
-      detail.summary = summary;
-      detail.version = detail.version || "v1";
-      detail.attachments = [
-        { badge: "视频", title: "本轮提交内容", desc: summary, meta: link ? `链接：${link}` : "未附在线链接" },
+    syncDeliverableDetailState(taskName, creatorName, (history) => {
+      const nextRound = history.length + 1;
+      return [
+        ...history,
+        {
+          round: nextRound,
+          submittedAt,
+          version: `v${nextRound}`,
+          summary,
+          attachments: [{ badge: "视频", title: `第 ${nextRound} 次提交内容`, desc: summary, meta: link ? `链接：${link}` : "未附在线链接", link }],
+          reviewResult: "待运营审核",
+          reviewTime: "-",
+          reviewReason: "",
+          brandReviewResult: "-",
+          brandReviewTime: "-",
+          brandReviewReason: "",
+        },
       ];
-    } else {
-      adminDeliverableReviewDetails.unshift({
-        taskName,
-        creator: creatorName,
-        platform: collab?.platform || "TikTok",
-        submittedAt: formatNow(),
-        version: "v1",
-        summary,
-        attachments: [{ badge: "视频", title: "本轮提交内容", desc: summary, meta: link ? `链接：${link}` : "未附在线链接" }],
-      });
-    }
+    });
     closeOverlay();
     render();
     toast("内容已提交，等待运营审核");
@@ -9919,7 +10248,7 @@ function handleAction(action, target) {
     const collab = findCollaborationRecord(taskName, fulfillment?.creator);
     if (project) {
       project.progress = "待确认发布";
-      project.status = "合作中";
+      project.status = "履约中";
       project.statusClass = "pending";
       project.finalStatus = "待确认发布";
     }
@@ -9962,7 +10291,7 @@ function handleAction(action, target) {
       const project = findProjectRecord(row.campaign);
       if (project) {
         project.progress = "审核被拒";
-        project.status = "合作中";
+        project.status = "履约中";
         project.statusClass = "rejected";
         project.rejectReason = reason;
         project.finalStatus = "审核被拒";
@@ -9974,6 +10303,16 @@ function handleAction(action, target) {
         fulfillment.brandReview = "已拒绝";
       }
       appendFulfillmentTimeline(row.campaign, fulfillment?.creatorId || row.creatorId, "广告主审核驳回", `驳回原因：${reason}`);
+      syncDeliverableDetailState(row.campaign, row.creator, (history) => {
+        if (!history.length) return history;
+        const next = [...history];
+        const latest = { ...next[next.length - 1] };
+        latest.brandReviewResult = "广告主已拒绝";
+        latest.brandReviewTime = formatNow();
+        latest.brandReviewReason = reason;
+        next[next.length - 1] = latest;
+        return next;
+      });
       notifyCreator({
         id: `creator-brand-reject-${Date.now()}`,
         type: "deliverable_rejected",
@@ -9988,7 +10327,7 @@ function handleAction(action, target) {
     toast("修改意见已发送给达人");
     return;
   }
-  if (action === "drawer-creator") openCreatorDrawer(target.dataset.name);
+  if (action === "drawer-creator") openCreatorDrawer(target.dataset.name, target.dataset.showInvite !== "false");
   if (action === "drawer-delivery") openDeliveryDrawer(decodeURIComponent(target.dataset.creator || ""));
   if (action === "approve-collab-delivery") {
     const creatorKey = decodeURIComponent(target.dataset.creator || "");
@@ -10000,7 +10339,7 @@ function handleAction(action, target) {
       row.status = "进行中";
       row.statusClass = "running";
       row.note = "广告主已确认终稿，等待达人按排期发布。";
-      row.brandReviewTime = "2026-06-18 10:30";
+      row.brandReviewTime = formatNow();
       row.deliverables = [
         ...(row.deliverables || []),
         {
@@ -10013,7 +10352,7 @@ function handleAction(action, target) {
       const project = findProjectRecord(row.campaign);
       if (project) {
         project.progress = "待发布";
-        project.status = "合作中";
+        project.status = "履约中";
         project.statusClass = "running";
         project.finalStatus = "待发布";
       }
@@ -10025,6 +10364,16 @@ function handleAction(action, target) {
         fulfillment.publishStatus = "待提交链接";
       }
       appendFulfillmentTimeline(row.campaign, fulfillment?.creatorId || row.creatorId, "广告主审核通过", "内容复审通过，等待达人发布并提交链接。");
+      syncDeliverableDetailState(row.campaign, row.creator, (history) => {
+        if (!history.length) return history;
+        const next = [...history];
+        const latest = { ...next[next.length - 1] };
+        latest.brandReviewResult = "广告主已通过";
+        latest.brandReviewTime = formatNow();
+        latest.brandReviewReason = "广告主已确认终稿，可进入发布安排。";
+        next[next.length - 1] = latest;
+        return next;
+      });
       notifyCreator({
         id: `creator-deliverable-approved-${Date.now()}`,
         type: "deliverable_approved",
@@ -10206,6 +10555,13 @@ document.addEventListener("input", (event) => {
   } else {
     state.publishDraft.platformConfigs[platform][key] = fieldTarget.value;
   }
+});
+
+document.addEventListener("input", (event) => {
+  const fieldTarget = event.target.closest("[data-revenue-payout-field]");
+  if (!fieldTarget) return;
+  const fieldName = fieldTarget.dataset.revenuePayoutField || "";
+  if (fieldName) state.revenuePayoutDraft[fieldName] = fieldTarget.value;
 });
 
 document.addEventListener("change", (event) => {
