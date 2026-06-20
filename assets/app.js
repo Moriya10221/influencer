@@ -1863,30 +1863,53 @@ function cooperationTypeDisplay(type = "", amount = "") {
   return amount ? `${type}-${amount}${unit}` : type;
 }
 
-const invitations = [
+const invitationSeedRows = [
   {
     task: "全境封锁-全球活动",
     advertiser: "平台官方",
+    creator: "Mika Studio",
     type: "短视频",
     settlement: "固定价",
     quote: "99",
+    quoteType: "fixed",
+    quoteValue: "99",
     time: "2026-6-5 10:59:20",
     publish: "-",
     status: "待接单",
     statusClass: "pending",
   },
   {
+    task: "椰子水夏季饮品种草",
+    advertiser: "品牌商家",
+    creator: "Luna Trend",
+    type: "短视频",
+    settlement: "固定价",
+    quote: "120 - 180",
+    quoteType: "range",
+    quoteMin: "120",
+    quoteMax: "180",
+    time: "2026-6-6 14:20:00",
+    publish: "2026-06-24",
+    status: "待接单",
+    statusClass: "pending",
+  },
+  {
     task: "全境封锁2-上线活动",
     advertiser: "平台官方",
+    creator: "Nova Plays",
     type: "直播",
     settlement: "固定价",
     quote: "80",
+    quoteType: "fixed",
+    quoteValue: "80",
     time: "2026-6-4 10:59:20",
     publish: "-",
     status: "已合作",
     statusClass: "running",
   },
 ];
+
+const invitations = invitationSeedRows.map((item) => ({ ...item }));
 
 const projectRows = [
   {
@@ -2021,6 +2044,15 @@ function replacePersistedCollection(target, source) {
   target.splice(0, target.length, ...source);
 }
 
+function ensureSeedInvitations() {
+  invitationSeedRows.forEach((seed) => {
+    const existing = invitations.find((item) => item.task === seed.task);
+    if (!existing) {
+      invitations.push({ ...seed });
+    }
+  });
+}
+
 function hydrateRuntimeState() {
   try {
     const raw = window.localStorage.getItem(runtimeStorageKey);
@@ -2033,6 +2065,7 @@ function hydrateRuntimeState() {
       const next = payload?.collections?.[key];
       if (Array.isArray(next)) replacePersistedCollection(target, next);
     });
+    ensureSeedInvitations();
   } catch (error) {
     console.warn("hydrate runtime state failed", error);
   }
@@ -2433,6 +2466,26 @@ function taskQuoteSpec(taskName = "") {
     mode: "fixed",
     value: normalizeMoneyNumber(creatorRow.budget || buildTaskProfile(taskName).budget),
   };
+}
+
+function invitationQuoteSpec(taskName = "") {
+  const invite = invitations.find((item) => item.task === taskName) || {};
+  if (invite.quoteType === "range" && invite.quoteMin && invite.quoteMax) {
+    return {
+      mode: "range",
+      min: normalizeMoneyNumber(invite.quoteMin),
+      max: normalizeMoneyNumber(invite.quoteMax),
+    };
+  }
+  if (invite.quoteType === "fixed" && invite.quoteValue) {
+    return {
+      mode: "fixed",
+      value: normalizeMoneyNumber(invite.quoteValue),
+    };
+  }
+  const parsedRange = parseBudgetRange(invite.quote || "");
+  if (parsedRange) return { mode: "range", ...parsedRange };
+  return taskQuoteSpec(taskName);
 }
 
 function findCampaignRecord(taskName = "") {
@@ -3143,8 +3196,8 @@ function collaborationRows() {
               <td>${status("申请报名", "pending")}</td>
               <td>
                 <div class="actions">
-                  <button class="link-button" data-action="confirm-collaboration" data-collab-key="${encodeURIComponent(collaboratorKey(row))}" data-creator="${row.creator}">确认</button>
-                  <button class="link-button" data-action="toast" data-message="已拒绝 ${row.creator} 的合作">拒绝</button>
+                  <button class="link-button" data-action="open-collaboration-decision" data-collab-key="${encodeURIComponent(collaboratorKey(row))}" data-creator="${encodeURIComponent(row.creator || "")}" data-decision="accept">确认</button>
+                  <button class="link-button" data-action="open-collaboration-decision" data-collab-key="${encodeURIComponent(collaboratorKey(row))}" data-creator="${encodeURIComponent(row.creator || "")}" data-decision="reject">拒绝</button>
                 </div>
               </td>
             </tr>
@@ -8393,6 +8446,18 @@ function openInviteDecisionModal(taskName = "", decision = "accept") {
   const advertiser = invite?.advertiser || "广告主";
   const verb = decision === "accept" ? "接受" : "拒绝";
   const buttonLabel = decision === "accept" ? "接受合作" : "拒绝合作";
+  const quoteSpec = invitationQuoteSpec(taskName);
+  const rangeQuoteField =
+    decision === "accept" && quoteSpec.mode === "range"
+      ? field(
+          "确认报价",
+          `<div class="money-single">
+            <input class="input" id="inviteQuoteInput" inputmode="decimal" placeholder="${quoteSpec.min} - ${quoteSpec.max}" />
+            <span class="money-suffix">USD</span>
+          </div><small class="muted">广告主报价范围为 ${formatUsdBudget(quoteSpec.min)} - ${formatUsdBudget(quoteSpec.max)}，请填写区间内金额。</small>`,
+          true,
+        )
+      : "";
   openModal(
     `
       <div class="modal-head">
@@ -8403,10 +8468,34 @@ function openInviteDecisionModal(taskName = "", decision = "accept") {
       </div>
       <div class="modal-body">
         <div class="note-box">是否${verb} ${advertiser}「${taskName}」的合作邀请？</div>
+        ${rangeQuoteField ? `<div class="form-grid" style="margin-top:16px">${rangeQuoteField}</div>` : ""}
       </div>
       <div class="modal-foot">
         <button class="ghost-button" data-action="close-overlay">取消</button>
         <button class="${decision === "accept" ? "primary-button" : "danger-button"}" data-action="confirm-invite-decision" data-task="${encodeURIComponent(taskName)}" data-decision="${decision}">${buttonLabel}</button>
+      </div>
+    `,
+    true,
+  );
+}
+
+function openCollaborationDecisionModal(collabKey = "", creatorName = "", decision = "accept") {
+  const verb = decision === "accept" ? "确认" : "拒绝";
+  const buttonLabel = decision === "accept" ? "确认合作" : "拒绝合作";
+  openModal(
+    `
+      <div class="modal-head">
+        <div>
+          <h2>${verb}合作</h2>
+        </div>
+        <button class="close-button" data-action="close-overlay" aria-label="关闭">×</button>
+      </div>
+      <div class="modal-body">
+        <div class="note-box">是否${verb} ${creatorName || "当前达人"} 的合作申请？</div>
+      </div>
+      <div class="modal-foot">
+        <button class="ghost-button" data-action="close-overlay">取消</button>
+        <button class="${decision === "accept" ? "primary-button" : "danger-button"}" data-action="confirm-collaboration-decision" data-collab-key="${encodeURIComponent(collabKey)}" data-creator="${encodeURIComponent(creatorName)}" data-decision="${decision}">${buttonLabel}</button>
       </div>
     `,
     true,
@@ -9728,13 +9817,36 @@ function handleAction(action, target) {
     render();
     return;
   }
-  if (action === "confirm-collaboration") {
+  if (action === "open-collaboration-decision") {
+    openCollaborationDecisionModal(
+      decodeURIComponent(target.dataset.collabKey || ""),
+      decodeURIComponent(target.dataset.creator || ""),
+      target.dataset.decision || "accept",
+    );
+    return;
+  }
+  if (action === "confirm-collaboration-decision") {
     const key = decodeURIComponent(target.dataset.collabKey || "");
-    if (key && !state.confirmedCollaborators.includes(key)) {
-      state.confirmedCollaborators.push(key);
+    const creatorName = decodeURIComponent(target.dataset.creator || "达人");
+    const decision = target.dataset.decision || "accept";
+    const row = collaborations.find((item) => collaboratorKey(item) === key);
+    if (decision === "accept") {
+      if (key && !state.confirmedCollaborators.includes(key)) {
+        state.confirmedCollaborators.push(key);
+      }
+      closeOverlay();
+      render();
+      toast(`已确认 ${creatorName} 的合作，已移入进行中`);
+      return;
     }
+    if (row) {
+      row.status = "已拒绝";
+      row.statusClass = "rejected";
+      row.note = "广告主已拒绝当前合作申请。";
+    }
+    closeOverlay();
     render();
-    toast(`已确认 ${target.dataset.creator || "达人"} 的合作，已移入进行中`);
+    toast(`已拒绝 ${creatorName} 的合作申请`);
     return;
   }
   if (action === "reset-collab-filters") {
@@ -10415,12 +10527,30 @@ function handleAction(action, target) {
     const taskName = decodeURIComponent(target.dataset.task || "");
     const decision = target.dataset.decision || "accept";
     const invite = invitations.find((row) => row.task === taskName);
+    const quoteSpec = invitationQuoteSpec(taskName);
+    let confirmedQuote = invite?.quote || "";
+    if (decision === "accept" && quoteSpec.mode === "range") {
+      const quoteInput = document.getElementById("inviteQuoteInput")?.value.trim() || "";
+      const quoteValue = normalizeMoneyNumber(quoteInput);
+      if (!quoteValue) {
+        toast("请先填写确认报价");
+        return;
+      }
+      if (quoteValue < quoteSpec.min || quoteValue > quoteSpec.max) {
+        toast(`确认报价需填写在 ${formatUsdBudget(quoteSpec.min)} - ${formatUsdBudget(quoteSpec.max)} 之间`);
+        return;
+      }
+      confirmedQuote = formatUsdBudget(quoteValue);
+    }
     if (invite) {
       invite.status = decision === "accept" ? "已合作" : "已拒绝";
       invite.statusClass = decision === "accept" ? "running" : "rejected";
       if (decision === "accept") {
+        invite.quote = confirmedQuote;
+        invite.quoteType = "fixed";
+        invite.quoteValue = String(normalizeMoneyNumber(confirmedQuote));
         ensureCooperationRecords(taskName, invite.creator || "Mika Studio", {
-          quote: invite.quote,
+          quote: confirmedQuote,
           type: invite.type,
         });
       }
