@@ -3084,8 +3084,8 @@ function talentRows(source = creators) {
           </div>
         </td>
         <td>${countryView(row.country)}</td>
-        <td>${row.gender}</td>
         <td>${row.fans}</td>
+        <td>${row.gender}</td>
         <td>${row.age}</td>
         <td>${row.recent}</td>
         <td>${row.avgViews}</td>
@@ -4674,7 +4674,7 @@ function renderTalentSearch() {
       <div class="table-head"><h2>达人列表</h2><button class="primary-button" data-action="modal-invite">批量邀请</button></div>
       <div class="table-wrap talent-list-scroll">
         <table>
-          <thead><tr><th><input type="checkbox" aria-label="全选达人" /></th><th>达人信息</th><th>国家/地区</th><th>受众性别</th><th>粉丝数</th><th>受众年龄</th><th>最近发布视频</th><th>平均曝光量</th><th>报价</th><th>操作</th></tr></thead>
+          <thead><tr><th><input type="checkbox" aria-label="全选达人" /></th><th>达人信息</th><th>国家/地区</th><th>粉丝数</th><th>受众性别</th><th>受众年龄</th><th>最近发布视频</th><th>平均曝光量</th><th>报价</th><th>操作</th></tr></thead>
           <tbody>${talentRows(filteredCreators)}</tbody>
         </table>
       </div>
@@ -4801,6 +4801,17 @@ function myTalentRegionText(codes = []) {
   return `<span class="my-talent-region-text">${(codes || []).join(" / ") || "-"}</span>`;
 }
 
+function hasMyTalentPerformanceData(row = {}) {
+  return Number(row.totalOrders || 0) > 0;
+}
+
+function myTalentCompletionCell(row = {}) {
+  if (!hasMyTalentPerformanceData(row)) {
+    return `<div class="my-talent-rate my-talent-rate-empty"><strong>-</strong><small class="my-talent-empty-note">暂无数据</small></div>`;
+  }
+  return `<div class="my-talent-rate"><strong>${row.completionRate}</strong><span class="tier-pill">${row.qualityTier}</span></div>`;
+}
+
 function renderMyTalents() {
   const filteredRows = filterMyTalents();
   const platforms = ["全部", "TikTok", "YouTube", "Instagram", "Twitch", "Facebook", "Twitter", "Others"];
@@ -4878,7 +4889,6 @@ function renderMyTalents() {
               <th><input type="checkbox" aria-label="全选达人" /></th>
               <th>达人卡片</th>
               <th>粉丝体量</th>
-              <th>垂类标签</th>
               <th>合作总单数</th>
               <th>有效履约单数</th>
               <th><span class="th-label-with-help">履约完成率<button class="th-help-button" type="button" aria-label="查看履约完成率说明"><span class="th-help-icon">i</span><span class="th-help-popover">${completionTooltip}</span></button></span></th>
@@ -5026,7 +5036,8 @@ function renderMyTalents() {
               <th>达人基础信息</th>
               <th>国家/地区</th>
               <th>粉丝体量</th>
-              <th>垂类标签</th>
+              <th>受众性别</th>
+              <th>受众年龄</th>
               <th>合作总单数</th>
               <th>有效履约单数</th>
               <th>履约完成率</th>
@@ -5052,17 +5063,18 @@ function renderMyTalents() {
                                 <img src="${row.avatar}" alt="" />
                               </button>
                               <span class="my-talent-name-stack">
-                              <span class="my-talent-name-row"><strong>${row.name}</strong><span class="my-talent-platform-icon">${socialPlatformIcon(row.platform)}</span></span>
+                              <span class="my-talent-name-row"><strong>${row.name}</strong><span class="my-talent-platform-icon">${socialPlatformIcon(row.platform)}</span><span class="my-talent-inline-tags">${simpleChips(row.categories)}</span></span>
                                 <small>${row.uid} · ${row.platform}</small>
                               </span>
                             </div>
                           </td>
                           <td>${myTalentRegionText(row.region)}</td>
                           <td>${row.followers}</td>
-                          <td><div class="my-talent-tag-line">${simpleChips(row.categories)}</div></td>
+                          <td>${row.audienceGender || "-"}</td>
+                          <td>${row.audienceAge || "-"}</td>
                           <td>${row.totalOrders}</td>
                           <td>${row.validOrders}</td>
-                          <td><div class="my-talent-rate"><strong>${row.completionRate}</strong><span class="tier-pill">${row.qualityTier}</span></div></td>
+                          <td>${myTalentCompletionCell(row)}</td>
                           <td>${row.avgExposure}</td>
                           <td>${row.avgEngagement}</td>
                           <td>${row.totalBudget}</td>
@@ -5078,7 +5090,7 @@ function renderMyTalents() {
                       `,
                     )
                     .join("")
-                : emptyRow(13)
+                : emptyRow(14)
             }
           </tbody>
         </table>
@@ -5341,7 +5353,7 @@ function renderMyTalentOverview(profile, isDrawer = false) {
           <div class="mini-stat"><span>总对接任务</span><strong>${profile.totalOrders} 单</strong></div>
           <div class="mini-stat"><span>成功履约发布</span><strong>${profile.validOrders} 单</strong></div>
           <div class="mini-stat"><span>中途放弃 / 驳回</span><strong>${Math.max(0, profile.totalOrders - profile.validOrders)} 单</strong></div>
-          <div class="mini-stat"><span>履约完成率</span><strong>${profile.completionRate}</strong><small>${profile.qualityTier}</small></div>
+          <div class="mini-stat"><span>履约完成率</span><strong>${hasMyTalentPerformanceData(profile) ? profile.completionRate : "-"}</strong><small>${hasMyTalentPerformanceData(profile) ? profile.qualityTier : "暂无数据"}</small></div>
         </div>
         <div class="my-talent-summary-note">
           <strong>合作判断</strong>
@@ -6041,10 +6053,13 @@ function renderRevenue() {
   `;
 }
 
-function revenuePayoutMethodCard(value, title, copy, selected = false) {
+function revenuePayoutMethodCard(value, title, copy, selected = false, isDefault = false) {
   return `
     <button class="revenue-method-card ${selected ? "active" : ""}" data-action="set-revenue-payout-method" data-value="${value}">
-      <strong>${title}</strong>
+      <div class="revenue-method-card-head">
+        <strong>${title}</strong>
+        ${isDefault ? `<span class="revenue-default-badge">默认账户</span>` : ""}
+      </div>
       <span>${copy}</span>
     </button>
   `;
@@ -6098,10 +6113,10 @@ function openRevenuePayoutModal() {
       <div class="modal-body">
         <div class="revenue-account-summary">${methodLabel} · ${payout.currency} · ${payout.isDefault ? "默认" : "未设为默认"} · ${methodHint}</div>
         <div class="revenue-method-grid">
-          ${revenuePayoutMethodCard("paypal", "PayPal", `${method === "paypal" && payout.isDefault ? "默认" : "未设置"} · 需要邮箱`, method === "paypal")}
-          ${revenuePayoutMethodCard("bank", "Bank Transfer", `${method === "bank" ? "当前配置" : "未设置"} · 需要账户或 IBAN`, method === "bank")}
-          ${revenuePayoutMethodCard("wise", "Wise", `${method === "wise" ? "当前配置" : "未设置"} · 需要邮箱或 IBAN`, method === "wise")}
-          ${revenuePayoutMethodCard("other", "Other", `${method === "other" ? "当前配置" : "未设置"} · 需要填写说明`, method === "other")}
+          ${revenuePayoutMethodCard("paypal", "PayPal", `${method === "paypal" ? (payout.isDefault ? "当前配置 · 已设为默认" : "当前配置 · 未设为默认") : "未设置"} · 需要邮箱`, method === "paypal", method === "paypal" && payout.isDefault)}
+          ${revenuePayoutMethodCard("bank", "Bank Transfer", `${method === "bank" ? (payout.isDefault ? "当前配置 · 已设为默认" : "当前配置 · 未设为默认") : "未设置"} · 需要账户或 IBAN`, method === "bank", method === "bank" && payout.isDefault)}
+          ${revenuePayoutMethodCard("wise", "Wise", `${method === "wise" ? (payout.isDefault ? "当前配置 · 已设为默认" : "当前配置 · 未设为默认") : "未设置"} · 需要邮箱或 IBAN`, method === "wise", method === "wise" && payout.isDefault)}
+          ${revenuePayoutMethodCard("other", "Other", `${method === "other" ? (payout.isDefault ? "当前配置 · 已设为默认" : "当前配置 · 未设为默认") : "未设置"} · 需要填写说明`, method === "other", method === "other" && payout.isDefault)}
         </div>
         <div class="form-grid" style="margin-top:16px">
           ${methodFields}

@@ -3211,6 +3211,16 @@ tr:last-child td {
   gap: 8px;
 }
 
+.my-talent-rate-empty {
+  gap: 4px;
+}
+
+.my-talent-empty-note {
+  color: #94a3b8;
+  font-size: 12px;
+  font-weight: 600;
+}
+
 .tier-pill {
   display: inline-flex;
   width: fit-content;
@@ -3552,7 +3562,20 @@ tr:last-child td {
   display: inline-flex;
   align-items: center;
   gap: 6px;
-  white-space: nowrap;
+  flex-wrap: wrap;
+}
+
+.my-talent-inline-tags,
+.my-talent-inline-tags .simple-chips {
+  display: inline-flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.my-talent-inline-tags .simple-chip {
+  min-height: 22px;
+  padding: 0 8px;
 }
 
 .my-talent-platform-icon {
@@ -5372,9 +5395,30 @@ tr:last-child td {
   background: rgba(124, 58, 237, 0.04);
 }
 
+.revenue-method-card-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+
 .revenue-method-card strong {
   font-size: 18px;
   color: var(--ink);
+}
+
+.revenue-default-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 24px;
+  padding: 0 10px;
+  border-radius: 999px;
+  background: rgba(124, 58, 237, 0.12);
+  color: #7c3aed;
+  font-size: 12px;
+  font-weight: 700;
+  white-space: nowrap;
 }
 
 .revenue-method-card span {
