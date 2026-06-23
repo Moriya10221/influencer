@@ -1879,6 +1879,7 @@ const adminInfluencerRows = [
     platform: "TikTok",
     socialAccounts: [
       { platform: "TikTok", account: "@mika_studio", status: "已认证", url: "https://tiktok.com/@mika_studio" },
+      { platform: "TikTok", account: "@mika_beauty", status: "审核中", url: "https://tiktok.com/@mika_beauty" },
       { platform: "Instagram", account: "@mika.game", status: "已认证", url: "https://instagram.com/mika.game" },
     ],
     tags: "游戏 / 测评 / 剧情短片",
@@ -2622,6 +2623,66 @@ function notifyCreator(item) {
 
 function notifyOperator(item) {
   pushInboxNotification(state.operatorNotifications, item);
+}
+
+function notificationKey(value = "") {
+  return encodeURIComponent(String(value || ""))
+    .replace(/%/g, "")
+    .replace(/[^A-Za-z0-9]/g, "")
+    .slice(0, 48);
+}
+
+function addOperatorNotificationIfMissing(item) {
+  if (
+    !item?.id ||
+    state.operatorNotifications.items.some(
+      (notice) => notice.id === item.id || (notice.type === item.type && notice.task === item.task && notice.content === item.content),
+    )
+  ) {
+    return;
+  }
+  pushInboxNotification(state.operatorNotifications, item);
+}
+
+function ensureOperatorWorkflowNotifications() {
+  adminAdvertiserCampaignRows
+    .filter((row) => row.status === "待审核")
+    .forEach((row) => {
+      addOperatorNotificationIfMissing({
+        id: `operator-campaign-review-${notificationKey(row.name)}`,
+        type: "campaign_review_pending",
+        task: row.name,
+        title: "待审核活动",
+        content: `广告主「${row.advertiser || "平台广告主"}」提交了「${row.name}」，请在活动审核中处理。`,
+        cta: "去审核",
+      });
+    });
+
+  applicationRecords
+    .filter((row) => row.statusKey === "platform_review")
+    .forEach((row) => {
+      addOperatorNotificationIfMissing({
+        id: `operator-application-review-${notificationKey(row.task)}-${notificationKey(row.account)}`,
+        type: "application_review_pending",
+        task: row.task,
+        title: "待审核达人报名",
+        content: `${row.account} 报名了「${row.task}」，报价 ${row.quote || "-"}，请在报名审核中处理。`,
+        cta: "去审核",
+      });
+    });
+
+  adminCampaignFulfillmentRows
+    .filter((row) => fulfillmentReviewResult(row) === "待审核")
+    .forEach((row) => {
+      addOperatorNotificationIfMissing({
+        id: `operator-deliverable-review-${notificationKey(row.campaign)}-${notificationKey(row.creator)}`,
+        type: "deliverable_review_pending",
+        task: row.campaign,
+        title: "待审核达人产物",
+        content: `${row.creator} 已提交「${row.campaign}」产物内容，请在产物审核中完成初审。`,
+        cta: "去审核",
+      });
+    });
 }
 
 function findCreatorProfile(name = "") {
@@ -5890,6 +5951,38 @@ function renderAccount() {
 }
 
 function accountPanel(tab) {
+  const industryOptions = [
+    "游戏",
+    "3C及电器",
+    "快速消费品",
+    "食品饮料",
+    "服装配饰",
+    "医疗",
+    "商务服务",
+    "生活服务",
+    "房地产",
+    "家居建材",
+    "教育培训",
+    "出行旅游",
+    "社会公共",
+    "零售",
+    "交通工具",
+    "汽车",
+    "农林牧畜渔",
+    "化工及能源",
+    "电子电工",
+    "机械设备",
+    "文娱娱乐",
+    "传媒及内容",
+    "物流业",
+    "通信",
+    "金融业",
+    "餐饮服务",
+    "工具类软件",
+    "招商加盟",
+    "其他",
+  ];
+  const companySizeOptions = ["<15", "15-50", "50-100", "100-500", "500-2000", ">2000"];
   if (tab === "product") {
     return `
       <div class="section-row" style="margin-bottom:14px">
@@ -5954,8 +6047,8 @@ function accountPanel(tab) {
   return `<div class="form-grid">
     ${field("公司名称", `<input class="input" placeholder="请输入公司名称" value="Meetinfluencer Brand Team" />`, true)}
     ${field("国家地区", `<select class="select"><option>请选择国家地区</option><option>中国</option><option>美国</option><option>英国</option></select>`, true)}
-    ${field("所属行业", `<select class="select"><option>请选择所属行业</option><option>游戏</option><option>购物与零售</option><option>美妆</option></select>`, true)}
-    ${field("公司规模", `<select class="select"><option>请选择公司规模</option><option>&lt;15</option><option>15-50</option><option>50-100</option><option>100-500</option><option>500-2000</option><option>&gt;2000</option></select>`, true)}
+    ${field("所属行业", `<select class="select"><option>请选择所属行业</option>${industryOptions.map((item) => `<option>${item}</option>`).join("")}</select>`, true)}
+    ${field("公司规模", `<select class="select"><option>请选择公司规模</option>${companySizeOptions.map((item) => `<option>${item}</option>`).join("")}</select>`, true)}
   </div>`;
 }
 
@@ -6832,13 +6925,17 @@ function adminInfluencerSocialAccountCell(row = {}) {
   const platforms = ["TikTok", "YouTube", "Twitch", "Instagram", "Facebook", "Twitter", "X", "Others"];
   return platforms
     .map((platform) => {
-      const match = accounts.find((a) => a.platform === platform);
-      if (!match) return `<td class="nowrap-cell">-</td>`;
-      const cls = match.status === "已认证" ? "running" : match.status === "审核中" ? "pending" : "muted";
-      const nameDisplay = match.url
-        ? `<a class="social-acct-link" href="${match.url}" target="_blank" rel="noopener">${match.account}</a>`
-        : `<span class="social-acct-inline">${match.account}</span>`;
-      return `<td class="nowrap-cell">${nameDisplay} <em class="${cls}">${match.status}</em></td>`;
+      const matches = accounts.filter((a) => a.platform === platform);
+      if (!matches.length) return `<td class="nowrap-cell">-</td>`;
+      return `<td class="nowrap-cell">${matches
+        .map((match) => {
+          const cls = match.status === "已认证" ? "running" : match.status === "审核中" ? "pending" : "muted";
+          const nameDisplay = match.url
+            ? `<a class="social-acct-link" href="${match.url}" target="_blank" rel="noopener">${match.account}</a>`
+            : `<span class="social-acct-inline">${match.account}</span>`;
+          return `${nameDisplay} <em class="${cls}">${match.status}</em>`;
+        })
+        .join("<br>")}</td>`;
     })
     .join("");
 }
@@ -7142,6 +7239,46 @@ function buildDeliverableQueueRows() {
     });
 }
 
+function deliverableLinkFromItem(item = {}) {
+  if (item.link) return item.link;
+  const meta = String(item.meta || "");
+  const matched = meta.match(/https?:\/\/\S+/);
+  return matched ? matched[0] : "";
+}
+
+function deliverableFileFromItem(item = {}) {
+  if (item.attachment?.name) return `${item.attachment.name}${item.attachment.size ? `（${item.attachment.size}）` : ""}`;
+  if (item.file) return item.file;
+  const meta = String(item.meta || "");
+  const fileMatched = meta.match(/文件[:：]\s*(.+)$/);
+  if (fileMatched) return fileMatched[1];
+  if (item.title && !deliverableLinkFromItem(item)) return item.title;
+  return "";
+}
+
+function renderAdminDeliverableSubmissionBlock(submission = {}, detail = {}) {
+  const attachments = submission?.attachments?.length ? submission.attachments : detail?.attachments || [];
+  const desc = submission?.summary || detail?.summary || attachments.find((item) => item.desc)?.desc || "达人已提交产物内容，请审核。";
+  const links = attachments.map(deliverableLinkFromItem).filter(Boolean);
+  const files = attachments.map(deliverableFileFromItem).filter(Boolean);
+  return `
+    <div class="deliver-submission-block" style="margin-top:16px">
+      <div class="deliver-submission-row">
+        <span>产物说明</span>
+        <strong>${desc}</strong>
+      </div>
+      <div class="deliver-submission-row">
+        <span>链接</span>
+        <strong>${links.length ? links.map((link) => `<a href="${link}" target="_blank" rel="noreferrer">${link}</a>`).join("<br />") : "-"}</strong>
+      </div>
+      <div class="deliver-submission-row">
+        <span>附件</span>
+        <strong>${files.length ? files.map((file) => `<span class="attachment-pill">${file}</span>`).join("") : "-"}</strong>
+      </div>
+    </div>
+  `;
+}
+
 function openAdminDeliverableReviewDetail(taskName = "", creatorName = "") {
   const detail = findAdminDeliverableReviewDetail(taskName, creatorName);
   const row = findCollaborationRecord(taskName, creatorName);
@@ -7161,21 +7298,18 @@ function openAdminDeliverableReviewDetail(taskName = "", creatorName = "") {
         <div class="mini-stat"><span>当前版本</span><strong>${latestSubmission?.version || detail?.version || "-"}</strong></div>
         <div class="mini-stat"><span>提交次数</span><strong>${submissionHistory.length || 0} 次</strong></div>
       </div>
-      <div class="note-box" style="margin-top:12px">${latestSubmission?.summary || detail?.summary || "达人已提交待审核产物。"}</div>
-      <div class="deliver-placeholders" style="margin-top:16px">
-        ${(latestSubmission?.attachments || detail?.attachments || [])
-          .map(
-            (item) => `
-            <div class="deliver-item deliver-review-item">
-              <span class="deliver-badge">${item.badge || "附件"}</span>
-              <strong>${item.title || "-"}</strong>
-              <p class="deliver-desc">${item.desc || "-"}</p>
-              <span class="deliver-meta">${item.meta || ""}</span>
-            </div>
-          `,
-          )
-          .join("")}
-      </div>
+      ${renderAdminDeliverableSubmissionBlock(latestSubmission, detail)}
+      ${
+        result === "待审核"
+          ? `<div class="review-action-bar" style="margin-top:14px">
+              <span>当前产物待运营审核，请确认通过或驳回。</span>
+              <div class="actions">
+                <button class="ghost-button" data-action="open-admin-deliverable-reject" data-task="${encodeURIComponent(taskName)}" data-creator="${encodeURIComponent(creatorName)}">驳回</button>
+                <button class="primary-button" data-action="approve-admin-deliverable-review" data-task="${encodeURIComponent(taskName)}" data-creator="${encodeURIComponent(creatorName)}">通过</button>
+              </div>
+            </div>`
+          : ""
+      }
       ${
         submissionHistory.length
           ? `<div class="timeline" style="margin-top:16px">
@@ -7634,9 +7768,9 @@ function renderAdminInfluencerDetailPage() {
         <div class="tabs" style="margin:0">
           <button class="tab ${activeTab === "tasks" ? "active" : ""}" data-action="set-influencer-detail-tab" data-tab="tasks">任务明细列表（${taskCount}）</button>
           <button class="tab ${activeTab === "advertisers" ? "active" : ""}" data-action="set-influencer-detail-tab" data-tab="advertisers">合作广告主（${advertiserCount}）</button>
-          <button class="tab ${activeTab === "socialAccounts" ? "active" : ""}" data-action="set-influencer-detail-tab" data-tab="socialAccounts">已认证社媒账号</button>
+          <button class="tab ${activeTab === "socialAccounts" ? "active" : ""}" data-action="set-influencer-detail-tab" data-tab="socialAccounts">社媒账号（${socialAccounts.length}）</button>
         </div>
-        <span class="muted">${activeTab === "tasks" ? "结构参考任务列表" : activeTab === "advertisers" ? "仅展示合作广告主名称与合作时间" : "已认证社媒账号列表"}</span>
+        <span class="muted">${activeTab === "tasks" ? "结构参考任务列表" : activeTab === "advertisers" ? "仅展示合作广告主名称与合作时间" : "社媒账号列表"}</span>
       </div>
       <div class="table-wrap">
         ${
@@ -7691,16 +7825,17 @@ function renderAdminInfluencerDetailPage() {
                   ${
                     socialAccounts.length
                       ? socialAccounts
-                          .filter((a) => a.status === "已认证")
                           .map(
-                            (a) => `
+                            (a) => {
+                              const statusCls = a.status === "已认证" ? "running" : "pending";
+                              return `
                             <tr>
                               <td><strong>${a.platform}</strong></td>
                               <td>${a.account}</td>
                               <td>${a.url ? `<a class="social-acct-link" href="${a.url}" target="_blank" rel="noopener">${a.url}</a>` : "-"}</td>
-                              <td>${status(a.status, "running")}</td>
+                              <td>${status(a.status, statusCls)}</td>
                             </tr>
-                          `,
+                          `;},
                           )
                           .join("")
                       : emptyRow(4)
@@ -7902,7 +8037,7 @@ function renderEmailInvitesAdmin() {
             </div>
             <div class="table-wrap">
               <table>
-                <thead><tr><th>发送时间</th><th>邮件主题</th><th>发送数</th><th>送达数</th><th>打开数</th><th>点击数</th><th>操作</th></tr></thead>
+                <thead><tr><th>发送时间</th><th>邮件主题</th><th>邮件内容</th><th>发送数</th><th>送达数</th><th>打开数</th><th>点击数</th><th>操作</th></tr></thead>
                 <tbody>
                   ${historyRows
                     .map(
@@ -7910,13 +8045,14 @@ function renderEmailInvitesAdmin() {
                         <tr>
                           <td>${row.sentAt}</td>
                           <td><strong>${row.subject}</strong></td>
+                          <td class="text-ellipsis" title="${row.content.replace(/"/g, '&quot;')}">${row.content}</td>
                           <td>${row.sent}</td>
                           <td>${row.delivered}</td>
                           <td>${row.opened}</td>
                           <td>${row.clicked}</td>
                           <td>
                             <div class="actions">
-                              <button class="link-button" data-action="modal-email-detail">发送明细</button>
+                              <button class="link-button" data-action="modal-email-history-detail">发送明细</button>
                             </div>
                           </td>
                         </tr>
@@ -7997,14 +8133,39 @@ function openEmailDetailModal() {
     <div class="modal-body">
       <div class="table-wrap">
         <table>
-          <thead><tr><th>序号</th><th>邮件主题</th><th>邮件内容</th><th>状态</th><th>备注</th><th>发送时间</th></tr></thead>
+          <thead><tr><th>序号</th><th>邮件主题</th><th>邮件内容</th><th>状态</th><th>发送时间</th></tr></thead>
           <tbody>
-            <tr><td>1</td><td>邀约注册MeetInfluencer</td><td>Hi {{creator_name}}，我们正在邀请优质创作者加入 MeetInfluencer 平台。</td><td>${status("已送达", "done")}</td><td>-</td><td>2026-1-5 10:59:20</td></tr>
-            <tr><td>2</td><td>邀约注册MeetInfluencer</td><td>Hi {{creator_name}}，完成注册后你可以收到品牌合作邀约并管理合作收益。</td><td>${status("已打开", "running")}</td><td>-</td><td>2026-1-5 10:59:20</td></tr>
-            <tr><td>3</td><td>邀约注册MeetInfluencer</td><td>Hi {{creator_name}}，我们正在邀请优质创作者加入 MeetInfluencer 平台。</td><td>${status("已送达", "done")}</td><td>-</td><td>2026-1-5 10:59:20</td></tr>
-            <tr><td>4</td><td>邀约注册MeetInfluencer</td><td>Hi {{creator_name}}，完成注册后你可以收到品牌合作邀约并管理合作收益。</td><td>${status("已点击", "done")}</td><td>-</td><td>2026-1-5 10:59:20</td></tr>
-            <tr><td>5</td><td>邀约注册MeetInfluencer</td><td>Hi {{creator_name}}，我们正在邀请优质创作者加入 MeetInfluencer 平台。</td><td>${status("发送失败", "rejected")}</td><td>SMTP连接超时</td><td>2026-1-5 10:59:20</td></tr>
-            <tr><td>6</td><td>邀约注册MeetInfluencer</td><td>Hi {{creator_name}}，完成注册后你可以收到品牌合作邀约并管理合作收益。</td><td>${status("待发送", "draft")}</td><td>-</td><td>-</td></tr>
+            <tr><td>1</td><td>邀约注册MeetInfluencer</td><td>Hi {{creator_name}}，我们正在邀请优质创作者加入 MeetInfluencer 平台。</td><td>${status("已送达", "done")}</td><td>2026-1-5 10:59:20</td></tr>
+            <tr><td>2</td><td>邀约注册MeetInfluencer</td><td>Hi {{creator_name}}，完成注册后你可以收到品牌合作邀约并管理合作收益。</td><td>${status("已打开", "running")}</td><td>2026-1-5 10:59:20</td></tr>
+            <tr><td>3</td><td>邀约注册MeetInfluencer</td><td>Hi {{creator_name}}，我们正在邀请优质创作者加入 MeetInfluencer 平台。</td><td>${status("已送达", "done")}</td><td>2026-1-5 10:59:20</td></tr>
+            <tr><td>4</td><td>邀约注册MeetInfluencer</td><td>Hi {{creator_name}}，完成注册后你可以收到品牌合作邀约并管理合作收益。</td><td>${status("已点击", "done")}</td><td>2026-1-5 10:59:20</td></tr>
+            <tr><td>5</td><td>邀约注册MeetInfluencer</td><td>Hi {{creator_name}}，我们正在邀请优质创作者加入 MeetInfluencer 平台。</td><td>${status("SMTP连接超时", "rejected")}</td><td>2026-1-5 10:59:20</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  `,
+    false,
+  );
+}
+
+function openEmailHistoryDetailModal() {
+  openModal(
+    `
+    <div class="modal-head">
+      <div><h2>发送明细</h2><p class="subcopy">邮件记录明细</p></div>
+      <button class="close-button" data-action="close-overlay" aria-label="关闭">×</button>
+    </div>
+    <div class="modal-body">
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>序号</th><th>达人邮箱</th><th>状态</th><th>发送时间</th></tr></thead>
+          <tbody>
+            <tr><td>1</td><td>tishakouri@gmail.com</td><td>${status("已送达", "done")}</td><td>2026-1-5 10:59:20</td></tr>
+            <tr><td>2</td><td>waifuconnoisseurr@gmail.com</td><td>${status("已打开", "running")}</td><td>2026-1-5 10:59:20</td></tr>
+            <tr><td>3</td><td>contact.dawn.music@gmail.com</td><td>${status("已送达", "done")}</td><td>2026-1-5 10:59:20</td></tr>
+            <tr><td>4</td><td>dimivgaming@hotmail.com</td><td>${status("已点击", "done")}</td><td>2026-1-5 10:59:20</td></tr>
+            <tr><td>5</td><td>hina.lakki@o2.pl</td><td>${status("发送失败", "rejected")}</td><td>2026-1-5 10:59:20</td></tr>
           </tbody>
         </table>
       </div>
@@ -8073,12 +8234,12 @@ function openEmailHistoryModal() {
       </div>
       <div class="table-wrap">
         <table>
-          <thead><tr><th>发送时间</th><th>邮件主题</th><th>发送数</th><th>送达数</th><th>打开数</th><th>点击数</th><th>操作</th></tr></thead>
+          <thead><tr><th>发送时间</th><th>邮件主题</th><th>邮件内容</th><th>发送数</th><th>送达数</th><th>打开数</th><th>点击数</th><th>操作</th></tr></thead>
           <tbody>
-            <tr><td>2026-6-5 10:59:20</td><td>邀约注册MeetInfluencer</td><td>99</td><td>99 100%</td><td>99 100%</td><td>99 100%</td><td><div class="actions"><button class="link-button" data-action="modal-email-detail">发送明细</button></div></td></tr>
-            <tr><td>2026-6-4 10:59:20</td><td>邀约注册MeetInfluencer</td><td>60</td><td>60 100%</td><td>60 100%</td><td>60 100%</td><td><div class="actions"><button class="link-button" data-action="modal-email-detail">发送明细</button></div></td></tr>
-            <tr><td>2026-6-3 10:59:20</td><td>邀约注册MeetInfluencer</td><td>50</td><td>50 100%</td><td>50</td><td>50 100%</td><td><div class="actions"><button class="link-button" data-action="modal-email-detail">发送明细</button></div></td></tr>
-            <tr><td>2026-6-1 10:59:20</td><td>主题内容</td><td>150</td><td>142 94.7%</td><td>98 69.0%</td><td>76 53.5%</td><td><div class="actions"><button class="link-button" data-action="modal-email-detail">发送明细</button></div></td></tr>
+            <tr><td>2026-6-5 10:59:20</td><td>邀约注册MeetInfluencer</td><td>-</td><td>99</td><td>99 100%</td><td>99 100%</td><td>99 100%</td><td><div class="actions"><button class="link-button" data-action="modal-email-history-detail">发送明细</button></div></td></tr>
+            <tr><td>2026-6-4 10:59:20</td><td>邀约注册MeetInfluencer</td><td>-</td><td>60</td><td>60 100%</td><td>60 100%</td><td>60 100%</td><td><div class="actions"><button class="link-button" data-action="modal-email-history-detail">发送明细</button></div></td></tr>
+            <tr><td>2026-6-3 10:59:20</td><td>邀约注册MeetInfluencer</td><td>-</td><td>50</td><td>50 100%</td><td>50</td><td>50 100%</td><td><div class="actions"><button class="link-button" data-action="modal-email-history-detail">发送明细</button></div></td></tr>
+            <tr><td>2026-6-1 10:59:20</td><td>主题内容</td><td>-</td><td>150</td><td>142 94.7%</td><td>98 69.0%</td><td>76 53.5%</td><td><div class="actions"><button class="link-button" data-action="modal-email-history-detail">发送明细</button></div></td></tr>
           </tbody>
         </table>
       </div>
@@ -11335,6 +11496,14 @@ function handleAction(action, target) {
     if (existing) Object.assign(existing, row);
     else applicationRecords.unshift(row);
     applicationDetail.statusKey = "platform_review";
+    notifyOperator({
+      id: `operator-application-review-${Date.now()}`,
+      type: "application_review_pending",
+      task: taskName,
+      title: "待审核达人报名",
+      content: `${creatorName} 报名了「${taskName}」，报价 ${formatUsdBudget(quoteValue)}，请在报名审核中处理。`,
+      cta: "去审核",
+    });
     state.pendingApplyCampaign = "";
     toast("报名已提交，当前状态为已报名，待平台审核");
     render();
@@ -11371,6 +11540,7 @@ function handleAction(action, target) {
   if (action === "modal-email-feedback") openEmailFeedbackModal();
   if (action === "modal-email-history") openEmailHistoryModal();
   if (action === "modal-email-detail") openEmailDetailModal();
+  if (action === "modal-email-history-detail") openEmailHistoryDetailModal();
   if (action === "modal-reject-reason") {
     const taskName = decodeURIComponent(target.dataset.task || "项目");
     const reason = decodeURIComponent(target.dataset.reason || "暂无被拒原因");
@@ -11486,6 +11656,14 @@ function handleAction(action, target) {
           brandReviewReason: "",
         },
       ];
+    });
+    notifyOperator({
+      id: `operator-deliverable-review-${Date.now()}`,
+      type: "deliverable_review_pending",
+      task: taskName,
+      title: "待审核达人产物",
+      content: `${creatorName} 已提交「${taskName}」产物内容，请在产物审核中完成初审。`,
+      cta: "去审核",
     });
     closeOverlay();
     render();
@@ -12031,6 +12209,7 @@ window.addEventListener("hashchange", () => {
 });
 
 hydrateRuntimeState();
+ensureOperatorWorkflowNotifications();
 ensurePublishDraftPlatforms();
 
 if (!window.location.hash) {

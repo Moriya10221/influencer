@@ -3244,6 +3244,12 @@ tr:last-child td {
 .table-wrap table td {
   white-space: nowrap;
 }
+.table-wrap .text-ellipsis {
+  max-width: 200px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
 
 .social-auth-page-note span {
   color: #667085;
@@ -6187,5 +6193,60 @@ tr:last-child td {
 
   .phone-field {
     grid-template-columns: 1fr;
+  }
+}
+.deliver-submission-block {
+  display: grid;
+  gap: 10px;
+}
+
+.deliver-submission-row {
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  background: #f8fbff;
+  padding: 12px 14px;
+}
+
+.deliver-submission-row span {
+  display: block;
+  color: var(--muted);
+  font-size: 12px;
+  margin-bottom: 6px;
+}
+
+.deliver-submission-row strong {
+  display: block;
+  color: var(--ink);
+  line-height: 1.6;
+}
+
+.attachment-pill {
+  display: inline-flex;
+  align-items: center;
+  margin: 0 8px 8px 0;
+  padding: 6px 10px;
+  border-radius: 999px;
+  background: #fff;
+  border: 1px solid var(--line);
+  color: var(--ink);
+  font-weight: 700;
+}
+
+.review-action-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  border: 1px solid #ffd6e8;
+  border-radius: 16px;
+  background: #fff6fb;
+  padding: 12px 14px;
+  color: var(--ink);
+}
+
+@media (max-width: 640px) {
+  .review-action-bar {
+    align-items: stretch;
+    flex-direction: column;
   }
 }
