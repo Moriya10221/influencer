@@ -717,7 +717,6 @@ const operatorNav = [
   ["creatorApplicationReviewAdmin", "报名审核", "报", "child"],
   ["creatorCertReviewAdmin", "达人认证审核", "认", "child"],
   ["creatorDeliverableReviewAdmin", "产物审核", "产", "child"],
-  ["officialTaskCreate", "官方任务", "官", undefined, "新"],
   ["operationsManagementAdmin", "运营管理", "运"],
   ["loginPageConfigAdmin", "登录页配置", "登", "child"],
   ["payoutAdmin", "财务管理", "财"],
