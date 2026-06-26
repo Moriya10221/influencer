@@ -715,6 +715,7 @@ const operatorNav = [
   ["reviewCenter", "审核管理", "审"],
   ["campaignReviewAdmin", "活动审核", "活", "child"],
   ["creatorApplicationReviewAdmin", "报名审核", "报", "child"],
+  ["creatorCertReviewAdmin", "达人认证审核", "认", "child"],
   ["creatorDeliverableReviewAdmin", "产物审核", "产", "child"],
   ["officialTaskCreate", "官方任务", "官", undefined, "新"],
   ["operationsManagementAdmin", "运营管理", "运"],
@@ -4573,8 +4574,6 @@ function publishForm(inModal = true) {
                 ${field("内容要求", `<textarea class="textarea" placeholder="请填写内容要求" data-platform-field="contentRequirement">${activeConfig.contentRequirement || ""}</textarea>`, true, "full")}
                 ${field("链接", `<input class="input" placeholder="请输入素材、脚本或参考内容链接" value="${draft.requirementLink || ""}" data-publish-field="requirementLink" />`, false, "full")}
                 ${field("附件", `<button class="ghost-button" data-action="toast" data-message="附件已加入上传队列">+ 上传附件</button><small class="muted">支持 PDF、PNG、JPG、JPEG，10M 以内</small>`, false, "full")}
-                ${field("达人报名时间", `<input class="input" value="${draft.registrationRange || ""}" placeholder="2026-06-11 ~ 2026-06-20" data-publish-field="registrationRange" />`)}
-                ${field("项目截至日期", `<input class="input" value="${draft.projectDeadline || ""}" placeholder="2026-06-30" data-publish-field="projectDeadline" />`, true)}
               </div>
             </section>
           </div>
@@ -5628,7 +5627,7 @@ function renderMyTalentDrawerTab(profile) {
         </div>
         <div class="table-wrap">
           <table class="my-talent-ledger-table">
-            <thead><tr><th>活动名称</th><th>合作时间</th><th>平台 / 地区</th><th>合作状态</th><th>当前履约节点</th><th>合作预算</th><th>交付信息</th><th>审核状态</th><th>发布数据</th><th>结算状态</th><th class="sticky-action-col">操作</th></tr></thead>
+            <thead><tr><th>活动名称</th><th>合作时间</th><th>平台 / 地区</th><th>合作状态</th><th>合作预算</th><th>交付信息</th><th>发布数据</th><th>结算状态</th><th class="sticky-action-col">操作</th></tr></thead>
             <tbody>
               ${
                 profile.taskLedger.length
@@ -5640,10 +5639,8 @@ function renderMyTalentDrawerTab(profile) {
                             <td>${item.createdAt}</td>
                             <td>${item.platform}<br /><small>${item.region}</small></td>
                             <td>${status(item.cooperationStatus, item.cooperationStatus.includes("完成") ? "done" : item.cooperationStatus.includes("拒绝") || item.cooperationStatus.includes("取消") ? "rejected" : "running")}</td>
-                            <td>${item.reviewStatus === "待审核" ? "待审核" : item.publishLink === "-" ? "待发布" : "已发布"}</td>
                             <td>${item.budget}</td>
                             <td>${item.deliverable}</td>
-                            <td>${item.reviewStatus}</td>
                             <td>${item.publishLink === "-" ? "-" : `${item.exposure} / ${item.interaction}`}</td>
                             <td>${item.settlementStatus}</td>
                             <td class="sticky-action-col"><div class="table-actions-inline"><button class="link-button" data-action="modal-campaign-info" data-campaign="${encodeURIComponent(item.campaign)}">查看任务详情</button><button class="link-button" data-action="open-my-talent-content" data-name="${encodeURIComponent(profile.name)}" data-campaign="${encodeURIComponent(item.campaign)}">查看交付内容</button></div></td>
@@ -5651,7 +5648,7 @@ function renderMyTalentDrawerTab(profile) {
                         `,
                       )
                       .join("")
-                  : emptyRow(11)
+                  : emptyRow(9)
               }
             </tbody>
           </table>
@@ -6582,44 +6579,79 @@ function renderMyProjects() {
 }
 
 function renderRevenue() {
-  const payout = state.revenuePayoutDraft;
-  const methodLabel = revenuePayoutMethodLabel(payout.method);
-  const methodHint = revenuePayoutMethodHint(payout);
+  const payoutRecords = [
+    {
+      task: "全境封锁-全球活动",
+      account: "PayPal · mo********@gmail.com",
+      amount: "$520.00",
+      statusLabel: "已打款",
+      statusClass: "success",
+      paidAt: "2026-06-18 15:42",
+    },
+    {
+      task: "MINISO 夏季新品内容合作",
+      account: "PayPal · mo********@gmail.com",
+      amount: "$143.00",
+      statusLabel: "内容审核中",
+      statusClass: "pending",
+      paidAt: "-",
+    },
+    {
+      task: "全境封锁2-上线活动",
+      account: "银行账户 · Deutsche Bank",
+      amount: "$380.00",
+      statusLabel: "待打款",
+      statusClass: "draft",
+      paidAt: "预计 2026-06-28",
+    },
+  ];
   return `
     ${pageHeader(
-      "履约数据",
+      "收益中心",
       "我的收益",
-      "当前达人端暂未接入结算模块，金额类信息以 - 展示，可查看已发布内容和效果回传情况。",
-      `<button class="secondary-button" data-nav="myProjects">返回我的任务</button>`,
+      "查看收益结算、收款账户与最近打款状态。",
+      "",
     )}
-    ${metrics([
-      { label: "待结算金额", value: "-", delta: "暂未接入结算" },
-      { label: "本月收益", value: "-", delta: "暂未接入结算" },
-      { label: "已完成发布", value: "9", delta: "已回传作品" },
-      { label: "实际完成值", value: "186K", delta: "曝光" },
-    ])}
-    <div class="panel revenue-payout-panel" style="margin-top:16px">
-      <div class="revenue-payout-card">
-        <div>
-          <div class="revenue-payout-label">收款账户</div>
-          <h2>${methodLabel} · ${payout.currency} ${payout.isDefault ? "· 默认" : ""}</h2>
-          <p class="subcopy">${methodHint}</p>
-        </div>
-        <div class="actions">
-          <button class="secondary-button" data-action="open-revenue-payout">配置收款账户</button>
-        </div>
+    <div class="grid revenue-metrics">
+      <div class="revenue-metric-card featured">
+        <div class="revenue-metric-label"><span aria-hidden="true">◷</span>待结算金额</div>
+        <strong>$143.00</strong>
+        <small>预计 3-5 个工作日到账</small>
+      </div>
+      <div class="revenue-metric-card">
+        <div class="revenue-metric-label"><span aria-hidden="true">▦</span>本月已到账</div>
+        <strong>$0.00</strong>
+        <small class="warning">本月暂无打款</small>
+      </div>
+      <div class="revenue-metric-card">
+        <div class="revenue-metric-label"><span aria-hidden="true">▣</span>历史累计收益</div>
+        <strong>$1,240.00</strong>
+        <small class="success">已完成 12 笔任务</small>
+      </div>
+      <div class="revenue-metric-card">
+        <div class="revenue-metric-label"><span aria-hidden="true">▥</span>进行中任务</div>
+        <strong>3</strong>
+        <small>预计收益 $380</small>
       </div>
     </div>
     <div class="panel" style="margin-top:16px">
-      <h2>履约数据</h2>
+      <div class="table-head"><h2>最近的打款记录</h2></div>
       <div class="table-wrap">
-        <table>
-          <thead><tr><th>任务名称</th><th>发布状态</th><th>实际完成值</th><th>收益金额</th><th>结算状态</th></tr></thead>
-          <tbody>
-            <tr><td>全境封锁-全球活动</td><td>${status("已发布", "success")}</td><td>126K 曝光</td><td>-</td><td>-</td></tr>
-            <tr><td>MINISO 夏季新品内容合作</td><td>${status("内容审核中", "pending")}</td><td>-</td><td>-</td><td>-</td></tr>
-            <tr><td>全境封锁2-上线活动</td><td>${status("已发布", "success")}</td><td>60K 曝光</td><td>-</td><td>-</td></tr>
-          </tbody>
+        <table class="revenue-record-table">
+          <thead><tr><th>任务名称</th><th>收款账户</th><th>金额</th><th>打款状态</th><th>打款时间</th></tr></thead>
+          <tbody>${payoutRecords
+            .map(
+              (row) => `
+                <tr>
+                  <td>${row.task}</td>
+                  <td>${row.account}</td>
+                  <td><strong>${row.amount}</strong></td>
+                  <td>${status(row.statusLabel, row.statusClass)}</td>
+                  <td>${row.paidAt}</td>
+                </tr>
+              `,
+            )
+            .join("")}</tbody>
         </table>
       </div>
     </div>
@@ -8375,6 +8407,98 @@ function renderCreatorInvitationReviewAdmin() {
   return renderAdminReviewQueue("creatorInvitationReviewAdmin", "邀约审核", "任务审核", pendingRows);
 }
 
+function renderCreatorCertReviewAdmin() {
+  const certRows = [
+    { nickname: "Mika Studio", account: "mika.studio@creator.com", platform: "TikTok", socailUrl: "https://tiktok.com/@mika_studio", screenshot: assets.talentAvatar1 },
+    { nickname: "Nova Plays", account: "nova.plays@creator.com", platform: "YouTube", socailUrl: "https://youtube.com/@novaplays", screenshot: assets.talentAvatar2 },
+    { nickname: "Daily Miki", account: "daily.miki@creator.com", platform: "TikTok", socailUrl: "https://tiktok.com/@dailymiki_home", screenshot: assets.talentAvatar3 },
+    { nickname: "Tech Otto", account: "tech.otto@creator.com", platform: "YouTube", socailUrl: "https://youtube.com/@tech_otto", screenshot: assets.talentAvatar4 },
+  ];
+  return `
+    ${pageHeader("运营后台", "达人认证审核", "审核达人提交的社媒账号认证申请。")}
+    <div class="table-card">
+      <div class="table-head"><h2>认证审核列表</h2><span class="muted">共 ${certRows.length} 条</span></div>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>达人账号</th><th>达人昵称</th><th>平台</th><th>社媒主页链接</th><th>主页截图</th><th>操作</th></tr></thead>
+          <tbody>
+            ${certRows
+              .map(
+                (row) => `
+                <tr>
+                  <td>${row.account}</td>
+                  <td><strong>${row.nickname}</strong></td>
+                  <td>${row.platform}</td>
+                  <td><a class="social-acct-link" href="${row.socailUrl}" target="_blank" rel="noopener">${row.socailUrl}</a></td>
+                  <td><img src="${row.screenshot}" alt="" style="width:80px;height:80px;object-fit:cover;border-radius:6px;cursor:pointer" onclick='openImagePreview("${row.screenshot}")' /></td>
+                  <td><div class="table-actions-inline"><button class="link-button" data-action="cert-pass" data-account="${encodeURIComponent(row.nickname)}">通过</button><button class="link-button" data-action="cert-reject" data-account="${encodeURIComponent(row.nickname)}">驳回</button></div></td>
+                </tr>
+              `,
+              )
+              .join("")}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  `;
+}
+
+function openCertPassConfirm(account) {
+  openModal(
+    `
+    <div class="modal-head">
+      <div><h2>确认通过</h2><p class="subcopy">确认通过达人 ${account} 的社媒认证申请？</p></div>
+      <button class="close-button" data-action="close-overlay" aria-label="关闭">×</button>
+    </div>
+    <div class="modal-foot">
+      <button class="ghost-button" data-action="close-overlay">取消</button>
+      <button class="primary-button" data-action="cert-pass-confirmed" data-account="${encodeURIComponent(account)}">确认通过</button>
+    </div>
+  `,
+    false,
+  );
+}
+
+function openCertRejectModal(account) {
+  openModal(
+    `
+    <div class="modal-head">
+      <div><h2>驳回认证</h2><p class="subcopy">填写驳回理由，理由将通知达人。</p></div>
+      <button class="close-button" data-action="close-overlay" aria-label="关闭">×</button>
+    </div>
+    <div class="modal-body">
+      <div class="form-grid">
+        ${field("达人账号", `<div class="note-box">${account}</div>`, false, "full")}
+        ${field("驳回理由", `<textarea class="textarea" id="certRejectReason" placeholder="请填写驳回原因（必填）"></textarea>`, true, "full")}
+      </div>
+    </div>
+    <div class="modal-foot">
+      <button class="ghost-button" data-action="close-overlay">取消</button>
+      <button class="primary-button" data-action="cert-reject-confirmed" data-account="${encodeURIComponent(account)}">确认驳回</button>
+    </div>
+  `,
+    false,
+  );
+}
+
+function openImagePreview(src) {
+  openModal(
+    `
+    <div class="modal-head">
+      <div><h2>主页截图预览</h2></div>
+      <button class="close-button" data-action="close-overlay" aria-label="关闭">×</button>
+    </div>
+    <div class="modal-body" style="text-align:center">
+      <img src="${src}" alt="主页截图" style="max-width:100%;max-height:70vh;border-radius:8px" />
+    </div>
+    <div class="modal-foot">
+      <button class="ghost-button" data-action="close-overlay">关闭</button>
+    </div>
+  `,
+    false,
+  );
+}
+
 function renderCreatorApplicationReviewAdmin() {
   const pendingRows = applicationRecords
     .filter((row) => row.statusKey === "platform_review")
@@ -8688,6 +8812,7 @@ const pages = {
   campaignReviewAdmin: renderCampaignReviewAdmin,
   creatorInvitationReviewAdmin: renderCreatorInvitationReviewAdmin,
   creatorApplicationReviewAdmin: renderCreatorApplicationReviewAdmin,
+  creatorCertReviewAdmin: renderCreatorCertReviewAdmin,
   creatorDeliverableReviewAdmin: renderCreatorDeliverableReviewAdmin,
   payoutAdmin: renderPayoutAdmin,
   campaignFulfillment: renderCampaignFulfillment,
@@ -11541,6 +11666,20 @@ function handleAction(action, target) {
   if (action === "modal-email-history") openEmailHistoryModal();
   if (action === "modal-email-detail") openEmailDetailModal();
   if (action === "modal-email-history-detail") openEmailHistoryDetailModal();
+  if (action === "cert-pass") openCertPassConfirm(decodeURIComponent(target.dataset.account || ""));
+  if (action === "cert-pass-confirmed") {
+    const account = decodeURIComponent(target.dataset.account || "");
+    closeOverlay();
+    toast("已通过达人 " + account + " 的社媒认证申请");
+  }
+  if (action === "cert-reject") openCertRejectModal(decodeURIComponent(target.dataset.account || ""));
+  if (action === "cert-reject-confirmed") {
+    const account = decodeURIComponent(target.dataset.account || "");
+    const reason = document.getElementById("certRejectReason")?.value.trim();
+    if (!reason) { toast("请填写驳回理由"); return; }
+    closeOverlay();
+    toast("已驳回达人 " + account + " 的认证申请，原因：" + reason);
+  }
   if (action === "modal-reject-reason") {
     const taskName = decodeURIComponent(target.dataset.task || "项目");
     const reason = decodeURIComponent(target.dataset.reason || "暂无被拒原因");
