@@ -141,37 +141,58 @@
   },
   myTalentFilters: {
     keyword: "",
+    followerCount: "全部",
+    followerMinK: "",
+    followerMaxK: "",
     cooperationStatus: "全部",
     cooperationTimes: "全部",
     platform: "全部",
     category: "全部",
+    categories: [],
+    categoryMenuOpen: false,
     engagement: "全部",
+    engagementMin: "",
+    engagementMax: "",
     exposure30d: "全部",
     qualityTier: "全部",
     priceRange: "全部",
+    priceMin: "",
+    priceMax: "",
+    moreOpen: false,
+    rangeOpen: "",
   },
   confirmedCollaborators: [],
   appliedCampaigns: [],
   pendingApplyCampaign: "",
   talentSearchFilters: {
     keyword: "",
-    platform: "全部",
+    platform: "",
     region: "全部",
     followerCount: "全部",
+    followerMinK: "",
+    followerMaxK: "",
     followerGender: "全部",
     followerAge: "全部",
     recent28: "全部",
     priceRange: "全部",
+    priceMin: "",
+    priceMax: "",
     engagement: "全部",
+    engagementMin: "",
+    engagementMax: "",
     category: "全部",
+    categories: [],
+    categoryMenuOpen: false,
     contract: "全部",
     expanded: false,
+    rangeOpen: "",
   },
   promotionFilters: {
     name: "",
     status: "",
     startDate: "",
   },
+  promotionFocusTask: "",
   opportunityFilters: {
     platformMenuOpen: false,
     regionMenuOpen: false,
@@ -194,6 +215,7 @@
     taskReview: "applicants",
     invitations: "all",
     myProjects: "active",
+    revenue: "pending",
     account: "company",
     emailInvitesAdmin: "inviteList",
     adminReviewHistory: "全部",
@@ -226,6 +248,7 @@
   socialAuthDraft: {
     platform: "TikTok",
     method: "oauth",
+    collapsed: {},
   },
   myTalentDetail: {
     name: "Mika Studio",
@@ -573,7 +596,10 @@ function creatorSocialPlatforms() {
       name: "TikTok",
       statusText: "已认证",
       statusClass: "success",
-      accounts: ["Mika Studio", "Mika Beauty Lab"],
+      accounts: [
+        { name: "Mika Studio", url: "https://www.tiktok.com/@mika_studio" },
+        { name: "Mika Beauty Lab", url: "https://www.tiktok.com/@mika_beauty" },
+      ],
       metrics: "最高粉丝 744.15万",
       usage: "报名合作任务、数据回传",
       updatedAt: "2026-06-12",
@@ -582,7 +608,7 @@ function creatorSocialPlatforms() {
       name: "YouTube",
       statusText: "已认证",
       statusClass: "success",
-      accounts: ["Nova Plays"],
+      accounts: [{ name: "Nova Plays", url: "https://www.youtube.com/@novaplays" }],
       metrics: "平均互动率 4.1%",
       usage: "长视频合作、品牌邀约",
       updatedAt: "2026-06-10",
@@ -591,13 +617,13 @@ function creatorSocialPlatforms() {
       name: "Instagram",
       statusText: "审核中",
       statusClass: "pending",
-      accounts: ["mika.trend"],
+      accounts: [{ name: "mika.trend", url: "https://www.instagram.com/mika.trend" }],
       metrics: "预计 1 个工作日内完成",
       usage: "内容种草、图片素材",
       updatedAt: "2026-06-15",
     },
     { name: "Twitch", statusText: "未认证", statusClass: "muted", accounts: [], metrics: "可添加直播账号", usage: "-", updatedAt: "-" },
-    { name: "Twitter", statusText: "未认证", statusClass: "muted", accounts: [], metrics: "可添加社媒账号", usage: "-", updatedAt: "-" },
+    { name: "X (Twitter)", statusText: "未认证", statusClass: "muted", accounts: [], metrics: "可添加社媒账号", usage: "-", updatedAt: "-" },
     { name: "Facebook", statusText: "未认证", statusClass: "muted", accounts: [], metrics: "可添加主页或个人号", usage: "-", updatedAt: "-" },
   ];
 }
@@ -715,8 +741,8 @@ const operatorNav = [
   ["reviewCenter", "审核管理", "审"],
   ["campaignReviewAdmin", "活动审核", "活", "child"],
   ["creatorApplicationReviewAdmin", "报名审核", "报", "child"],
-  ["creatorCertReviewAdmin", "达人认证审核", "认", "child"],
   ["creatorDeliverableReviewAdmin", "产物审核", "产", "child"],
+  ["creatorCertReviewAdmin", "达人认证审核", "认", "child"],
   ["operationsManagementAdmin", "运营管理", "运"],
   ["loginPageConfigAdmin", "登录页配置", "登", "child"],
   ["payoutAdmin", "财务管理", "财"],
@@ -1800,6 +1826,7 @@ const adminCampaignFulfillmentRows = [
     brandReview: "待审核",
     publishStatus: "待发布",
     trackingStatus: "未开始",
+    settlementAmount: "$2,000",
     settlementStatus: "未结算",
     due: "2026-06-18",
   },
@@ -1815,6 +1842,7 @@ const adminCampaignFulfillmentRows = [
     brandReview: "已通过",
     publishStatus: "待发布",
     trackingStatus: "未开始",
+    settlementAmount: "$800",
     settlementStatus: "未结算",
     due: "2026-06-19",
   },
@@ -1830,6 +1858,7 @@ const adminCampaignFulfillmentRows = [
     brandReview: "已通过",
     publishStatus: "已发布",
     trackingStatus: "追踪中",
+    settlementAmount: "$950",
     settlementStatus: "待结算",
     due: "2026-06-12",
   },
@@ -1845,6 +1874,7 @@ const adminCampaignFulfillmentRows = [
     brandReview: "待确认",
     publishStatus: "-",
     trackingStatus: "-",
+    settlementAmount: "-",
     settlementStatus: "-",
     due: "2026-07-08",
   },
@@ -1970,7 +2000,7 @@ const adminFulfillmentTimelineMap = {
   ],
   "MINISO 夏季新品内容合作::MYTB-0241": [
     { title: "报名通过", desc: "2026-06-09 12:10 平台审核通过该达人报名。" },
-    { title: "脚本确认", desc: "2026-06-11 16:00 广告主确认拍摄脚本与卖点。" },
+    { title: "产物提交", desc: "2026-06-11 16:00 广告主确认拍摄脚本与卖点。" },
     { title: "待发布", desc: "2026-06-15 19:30 内容通过审核，等待达人按排期发布。" },
   ],
   "MINISO 夏季新品内容合作::MKTK-0308": [
@@ -2271,15 +2301,19 @@ function renderTopbar() {
   const actions = document.querySelector(".topbar-actions");
   if (!actions) return;
 
-  const langFlag = state.language === "en" ? assets.flagEN : assets.flagCN;
-  const langLabel = state.language === "en" ? "English" : "中文";
   const roleAction =
     state.role === "brand"
       ? `<button class="primary-button" data-action="open-publish">+ 创建活动</button>`
       : state.role === "operator"
         ? `<button class="primary-button" data-nav="officialTaskCreate">+ 创建官方任务</button>`
         : `<button class="primary-button" data-nav="opportunityHall">查看机会大厅</button>`;
-  const userLabel = state.role === "operator" ? "运营后台" : state.role === "creator" ? "达人工作台" : "广告主工作台";
+  const userEmail =
+    state.role === "operator"
+      ? "ops@meetinfluencer.com"
+      : state.role === "creator"
+        ? "creator@meetinfluencer.com"
+        : "brand@meetinfluencer.com";
+  const profilePage = state.role === "operator" ? "settingsAccountAdmin" : state.role === "creator" ? "personalCenter" : "account";
   const unreadCount =
     state.role === "brand"
       ? state.brandNotifications.unreadCount
@@ -2289,22 +2323,6 @@ function renderTopbar() {
   const unreadLabel = unreadCount > 99 ? "99+" : String(unreadCount);
 
   actions.innerHTML = `
-    <div class="topbar-dropdown ${state.topbarMenu.languageOpen ? "open" : ""}" data-dropdown-scope="language">
-      <button class="ghost-button dropdown-trigger" data-action="toggle-language-menu" aria-label="切换语言">
-        <img class="flag-icon" src="${langFlag}" alt="" />
-        <span>${langLabel}</span>
-        <span class="caret" aria-hidden="true">▾</span>
-      </button>
-      <div class="dropdown-menu" data-dropdown="language">
-        <button class="dropdown-item" data-action="set-language" data-lang="zh">
-          <img class="flag-icon" src="${assets.flagCN}" alt="" /><span>中文</span>
-        </button>
-        <button class="dropdown-item" data-action="set-language" data-lang="en">
-          <img class="flag-icon" src="${assets.flagEN}" alt="" /><span>English</span>
-        </button>
-      </div>
-    </div>
-
     <button class="icon-button topbar-icon ${unreadCount > 0 ? "has-notice" : ""}" data-action="open-notifications" aria-label="通知">
       🔔
       ${unreadCount > 0 ? `<span class="topbar-notice-badge" aria-label="${unreadLabel} 条未读通知">${unreadLabel}</span>` : ""}
@@ -2314,10 +2332,25 @@ function renderTopbar() {
     <div class="topbar-dropdown ${state.topbarMenu.userOpen ? "open" : ""}" data-dropdown-scope="user">
       <button class="ghost-button dropdown-trigger" data-action="toggle-user-menu" aria-label="账号菜单">
         <span class="avatar">MA</span>
-        <span class="user-name">${userLabel}</span>
+        <span class="user-name">${userEmail}</span>
         <span class="caret" aria-hidden="true">▾</span>
       </button>
-      <div class="dropdown-menu" data-dropdown="user">
+      <div class="dropdown-menu user-dropdown-menu" data-dropdown="user">
+        <button class="dropdown-item" data-nav="${profilePage}">个人中心</button>
+        <div class="user-language-row ${state.topbarMenu.languageOpen ? "open" : ""}">
+          <button class="dropdown-item user-language-trigger" data-action="toggle-language-menu">
+            <span>语言 / Language</span>
+            <span class="submenu-caret" aria-hidden="true">▶</span>
+          </button>
+          <div class="language-submenu">
+            <button class="dropdown-item ${state.language === "en" ? "active" : ""}" data-action="set-language" data-lang="en">
+              <img class="flag-icon" src="${assets.flagEN}" alt="" /><span>English</span>
+            </button>
+            <button class="dropdown-item ${state.language === "zh" ? "active" : ""}" data-action="set-language" data-lang="zh">
+              <img class="flag-icon" src="${assets.flagCN}" alt="" /><span>简体中文</span>
+            </button>
+          </div>
+        </div>
         <button class="dropdown-item danger" data-action="logout">退出登录</button>
       </div>
     </div>
@@ -2434,11 +2467,13 @@ function syncInvitationCountdownTimer() {
   }, 60000);
 }
 
-function pageHeader(_eyebrow, title, _subcopy, actions = "") {
+function pageHeader(_eyebrow, title, subcopy, actions = "") {
+  const headClass = _eyebrow === "社媒认证" ? "page-head social-auth-head" : "page-head";
   return `
-    <div class="page-head">
+    <div class="${headClass}">
       <div>
         <h1>${title}</h1>
+        ${subcopy ? `<p class="subcopy">${subcopy}</p>` : ""}
       </div>
       <div class="actions">${actions}</div>
     </div>
@@ -2517,6 +2552,16 @@ function countryCodeFromName(name) {
     马来西亚: "MY",
     英国: "UK",
     德国: "DE",
+    法国: "FR",
+    意大利: "IT",
+    西班牙: "ES",
+    加拿大: "CA",
+    澳大利亚: "AU",
+    新加坡: "SG",
+    菲律宾: "PH",
+    巴西: "BR",
+    墨西哥: "MX",
+    阿联酋: "AE",
   };
   return map[name] || "";
 }
@@ -3277,13 +3322,30 @@ function filterCreators(list) {
 
   return list
     .filter((row) => !keyword || row.name.toLowerCase().includes(keyword))
-    .filter((row) => f.platform === "全部" || row.platform === f.platform)
+    .filter((row) => !f.platform || f.platform === "全部" || row.platform === f.platform)
     .filter((row) => !regionCode || String(row.country || "").includes(regionCode))
-    .filter((row) => f.category === "全部" || row.category === f.category)
+    .filter((row) => {
+      const selectedCategories = f.categories?.length ? f.categories : f.category === "全部" ? [] : [f.category];
+      if (!selectedCategories.length) return true;
+      const aliases = {
+        购物与零售: ["购物与零售", "购物零售"],
+        科技数码: ["科技数码", "科技", "科技与数码"],
+        生活方式: ["生活方式", "生活"],
+        理财与投资: ["理财与投资", "理财"],
+        软件与应用: ["软件与应用", "软件"],
+      };
+      const accepted = selectedCategories.flatMap((item) => aliases[item] || [item]);
+      return accepted.some((item) => String(row.category || "").includes(item));
+    })
     .filter((row) => f.contract === "全部" || row.contract === f.contract)
     .filter((row) => {
-      if (f.followerCount === "全部") return true;
       const n = follower(row);
+      const minK = normalizeMoneyNumber(f.followerMinK);
+      const maxK = normalizeMoneyNumber(f.followerMaxK);
+      if (minK && n < minK * 1000) return false;
+      if (maxK && n > maxK * 1000) return false;
+      if (minK || maxK) return true;
+      if (f.followerCount === "全部") return true;
       if (f.followerCount === "0-10万") return n >= 0 && n < 100000;
       if (f.followerCount === "10-50万") return n >= 100000 && n < 500000;
       if (f.followerCount === "50-200万") return n >= 500000 && n < 2000000;
@@ -3312,8 +3374,13 @@ function filterCreators(list) {
       return true;
     })
     .filter((row) => {
-      if (f.priceRange === "全部") return true;
       const n = price(row);
+      const min = normalizeMoneyNumber(f.priceMin);
+      const max = normalizeMoneyNumber(f.priceMax);
+      if (min && n < min) return false;
+      if (max && n > max) return false;
+      if (min || max) return true;
+      if (f.priceRange === "全部") return true;
       if (f.priceRange === "$0-500") return n >= 0 && n < 500;
       if (f.priceRange === "$500-1K") return n >= 500 && n < 1000;
       if (f.priceRange === "$1K-3K") return n >= 1000 && n < 3000;
@@ -3322,8 +3389,13 @@ function filterCreators(list) {
       return true;
     })
     .filter((row) => {
-      if (f.engagement === "全部") return true;
       const n = engagement(row);
+      const min = normalizeMoneyNumber(f.engagementMin);
+      const max = normalizeMoneyNumber(f.engagementMax);
+      if (min && n < min) return false;
+      if (max && n > max) return false;
+      if (min || max) return true;
+      if (f.engagement === "全部") return true;
       if (f.engagement === ">1%") return n > 1;
       if (f.engagement === ">3%") return n > 3;
       if (f.engagement === ">5%") return n > 5;
@@ -3336,33 +3408,42 @@ function resetTalentSearchFilters() {
   state.talentSearchFilters = {
     ...state.talentSearchFilters,
     keyword: "",
-    platform: "全部",
+    platform: "",
     region: "全部",
     followerCount: "全部",
+    followerMinK: "",
+    followerMaxK: "",
     followerGender: "全部",
     followerAge: "全部",
     recent28: "全部",
     priceRange: "全部",
+    priceMin: "",
+    priceMax: "",
     engagement: "全部",
+    engagementMin: "",
+    engagementMax: "",
     category: "全部",
+    categories: [],
+    categoryMenuOpen: false,
     contract: "全部",
     expanded: false,
+    rangeOpen: "",
   };
 }
 
 function renderTalentSelectedConditions() {
   const f = state.talentSearchFilters;
   const items = [
-    ["platform", "平台", f.platform],
+    ["platform", "推广平台", f.platform === "Twitter" ? "X" : f.platform],
     ["region", "国家/地区", f.region],
+    ["followerRange", "粉丝数", myTalentRangeValue(f.followerMinK, f.followerMaxK, "K")],
     ["followerCount", "粉丝数", f.followerCount],
-    ["followerGender", "粉丝性别", f.followerGender],
-    ["followerAge", "粉丝年龄", f.followerAge],
-    ["recent28", "近28天涨粉数", f.recent28],
+    ["priceRangeCustom", "报价范围", myTalentRangeValue(f.priceMin, f.priceMax, " USD")],
     ["priceRange", "报价范围", f.priceRange],
+    ["engagementRange", "互动率", myTalentRangeValue(f.engagementMin, f.engagementMax, "%")],
     ["engagement", "互动率", f.engagement],
+    ["categories", "达人分类", (f.categories || []).join("、")],
     ["category", "达人分类", f.category],
-    ["contract", "收藏状态", f.contract],
   ].filter(([, , value]) => value && value !== "全部");
 
   return `
@@ -3384,7 +3465,7 @@ function renderTalentSelectedConditions() {
             : `<span class="selected-filter-empty">暂无筛选条件</span>`
         }
       </div>
-      <button class="selected-filter-clear" data-action="clear-talent-selected-filters" ${items.length ? "" : "disabled"} type="button">全部清除</button>
+      <button class="selected-filter-clear" data-action="clear-talent-selected-filters" ${items.length ? "" : "disabled"} type="button">清除全部</button>
     </div>
   `;
 }
@@ -3453,20 +3534,21 @@ function campaignRows(source = getFilteredCampaigns()) {
     .map(
       (row) => {
         const isRejected = row.status === "已驳回";
+        const isFocused = state.promotionFocusTask === row.name;
         const isDraft = row.status === "草稿";
         const rejectReason = isRejected ? campaignRejectReason(row.name) : "";
         return `
-      <tr class="${isRejected ? "campaign-row-rejected" : ""}">
+      <tr class="${isRejected ? "campaign-row-rejected" : ""} ${isFocused ? "campaign-row-focused" : ""}">
         <td>
           <div class="row-title">
             <img src="${assets.avatar}" alt="" />
             <span>
               <strong>${row.name}</strong>
               <small>${row.product}</small>
+              ${isFocused ? `<span class="campaign-focus-alert">通知定位</span>` : ""}
               ${isRejected ? `<span class="campaign-inline-alert">待重新提交</span>` : ""}
             </span>
           </div>
-          ${isRejected ? `<div class="campaign-reject-inline">${rejectReason}</div>` : ""}
         </td>
         <td>${row.region}</td>
         <td>${row.platform || "-"}</td>
@@ -3480,8 +3562,10 @@ function campaignRows(source = getFilteredCampaigns()) {
           <div class="actions ${isRejected ? "actions-emphasis" : ""}">
             ${
               isRejected
-                ? `<button class="link-button" data-action="open-reason" data-reason="${encodeURIComponent(rejectReason)}">查看原因</button>
-                   <button class="link-button" data-action="resubmit-campaign" data-task="${encodeURIComponent(row.name)}">修改并重提</button>`
+                ? `<button class="link-button" data-action="open-reason" data-reason="${encodeURIComponent(rejectReason)}" data-reason-title="任务驳回" data-reason-copy="查看运营给出的驳回原因。">查看原因</button>
+                   <button class="link-button" data-action="resubmit-campaign" data-task="${encodeURIComponent(row.name)}">修改并重提</button>
+                   <button class="link-button" data-action="toast" data-message="活动审核通过后才能邀请达人">邀请达人</button>
+                   <button class="link-button danger" data-action="toast" data-message="已将 ${row.name} 移入删除确认队列">删除</button>`
                 : `${isDraft ? `<button class="link-button" data-action="open-publish">编辑</button>` : ""}
                    <button class="link-button" data-action="modal-invite">邀请达人</button>
                    <button class="link-button" data-nav="taskReview">查看详情</button>
@@ -3519,13 +3603,33 @@ function renderRejectedCampaignQueue() {
                 <p>${campaignRejectReason(row.name)}</p>
               </div>
               <div class="rejected-campaign-actions">
-                <button class="secondary-button mini-button" data-action="open-reason" data-reason="${encodeURIComponent(campaignRejectReason(row.name))}">查看原因</button>
+                <button class="secondary-button mini-button" data-action="open-reason" data-reason="${encodeURIComponent(campaignRejectReason(row.name))}" data-reason-title="任务驳回" data-reason-copy="查看运营给出的驳回原因。">查看原因</button>
                 <button class="primary-button mini-button" data-action="resubmit-campaign" data-task="${encodeURIComponent(row.name)}">修改并重提</button>
               </div>
             </article>
           `,
           )
           .join("")}
+      </div>
+    </div>
+  `;
+}
+
+function renderPromotionFocusNotice() {
+  const taskName = state.promotionFocusTask;
+  if (!taskName) return "";
+  const row = campaigns.find((item) => item.name === taskName);
+  if (!row || row.status !== "已驳回") return "";
+  const reason = campaignRejectReason(taskName);
+  return `
+    <div class="promotion-focus-notice">
+      <div>
+        <strong>已定位审核被拒任务：${taskName}</strong>
+        <p>${reason}</p>
+      </div>
+      <div class="promotion-focus-actions">
+        <button class="secondary-button mini-button" data-action="open-reason" data-reason="${encodeURIComponent(reason)}" data-reason-title="任务驳回" data-reason-copy="查看运营给出的驳回原因。">查看原因</button>
+        <button class="primary-button mini-button" data-action="resubmit-campaign" data-task="${encodeURIComponent(taskName)}">修改并重提</button>
       </div>
     </div>
   `;
@@ -3885,25 +3989,11 @@ function renderPromotions() {
     ${pageHeader(
       "广告主工作台",
       "活动管理",
-      showOnboardingEmpty ? "完成首次任务创建后，即可开始管理活动、达人报名和交付进度。" : "集中查看活动、预算、达人参与和发布状态。",
-      showOnboardingEmpty ? "" : `<button class="primary-button" data-action="open-publish">+ 新建活动</button>`,
+      showOnboardingEmpty ? "暂无活动，创建你的第一个推广任务。" : "集中查看活动、预算、达人参与和发布状态。",
+      "",
     )}
-    ${
-          showOnboardingEmpty
-        ? metrics([
-            { label: "进行中活动", value: "0", delta: "创建后开始统计" },
-            { label: "合作达人", value: "0", delta: "发布任务后可查看" },
-            { label: "已发布作品", value: "0", delta: "交付后自动汇总" },
-            { label: "总预算", value: "$0", delta: "创建任务后累计" },
-          ])
-        : metrics([
-            { label: "进行中活动", value: "12", delta: "+18% 本周" },
-            { label: "合作达人", value: "64", delta: "+9 人" },
-            { label: "已发布作品", value: "28", delta: "+6 条" },
-            { label: "总预算", value: "$18.6K", delta: "利用率 72%" },
-          ])
-    }
     ${showOnboardingEmpty ? "" : renderRejectedCampaignQueue()}
+    ${showOnboardingEmpty ? "" : renderPromotionFocusNotice()}
     <div style="margin-top:16px">
       <div class="table-card">
         <div class="table-head">
@@ -4488,6 +4578,8 @@ function publishForm(inModal = true) {
             true,
           )}
           ${field("推广产品", `<input class="input" placeholder="请输入产品名称" value="${draft.productName || ""}" data-publish-field="productName" />`, true)}
+          ${field("项目截止日期", `<input class="input" type="date" value="${draft.projectDeadline || ""}" data-publish-field="projectDeadline" />`, true)}
+          ${field("达人报名日期", `<input class="input" placeholder="例：2026-06-11 ~ 2026-06-20" value="${draft.registrationRange || ""}" data-publish-field="registrationRange" />`, false)}
           ${field("产品链接", `<input class="input" placeholder="请输入产品链接" value="${draft.productLink || ""}" data-publish-field="productLink" />`)}
           ${field("产品描述", `<textarea class="textarea" placeholder="请输入产品描述" data-publish-field="productDesc">${draft.productDesc || ""}</textarea>`, false, "full")}
           ${field("产品图片 / 附件", `<button class="ghost-button" data-action="toast" data-message="文件已加入上传队列">+ 上传文件</button><small class="muted">支持 PDF、PNG、JPG、JPEG，10M 以内</small>`, false, "full")}
@@ -5044,10 +5136,16 @@ function renderCollaborators() {
 }
 
 function renderTalentSearch() {
-  const platforms = ["全部", "TikTok", "YouTube", "Twitch", "Instagram", "Facebook", "Twitter", "Others"];
-  const regions = ["全部", "美国", "日本", "韩国", "印尼", "泰国", "越南", "马来西亚", "英国", "德国"];
-  const categories = ["全部", "购物与零售", "游戏", "美妆", "运动户外", "理财与投资", "软件与应用", "食品饮料", "科技与数码"];
-  const visibleCats = state.talentSearchFilters.expanded ? categories : categories.slice(0, 8);
+  const platforms = [
+    { value: "TikTok", label: "TikTok" },
+    { value: "YouTube", label: "YouTube" },
+    { value: "Instagram", label: "Instagram" },
+    { value: "Facebook", label: "Facebook" },
+    { value: "Twitch", label: "Twitch" },
+    { value: "Twitter", label: "X" },
+  ];
+  const regions = ["全部", "美国", "日本", "韩国", "英国", "加拿大", "澳大利亚", "德国", "法国", "意大利", "西班牙", "印尼", "泰国", "越南", "马来西亚", "新加坡", "菲律宾", "巴西", "墨西哥", "阿联酋"];
+  const categories = ["购物与零售", "游戏", "美妆", "运动户外", "理财与投资", "软件与应用", "食品饮料", "科技数码", "生活方式", "测评"];
   const filteredCreators = filterCreators(creators);
   const allSelected = filteredCreators.length > 0 && filteredCreators.every((row) => (state.talentInviteSelections || []).includes(row.name));
   return `
@@ -5064,23 +5162,22 @@ function renderTalentSearch() {
           <input
             class="input search-input"
             type="search"
-            placeholder="输入达人 UID、昵称或 HashTag 关键词搜索"
+            placeholder="请输入达人昵称，标签关键词"
             value="${state.talentSearchFilters.keyword}"
             data-talent-filter="keyword"
           />
         </div>
-        <button class="primary-button search-button" data-action="toast" data-message="已应用搜索条件">搜索</button>
       </div>
 
       <div class="panel talent-filter-panel">
         <div class="filter-row">
-          <div class="filter-label">平台</div>
+          <div class="filter-label">推广平台</div>
           <div class="filter-content">
             <div class="chips chips-nowrap">
               ${platforms
                 .map(
                   (x) =>
-                    `<button class="chip ${state.talentSearchFilters.platform === x ? "active" : ""}" data-action="set-talent-platform" data-platform="${x}">${x}</button>`,
+                    `<button class="chip ${state.talentSearchFilters.platform === x.value ? "active" : ""}" data-action="set-talent-platform" data-platform="${x.value}">${x.label}</button>`,
                 )
                 .join("")}
             </div>
@@ -5091,93 +5188,28 @@ function renderTalentSearch() {
           <div class="filter-content">
             <div class="chips chips-nowrap">
               ${regions
+                .slice(0, 6)
                 .map(
                   (x) =>
                     `<button class="chip ${state.talentSearchFilters.region === x ? "active" : ""}" data-action="set-talent-region" data-region="${x}">${x}</button>`,
                 )
                 .join("")}
+              <button class="chip" data-action="talent-region-more">更多国家</button>
             </div>
           </div>
         </div>
-        <div class="filter-row">
-          <div class="filter-label">粉丝信息：</div>
-          <div class="filter-content filter-selects follower-info-selects">
-            <select class="select" data-talent-filter="followerCount">
-              ${["全部", "0-10万", "10-50万", "50-200万", "200万+"]
-                .map((x) => `<option value="${x}" ${state.talentSearchFilters.followerCount === x ? "selected" : ""}>粉丝数：${x}</option>`)
-                .join("")}
-            </select>
-            <select class="select" data-talent-filter="followerGender">
-              ${["全部", "女性为主", "男性为主"]
-                .map((x) => `<option value="${x}" ${state.talentSearchFilters.followerGender === x ? "selected" : ""}>粉丝性别：${x}</option>`)
-                .join("")}
-            </select>
-            <select class="select" data-talent-filter="followerAge">
-              ${["全部", "16-24", "18-30", "30+"]
-                .map((x) => `<option value="${x}" ${state.talentSearchFilters.followerAge === x ? "selected" : ""}>粉丝年龄：${x}</option>`)
-                .join("")}
-            </select>
-            <select class="select" data-talent-filter="recent28">
-              ${["全部", ">500", ">1000", ">1万"]
-                .map((x) => `<option value="${x}" ${state.talentSearchFilters.recent28 === x ? "selected" : ""}>近28天涨粉数：${x}</option>`)
-                .join("")}
-            </select>
-          </div>
-        </div>
-        <div class="filter-row">
-          <div class="filter-label">报价范围</div>
-          <div class="filter-content">
-            <div class="chips chips-nowrap">
-              ${["全部", "$0-500", "$500-1K", "$1K-3K", "$3K-10K", "$10K+"]
-                .map(
-                  (x) =>
-                    `<button class="chip ${state.talentSearchFilters.priceRange === x ? "active" : ""}" data-action="set-talent-price" data-price="${x}">${x}</button>`,
-                )
-                .join("")}
-            </div>
-          </div>
-        </div>
-        <div class="filter-row">
-          <div class="filter-label">互动率</div>
-          <div class="filter-content">
-            <div class="chips chips-nowrap">
-              ${["全部", ">1%", ">3%", ">5%", ">10%"]
-                .map(
-                  (x) =>
-                    `<button class="chip ${state.talentSearchFilters.engagement === x ? "active" : ""}" data-action="set-talent-engagement" data-engagement="${x}">${x}</button>`,
-                )
-                .join("")}
-            </div>
-          </div>
-        </div>
-        <div class="filter-row">
-          <div class="filter-label">达人分类</div>
-          <div class="filter-content">
-            <div class="chips chips-nowrap">
-              ${visibleCats
-                .map(
-                  (x) =>
-                    `<button class="chip ${state.talentSearchFilters.category === x ? "active" : ""}" data-action="set-talent-category" data-category="${x}">${x}</button>`,
-                )
-                .join("")}
-            </div>
-          </div>
-          <button class="ghost-button filter-expand" data-action="toggle-talent-category-expand">
-            ${state.talentSearchFilters.expanded ? "收起" : "展开"}
-          </button>
-        </div>
-        <div class="filter-row talent-contract-row">
-          <div class="filter-label">达人筛选：</div>
-          <div class="filter-content">
-            <select class="select" data-talent-filter="contract">
-              ${[
-                { value: "全部", text: "收藏状态" },
-                { value: "已收藏", text: "已收藏" },
-                { value: "未收藏", text: "未收藏" },
-              ]
-                .map((x) => `<option value="${x.value}" ${state.talentSearchFilters.contract === x.value ? "selected" : ""}>${x.text}</option>`)
-                .join("")}
-            </select>
+        <div class="filter-row talent-select-row">
+          <div class="filter-content filter-selects talent-compact-selects">
+            ${talentRangeFilter("粉丝数", "followers", "followerMinK", "followerMaxK", "K")}
+            ${talentRangeFilter("报价区间", "price", "priceMin", "priceMax", "USD")}
+            ${talentRangeFilter("互动率", "engagement", "engagementMin", "engagementMax", "%", "0.00", "10.00")}
+            ${filterCategoryMultiSelect("达人分类", state.talentSearchFilters.categories || [], categories, {
+              open: state.talentSearchFilters.categoryMenuOpen,
+              toggleAction: "toggle-talent-category-menu",
+              optionAction: "toggle-talent-category-option",
+              removeAction: "remove-talent-category-option",
+              scope: "talent-search-category",
+            })}
           </div>
         </div>
         ${renderTalentSelectedConditions()}
@@ -5204,11 +5236,26 @@ function filterMyTalents(list = myTalentRows) {
       if (!keyword) return true;
       return [row.name, row.uid, row.platform, ...(row.categories || []), ...(row.styleTags || [])].join(" ").toLowerCase().includes(keyword);
     })
+    .filter((row) => {
+      const value = parseCompactNumber(row.followers);
+      const minK = normalizeMoneyNumber(f.followerMinK);
+      const maxK = normalizeMoneyNumber(f.followerMaxK);
+      if (minK && value < minK * 1000) return false;
+      if (maxK && value > maxK * 1000) return false;
+      if (minK || maxK) return true;
+      if (f.followerCount === "全部") return true;
+      if (f.followerCount === "0-10万") return value >= 0 && value < 100000;
+      if (f.followerCount === "10-50万") return value >= 100000 && value < 500000;
+      if (f.followerCount === "50-200万") return value >= 500000 && value < 2000000;
+      if (f.followerCount === "200万+") return value >= 2000000;
+      return true;
+    })
     .filter(
       (row) =>
         f.cooperationStatus === "全部" ||
         (f.cooperationStatus === "有进行中的任务" && row.statusTags.includes("有进行中的任务")) ||
-        (f.cooperationStatus === "历史合作" && row.statusTags.includes("历史合作")),
+        (f.cooperationStatus === "历史合作" && row.statusTags.includes("历史合作")) ||
+        (f.cooperationStatus === "已终止" && row.statusTags.includes("已终止")),
     )
     .filter((row) => {
       if (f.cooperationTimes === "全部") return true;
@@ -5219,10 +5266,27 @@ function filterMyTalents(list = myTalentRows) {
       return true;
     })
     .filter((row) => f.platform === "全部" || row.platform === f.platform)
-    .filter((row) => f.category === "全部" || row.categories.includes(f.category))
     .filter((row) => {
-      if (f.engagement === "全部") return true;
+      const selectedCategories = f.categories?.length ? f.categories : f.category === "全部" ? [] : [f.category];
+      if (!selectedCategories.length) return true;
+      const aliases = {
+        购物与零售: ["购物与零售", "购物零售"],
+        科技数码: ["科技数码", "科技", "科技与数码"],
+        生活方式: ["生活方式", "生活"],
+        理财与投资: ["理财与投资", "理财"],
+        软件与应用: ["软件与应用", "软件"],
+      };
+      const accepted = selectedCategories.flatMap((item) => aliases[item] || [item]);
+      return accepted.some((item) => row.categories.includes(item));
+    })
+    .filter((row) => {
       const value = parsePercent(row.avgEngagement);
+      const min = normalizeMoneyNumber(f.engagementMin);
+      const max = normalizeMoneyNumber(f.engagementMax);
+      if (min && value < min) return false;
+      if (max && value > max) return false;
+      if (min || max) return true;
+      if (f.engagement === "全部") return true;
       if (f.engagement === "1%+") return value >= 1;
       if (f.engagement === ">3%") return value > 3;
       if (f.engagement === ">5%") return value > 5;
@@ -5240,8 +5304,13 @@ function filterMyTalents(list = myTalentRows) {
     })
     .filter((row) => f.qualityTier === "全部" || row.qualityTier === f.qualityTier)
     .filter((row) => {
-      if (f.priceRange === "全部") return true;
       const value = parseMoneyUSD(row.baseQuote);
+      const min = normalizeMoneyNumber(f.priceMin);
+      const max = normalizeMoneyNumber(f.priceMax);
+      if (min && value < min) return false;
+      if (max && value > max) return false;
+      if (min || max) return true;
+      if (f.priceRange === "全部") return true;
       if (f.priceRange === "$0-500") return value >= 0 && value < 500;
       if (f.priceRange === "$500-1K") return value >= 500 && value < 1000;
       if (f.priceRange === "$1K-3K") return value >= 1000 && value < 3000;
@@ -5254,27 +5323,50 @@ function filterMyTalents(list = myTalentRows) {
 function resetMyTalentFilters() {
   state.myTalentFilters = {
     keyword: "",
+    followerCount: "全部",
+    followerMinK: "",
+    followerMaxK: "",
     cooperationStatus: "全部",
     cooperationTimes: "全部",
     platform: "全部",
     category: "全部",
+    categories: [],
+    categoryMenuOpen: false,
     engagement: "全部",
+    engagementMin: "",
+    engagementMax: "",
     exposure30d: "全部",
     qualityTier: "全部",
     priceRange: "全部",
+    priceMin: "",
+    priceMax: "",
+    moreOpen: false,
+    rangeOpen: "",
   };
+}
+
+function myTalentRangeValue(minValue, maxValue, unit = "") {
+  const min = String(minValue || "").trim();
+  const max = String(maxValue || "").trim();
+  if (!min && !max) return "";
+  return `${min || "不限"} - ${max || "不限"}${unit}`;
 }
 
 function renderMyTalentSelectedConditions() {
   const f = state.myTalentFilters;
   const items = [
+    ["followerRange", "粉丝数", myTalentRangeValue(f.followerMinK, f.followerMaxK, "K")],
+    ["followerCount", "粉丝数", f.followerCount],
     ["cooperationStatus", "合作状态", f.cooperationStatus],
     ["cooperationTimes", "合作次数", f.cooperationTimes],
-    ["platform", "达人平台", f.platform],
-    ["category", "垂类分类", f.category],
+    ["platform", "推广平台", f.platform],
+    ["categories", "达人分类", (f.categories || []).join("、")],
+    ["category", "达人分类", f.category],
+    ["engagementRange", "平均互动率", myTalentRangeValue(f.engagementMin, f.engagementMax, "%")],
     ["engagement", "平均互动率", f.engagement],
     ["exposure30d", "近30天平均曝光量", f.exposure30d],
     ["qualityTier", "履约质量", f.qualityTier],
+    ["priceRangeCustom", "报价区间", myTalentRangeValue(f.priceMin, f.priceMax, " USD")],
     ["priceRange", "报价区间", f.priceRange],
   ].filter(([, , value]) => value && value !== "全部");
 
@@ -5286,12 +5378,22 @@ function renderMyTalentSelectedConditions() {
           items.length
             ? items
                 .map(
-                  ([key, label, value]) => `
+                  ([key, label, value]) => {
+                    const displayValue =
+                      key === "cooperationStatus" && value === "有进行中的任务"
+                        ? "进行中"
+                        : key === "cooperationStatus" && value === "历史合作"
+                          ? "已完成"
+                          : key === "platform" && value === "Twitter"
+                            ? "X"
+                            : value;
+                    return `
                     <button class="selected-filter-chip" data-action="remove-my-talent-filter" data-filter-key="${key}" type="button">
-                      <span>${label}：${value}</span>
+                      <span>${label}：${displayValue}</span>
                       <span class="selected-filter-x" aria-hidden="true">×</span>
                     </button>
-                  `,
+                  `;
+                  },
                 )
                 .join("")
             : `<span class="selected-filter-empty">暂无筛选条件</span>`
@@ -5328,7 +5430,7 @@ function myTalentCompletionCell(row = {}) {
 function renderMyTalents() {
   const filteredRows = filterMyTalents();
   const platforms = ["全部", "TikTok", "YouTube", "Instagram", "Twitch", "Facebook", "Twitter", "Others"];
-  const categories = ["全部", "购物零售", "游戏", "美妆", "科技", "生活", "理财", "软件", "食品饮料"];
+  const categories = ["全部", "购物与零售", "游戏", "美妆", "运动户外", "理财与投资", "软件与应用", "食品饮料", "科技数码", "生活方式", "测评"];
   const completionTooltip =
     "履约完成率 = 已完成履约任务数 / 已确认合作任务总数。已确认合作后被取消、长期逾期或最终未交付的任务，会计入未完成并拉低该比例。";
 
@@ -5360,11 +5462,11 @@ function renderMyTalents() {
         <div class="filter-content"><div class="chips chips-nowrap">${["全部", "0次（仅收藏）", "1次", "2-3次", "4次及以上"].map((item) => `<button class="chip ${state.myTalentFilters.cooperationTimes === item ? "active" : ""}" data-action="set-my-talent-filter" data-key="cooperationTimes" data-value="${item}">${item}</button>`).join("")}</div></div>
       </div>
       <div class="filter-row">
-        <div class="filter-label">达人平台</div>
+      <div class="filter-label">推广平台</div>
         <div class="filter-content"><div class="chips chips-nowrap">${platforms.map((item) => `<button class="chip ${state.myTalentFilters.platform === item ? "active" : ""}" data-action="set-my-talent-filter" data-key="platform" data-value="${item}">${item}</button>`).join("")}</div></div>
       </div>
       <div class="filter-row">
-        <div class="filter-label">垂类分类</div>
+      <div class="filter-label">达人分类</div>
         <div class="filter-content"><div class="chips chips-nowrap">${categories.map((item) => `<button class="chip ${state.myTalentFilters.category === item ? "active" : ""}" data-action="set-my-talent-filter" data-key="category" data-value="${item}">${item}</button>`).join("")}</div></div>
       </div>
       <div class="filter-row">
@@ -5461,13 +5563,17 @@ function renderMyTalents() {
 function renderMyTalentSelectedConditions() {
   const f = state.myTalentFilters;
   const items = [
+    ["followerRange", "粉丝数", myTalentRangeValue(f.followerMinK, f.followerMaxK, "K")],
     ["cooperationStatus", "合作状态", f.cooperationStatus],
     ["cooperationTimes", "合作次数", f.cooperationTimes],
-    ["platform", "达人平台", f.platform],
-    ["category", "垂类分类", f.category],
+    ["platform", "推广平台", f.platform],
+    ["categories", "达人分类", (f.categories || []).join("、")],
+    ["category", "达人分类", f.category],
+    ["engagementRange", "平均互动率", myTalentRangeValue(f.engagementMin, f.engagementMax, "%")],
     ["engagement", "平均互动率", f.engagement],
     ["exposure30d", "近30天平均曝光量", f.exposure30d],
     ["qualityTier", "履约质量", f.qualityTier],
+    ["priceRangeCustom", "报价区间", myTalentRangeValue(f.priceMin, f.priceMax, " USD")],
     ["priceRange", "报价区间", f.priceRange],
   ].filter(([, , value]) => value && value !== "全部");
 
@@ -5479,12 +5585,22 @@ function renderMyTalentSelectedConditions() {
           items.length
             ? items
                 .map(
-                  ([key, label, value]) => `
+                  ([key, label, value]) => {
+                    const displayValue =
+                      key === "cooperationStatus" && value === "有进行中的任务"
+                        ? "进行中"
+                        : key === "cooperationStatus" && value === "历史合作"
+                          ? "已完成"
+                          : key === "platform" && value === "Twitter"
+                            ? "X"
+                            : value;
+                    return `
                     <button class="selected-filter-chip" data-action="remove-my-talent-filter" data-filter-key="${key}" type="button">
-                      <span>${label}：${value}</span>
+                      <span>${label}：${displayValue}</span>
                       <span class="selected-filter-x" aria-hidden="true">×</span>
                     </button>
-                  `,
+                  `;
+                  },
                 )
                 .join("")
             : `<span class="selected-filter-empty">暂无筛选条件</span>`
@@ -5499,18 +5615,127 @@ function myTalentSelect(label, key, options) {
   const current = state.myTalentFilters[key] || "全部";
   return `
     <label class="compact-filter-field">
-      <span>${label}</span>
       <select class="select compact-filter-select" data-my-talent-filter="${key}">
-        ${options.map((item) => `<option value="${item}" ${current === item ? "selected" : ""}>${item}</option>`).join("")}
+        ${options.map((item) => `<option value="${item}" ${current === item ? "selected" : ""}>${label}：${item}</option>`).join("")}
       </select>
     </label>
   `;
 }
 
+function filterCategoryMultiSelect(label, selected = [], options = [], config = {}) {
+  const selectedSet = new Set(selected);
+  const selectedChips = selected.slice(0, 4);
+  const hiddenCount = Math.max(0, selected.length - selectedChips.length);
+  return `
+    <div class="multi-select-input filter-tag-select ${config.open ? "open" : ""}" data-ms-scope="${config.scope || ""}">
+      <div class="ms-trigger" role="button" tabindex="0" data-action="${config.toggleAction}" aria-expanded="${config.open ? "true" : "false"}">
+        ${
+          selected.length
+            ? `<div class="ms-chips">
+                ${selectedChips
+                  .map(
+                    (item) => `
+                    <span class="ms-chip">
+                      <span>${item}</span>
+                      <span class="ms-chip-x" role="button" tabindex="0" data-action="${config.removeAction}" data-value="${encodeURIComponent(item)}" aria-label="移除 ${item}">×</span>
+                    </span>
+                  `,
+                  )
+                  .join("")}
+                ${hiddenCount ? `<span class="ms-more">+${hiddenCount}</span>` : ""}
+              </div>`
+            : `<span class="ms-placeholder">${label}：全部</span>`
+        }
+        <span class="ms-caret" aria-hidden="true">▾</span>
+      </div>
+      <div class="dropdown-menu ms-menu filter-tag-menu">
+        ${options
+          .map(
+            (item) => `
+            <label class="dropdown-check">
+              <input type="checkbox" ${selectedSet.has(item) ? "checked" : ""} data-action="${config.optionAction}" data-value="${encodeURIComponent(item)}" />
+              <span>${item}</span>
+            </label>
+          `,
+          )
+          .join("")}
+      </div>
+    </div>
+  `;
+}
+
+function myTalentRangeFilter(label, key, minField, maxField, unit, minPlaceholder = "0.00", maxPlaceholder = "100.00") {
+  const filters = state.myTalentFilters;
+  const displayValue = myTalentRangeValue(filters[minField], filters[maxField], unit);
+  return `
+    <div class="my-talent-range-filter range-popover-field ${filters.rangeOpen === key ? "open" : ""}">
+      <button class="input range-display my-talent-range-display" data-action="toggle-my-talent-range" data-key="${key}" type="button">
+        ${displayValue ? `${label}：${displayValue}` : `${label}：全部`}
+      </button>
+      <div class="range-popover my-talent-range-popover">
+        <div class="my-talent-range-fields">
+          <label>
+            <span>下限</span>
+            <div class="money-single">
+              <input class="input" inputmode="decimal" placeholder="${minPlaceholder}" value="${filters[minField] || ""}" data-my-talent-range-field="${minField}" />
+              <span class="money-suffix">${unit}</span>
+            </div>
+          </label>
+          <label>
+            <span>上限</span>
+            <div class="money-single">
+              <input class="input" inputmode="decimal" placeholder="${maxPlaceholder}" value="${filters[maxField] || ""}" data-my-talent-range-field="${maxField}" />
+              <span class="money-suffix">${unit}</span>
+            </div>
+          </label>
+        </div>
+        <div class="my-talent-range-actions">
+          <button class="ghost-button danger-soft" data-action="clear-my-talent-range" data-min-field="${minField}" data-max-field="${maxField}" type="button">清空区间</button>
+          <button class="primary-button" data-action="apply-my-talent-range" type="button">确定</button>
+        </div>
+      </div>
+    </div>
+  `;
+}
+
+function talentRangeFilter(label, key, minField, maxField, unit, minPlaceholder = "0.00", maxPlaceholder = "100.00") {
+  const filters = state.talentSearchFilters;
+  const displayValue = myTalentRangeValue(filters[minField], filters[maxField], unit);
+  return `
+    <div class="talent-range-filter my-talent-range-filter range-popover-field ${filters.rangeOpen === key ? "open" : ""}">
+      <button class="input range-display my-talent-range-display" data-action="toggle-talent-range" data-key="${key}" type="button">
+        ${displayValue ? `${label}：${displayValue}` : `${label}：全部`}
+      </button>
+      <div class="range-popover my-talent-range-popover talent-range-popover">
+        <div class="my-talent-range-fields">
+          <label>
+            <span>下限</span>
+            <div class="money-single">
+              <input class="input" inputmode="decimal" placeholder="${minPlaceholder}" value="${filters[minField] || ""}" data-talent-range-field="${minField}" />
+              <span class="money-suffix">${unit}</span>
+            </div>
+          </label>
+          <label>
+            <span>上限</span>
+            <div class="money-single">
+              <input class="input" inputmode="decimal" placeholder="${maxPlaceholder}" value="${filters[maxField] || ""}" data-talent-range-field="${maxField}" />
+              <span class="money-suffix">${unit}</span>
+            </div>
+          </label>
+        </div>
+        <div class="my-talent-range-actions">
+          <button class="ghost-button danger-soft" data-action="clear-talent-range" data-min-field="${minField}" data-max-field="${maxField}" type="button">清空区间</button>
+          <button class="primary-button" data-action="apply-talent-range" type="button">确定</button>
+        </div>
+      </div>
+    </div>
+  `;
+}
+
 function renderMyTalents() {
   const filteredRows = filterMyTalents();
-  const platforms = ["全部", "TikTok", "YouTube", "Instagram", "Twitch", "Facebook", "Twitter", "Others"];
-  const categories = ["全部", "购物零售", "游戏", "美妆", "科技", "生活", "理财", "软件", "食品饮料"];
+  const platforms = ["TikTok", "YouTube", "Instagram", "Twitch", "Facebook", "X"];
+  const categories = ["购物与零售", "游戏", "美妆", "运动户外", "理财与投资", "软件与应用", "食品饮料", "科技数码", "生活方式", "测评"];
 
   return `
     ${pageHeader("合作达人", "合作达人", "围绕达人聚合历史合作、履约表现、投放效果与结算信息，支持复投评估和合作台账追溯。", "")}
@@ -5518,18 +5743,30 @@ function renderMyTalents() {
       <div class="talent-search-top">
         <div class="search-box-inline">
           <span aria-hidden="true">⌕</span>
-          <input class="input search-input" type="search" placeholder="搜索达人昵称 / UID / 标签关键词" value="${state.myTalentFilters.keyword}" data-my-talent-filter="keyword" />
+          <input class="input search-input" type="search" placeholder="请输入达人昵称，标签关键词" value="${state.myTalentFilters.keyword}" data-my-talent-filter="keyword" />
         </div>
       </div>
-      <div class="compact-filter-grid">
-        ${myTalentSelect("合作状态", "cooperationStatus", ["全部", "有进行中的任务", "历史合作"])}
-        ${myTalentSelect("合作次数", "cooperationTimes", ["全部", "0次（仅收藏）", "1次", "2-3次", "4次及以上"])}
-        ${myTalentSelect("达人平台", "platform", platforms)}
-        ${myTalentSelect("垂类分类", "category", categories)}
-        ${myTalentSelect("平均互动率", "engagement", ["全部", "1%+", ">3%", ">5%", ">10%"])}
-        ${myTalentSelect("近30天曝光", "exposure30d", ["全部", "0-10w", "10w-50w", "50w-200w", "200w+"])}
-        ${myTalentSelect("履约质量", "qualityTier", ["全部", "S级优质", "A级良好", "B级一般", "C级较差"])}
-        ${myTalentSelect("报价区间", "priceRange", ["全部", "$0-500", "$500-1K", "$1K-3K", "$3K-10K", "$10K+"])}
+      <div class="my-talent-filter-rows">
+        <div class="filter-row my-talent-chip-row">
+          <div class="filter-label">推广平台</div>
+          <div class="filter-content"><div class="chips chips-nowrap">${platforms.map((item) => `<button class="chip ${state.myTalentFilters.platform === item || (item === "X" && state.myTalentFilters.platform === "Twitter") ? "active" : ""}" data-action="set-my-talent-filter" data-key="platform" data-value="${item === "X" ? "Twitter" : item}">${item}</button>`).join("")}</div></div>
+        </div>
+        <div class="filter-row my-talent-chip-row">
+          <div class="filter-label">合作状态</div>
+          <div class="filter-content"><div class="chips chips-nowrap">${["全部", "进行中", "已完成", "已终止"].map((item) => `<button class="chip ${state.myTalentFilters.cooperationStatus === item || (item === "进行中" && state.myTalentFilters.cooperationStatus === "有进行中的任务") || (item === "已完成" && state.myTalentFilters.cooperationStatus === "历史合作") ? "active" : ""}" data-action="set-my-talent-filter" data-key="cooperationStatus" data-value="${item === "进行中" ? "有进行中的任务" : item === "已完成" ? "历史合作" : item}">${item}</button>`).join("")}</div></div>
+        </div>
+        <div class="compact-filter-grid">
+          ${myTalentRangeFilter("粉丝数", "followers", "followerMinK", "followerMaxK", "K")}
+          ${myTalentRangeFilter("报价区间", "price", "priceMin", "priceMax", "USD")}
+          ${myTalentRangeFilter("互动率", "engagement", "engagementMin", "engagementMax", "%", "0.00", "10.00")}
+          ${filterCategoryMultiSelect("达人分类", state.myTalentFilters.categories || [], categories, {
+            open: state.myTalentFilters.categoryMenuOpen,
+            toggleAction: "toggle-my-talent-category-menu",
+            optionAction: "toggle-my-talent-category-option",
+            removeAction: "remove-my-talent-category-option",
+            scope: "my-talent-category",
+          })}
+        </div>
       </div>
       ${renderMyTalentSelectedConditions()}
     </div>
@@ -5979,6 +6216,66 @@ function accountPanel(tab) {
     "其他",
   ];
   const companySizeOptions = ["<15", "15-50", "50-100", "100-500", "500-2000", ">2000"];
+  const countryRegionOptions = [
+    "中国",
+    "中国香港",
+    "中国澳门",
+    "中国台湾",
+    "美国",
+    "加拿大",
+    "墨西哥",
+    "巴西",
+    "英国",
+    "德国",
+    "法国",
+    "意大利",
+    "西班牙",
+    "荷兰",
+    "瑞典",
+    "挪威",
+    "丹麦",
+    "芬兰",
+    "瑞士",
+    "奥地利",
+    "比利时",
+    "爱尔兰",
+    "波兰",
+    "葡萄牙",
+    "希腊",
+    "捷克",
+    "匈牙利",
+    "罗马尼亚",
+    "土耳其",
+    "俄罗斯",
+    "乌克兰",
+    "日本",
+    "韩国",
+    "新加坡",
+    "马来西亚",
+    "泰国",
+    "越南",
+    "印度尼西亚",
+    "菲律宾",
+    "印度",
+    "巴基斯坦",
+    "孟加拉国",
+    "澳大利亚",
+    "新西兰",
+    "阿联酋",
+    "沙特阿拉伯",
+    "卡塔尔",
+    "科威特",
+    "以色列",
+    "埃及",
+    "南非",
+    "尼日利亚",
+    "肯尼亚",
+    "摩洛哥",
+    "阿根廷",
+    "智利",
+    "哥伦比亚",
+    "秘鲁",
+  ];
   if (tab === "product") {
     return `
       <div class="section-row" style="margin-bottom:14px">
@@ -5987,11 +6284,12 @@ function accountPanel(tab) {
       </div>
       <div class="table-wrap">
         <table>
-          <thead><tr><th>产品名称</th><th>产品链接</th><th>产品描述</th><th>产品图片</th><th>操作</th></tr></thead>
+          <thead><tr><th>产品名称</th><th>产品类型</th><th>产品链接</th><th>产品描述</th><th>产品图片</th><th>操作</th></tr></thead>
           <tbody>
             <tr>
               <td>MINISO 香氛系列</td>
-              <td>https://td2.qq.com/main.shtml?wg_ad_from=shopbannerIntraCompanyCompetitionClassB</td>
+              <td>实物商品</td>
+              <td class="product-link-cell" title="https://td2.qq.com/main.shtml?wg_ad_from=shopbannerIntraCompanyCompetitionClassB">https://td2.qq.com/main.shtml?wg_ad_from=shopbannerIntraCompanyCompetitionClassB</td>
               <td>面向生活方式内容创作者的新品推广。</td>
               <td><img src="${assets.avatar}" alt="" style="width:44px;height:44px;border-radius:8px" /></td>
               <td><button class="link-button" data-action="modal-product">修改</button> <button class="link-button" data-action="toast" data-message="产品删除确认已打开">删除</button></td>
@@ -6042,7 +6340,7 @@ function accountPanel(tab) {
   }
   return `<div class="form-grid">
     ${field("公司名称", `<input class="input" placeholder="请输入公司名称" value="Meetinfluencer Brand Team" />`, true)}
-    ${field("国家地区", `<select class="select"><option>请选择国家地区</option><option>中国</option><option>美国</option><option>英国</option></select>`, true)}
+    ${field("国家地区", `<select class="select"><option>请选择国家地区</option>${countryRegionOptions.map((item) => `<option>${item}</option>`).join("")}</select>`, true)}
     ${field("所属行业", `<select class="select"><option>请选择所属行业</option>${industryOptions.map((item) => `<option>${item}</option>`).join("")}</select>`, true)}
     ${field("公司规模", `<select class="select"><option>请选择公司规模</option>${companySizeOptions.map((item) => `<option>${item}</option>`).join("")}</select>`, true)}
   </div>`;
@@ -6580,77 +6878,88 @@ function renderMyProjects() {
 function renderRevenue() {
   const payoutRecords = [
     {
-      task: "全境封锁-全球活动",
       account: "PayPal · mo********@gmail.com",
       amount: "$520.00",
-      statusLabel: "已打款",
+      withdrawStatus: "已打款",
       statusClass: "success",
       paidAt: "2026-06-18 15:42",
     },
     {
-      task: "MINISO 夏季新品内容合作",
       account: "PayPal · mo********@gmail.com",
       amount: "$143.00",
-      statusLabel: "内容审核中",
-      statusClass: "pending",
+      withdrawStatus: "待打款",
+      statusClass: "draft",
       paidAt: "-",
     },
     {
-      task: "全境封锁2-上线活动",
       account: "银行账户 · Deutsche Bank",
       amount: "$380.00",
-      statusLabel: "待打款",
+      withdrawStatus: "待打款",
       statusClass: "draft",
       paidAt: "预计 2026-06-28",
     },
   ];
+  const activeTab = state.tabs.revenue || "pending";
+  const tabs = [
+    { key: "pending", label: "待结算", rows: [], tip: "待结算金额将在约定时间自动结算至账户" },
+    { key: "arrived", label: "已到账", rows: [], tip: "已到账金额，不含线下支付金额" },
+    { key: "withdrawn", label: "已提现", rows: payoutRecords, tip: "已提现金额明细" },
+  ];
+  const activeRows = tabs.find((item) => item.key === activeTab)?.rows || [];
+  const activeTotal = activeRows.reduce((sum, row) => sum + normalizeMoneyNumber(row.amount), 0);
   return `
     ${pageHeader(
       "收益中心",
-      "我的收益",
-      "查看收益结算、收款账户与最近打款状态。",
+      "我的钱包",
+      "",
       "",
     )}
-    <div class="grid revenue-metrics">
-      <div class="revenue-metric-card featured">
-        <div class="revenue-metric-label"><span aria-hidden="true">◷</span>待结算金额</div>
-        <strong>$143.00</strong>
-        <small>预计 3-5 个工作日到账</small>
+    <div class="panel revenue-wallet-panel">
+      <div class="revenue-wallet-card total">
+        <div class="revenue-wallet-icon" aria-hidden="true">▰</div>
+        <div>
+          <strong>1,240.00</strong>
+          <span>总金额（USD）<i class="tooltip-dot" data-tooltip="总金额 = 可提现余额 + 待结算金额" tabindex="0">i</i></span>
+        </div>
       </div>
-      <div class="revenue-metric-card">
-        <div class="revenue-metric-label"><span aria-hidden="true">▦</span>本月已到账</div>
-        <strong>$0.00</strong>
-        <small class="warning">本月暂无打款</small>
-      </div>
-      <div class="revenue-metric-card">
-        <div class="revenue-metric-label"><span aria-hidden="true">▣</span>历史累计收益</div>
-        <strong>$1,240.00</strong>
-        <small class="success">已完成 12 笔任务</small>
-      </div>
-      <div class="revenue-metric-card">
-        <div class="revenue-metric-label"><span aria-hidden="true">▥</span>进行中任务</div>
-        <strong>3</strong>
-        <small>预计收益 $380</small>
+      <div class="revenue-wallet-card withdrawable">
+        <div class="revenue-wallet-icon" aria-hidden="true">▣</div>
+        <div>
+          <strong>0.00</strong>
+          <span>可提现余额（USD）<i class="tooltip-dot" data-tooltip="可提现 = 已到账金额 + 提现失败退回金额 - 已提现金额" tabindex="0">i</i></span>
+        </div>
+        <button class="revenue-withdraw-button" data-action="open-revenue-payout">提现</button>
       </div>
     </div>
-    <div class="panel" style="margin-top:16px">
-      <div class="table-head"><h2>最近的打款记录</h2></div>
+    <div class="panel revenue-ledger-panel">
+      <div class="revenue-ledger-tabs">
+        ${tabs
+          .map((item) => `<button class="revenue-ledger-tab ${activeTab === item.key ? "active" : ""}" data-action="set-revenue-tab" data-value="${item.key}" type="button">${item.label}<i class="tooltip-dot" data-tooltip="${item.tip}" tabindex="0">i</i></button>`)
+          .join("")}
+      </div>
+      <div class="revenue-ledger-toolbar">
+        <div class="date-range-placeholder">开始日期 <span>→</span> 结束日期 <b>□</b></div>
+        <div class="revenue-ledger-total">总计（USD）：<strong>${activeTotal.toFixed(2)}</strong></div>
+      </div>
       <div class="table-wrap">
         <table class="revenue-record-table">
-          <thead><tr><th>任务名称</th><th>收款账户</th><th>金额</th><th>打款状态</th><th>打款时间</th></tr></thead>
-          <tbody>${payoutRecords
-            .map(
-              (row) => `
+          <thead><tr><th>收款账户</th><th>金额</th><th>提现状态</th><th>打款时间</th></tr></thead>
+          <tbody>${
+            activeRows.length
+              ? activeRows
+                  .map(
+                    (row) => `
                 <tr>
-                  <td>${row.task}</td>
                   <td>${row.account}</td>
                   <td><strong>${row.amount}</strong></td>
-                  <td>${status(row.statusLabel, row.statusClass)}</td>
+                  <td>${status(row.withdrawStatus, row.statusClass)}</td>
                   <td>${row.paidAt}</td>
                 </tr>
               `,
-            )
-            .join("")}</tbody>
+                  )
+                  .join("")
+              : `<tr><td colspan="4"><div class="empty-state compact"><strong>暂无记录</strong></div></td></tr>`
+          }</tbody>
         </table>
       </div>
     </div>
@@ -6805,55 +7114,97 @@ function renderPersonalCenter() {
 
 function renderSocialAuth() {
   const platforms = creatorSocialPlatforms();
+  const accountInitials = (account = "") => {
+    const text = String(account || "").trim().replace(/^@/, "");
+    if (!text) return "--";
+    const tokens = text.split(/[\s._-]+/).filter(Boolean);
+    if (!tokens.length) return text.slice(0, 2).toUpperCase();
+    return tokens
+      .slice(0, 2)
+      .map((token) => token.slice(0, 1))
+      .join("")
+      .toUpperCase();
+  };
   return `
     ${pageHeader(
       "社媒认证",
       "社媒认证",
-      "认证参与合作的平台账号，一个平台可认证多个账号。",
+      "认证通过的账号可用于报名品牌商单，实时同步活动数据；每个平台支持绑定多个账号",
       "",
     )}
-    <div class="panel social-auth-page-note">
-      <strong>认证说明</strong>
-      <span>为确保你能在「合作邀请」和「我的任务」中实时查看活动数据，请正确认证参与活动所使用的指定平台账号。</span>
-    </div>
-    <div class="table-card">
-      <div class="table-head">
-        <h2>平台账号认证</h2>
-        <span class="muted">支持同个平台关联多个账号</span>
-      </div>
-      <div class="table-wrap">
-        <table class="social-auth-table">
-          <thead><tr><th>平台</th><th>已认证账号</th><th>操作</th></tr></thead>
-          <tbody>
-            ${platforms
+    <div class="social-auth-layout">
+      <section class="social-auth-grid">
+        ${platforms
+          .map((item) => {
+            const isVerified = item.statusClass === "success";
+            const isPending = item.statusClass === "pending";
+            const cardClass = isVerified ? "verified" : isPending ? "pending" : "muted";
+            const sizeClass = isVerified || isPending ? "expanded" : "compact";
+            const isCollapsed = sizeClass === "expanded" && state.socialAuthDraft.collapsed?.[item.name] !== false;
+            const badgeText = isVerified ? `✓ ${item.accounts.length} 已认证` : isPending ? "⏱ 审核中" : "未认证";
+            const accountCountText = item.accounts.length ? `${item.accounts.length} 个账号` : "暂无账号";
+            const accountRows = item.accounts
               .map(
-                (item) => `
-                  <tr>
-                    <td><div class="social-auth-main"><span class="social-auth-icon">${socialPlatformIcon(item.name)}</span><strong>${item.name}</strong></div></td>
-                    <td>
-                      ${
-                        item.accounts.length
-                          ? `<div class="social-account-summary"><span>${item.accounts.length}</span> 个账户已认证</div>
-                             <div class="social-account-compact-list">
-                               ${item.accounts
-                                 .map(
-                                   (account) => `
-                                     <span class="social-account-pill">${account}<em class="${item.statusClass}">${item.statusText}</em></span>
-                                   `,
-                                 )
-                                 .join("")}
-                             </div>`
-                          : ``
-                      }
-                    </td>
-                    <td><button class="link-button" data-action="open-social-auth" data-platform="${item.name}">认证</button></td>
-                  </tr>
-                `,
+                (account) => {
+                  const accountName = typeof account === "string" ? account : account.name;
+                  const accountUrl = typeof account === "string" ? "" : account.url;
+                  return `
+                  <div class="social-auth-account-row">
+                    <span class="social-auth-account-avatar">${accountInitials(accountName)}</span>
+                    <strong class="social-auth-account-name">${accountName}</strong>
+                    <span class="social-auth-account-url">${accountUrl || "-"}</span>
+                    <em class="social-auth-account-badge ${item.statusClass}">${item.statusText}</em>
+                  </div>
+                `;
+                },
               )
-              .join("")}
-          </tbody>
-        </table>
-      </div>
+              .join("");
+            return `
+              <article class="social-auth-card ${cardClass} ${sizeClass} ${isCollapsed ? "collapsed" : "open"}">
+                <div class="social-auth-card-head">
+                  <div class="social-auth-card-brand">
+                    <span class="social-auth-icon">${socialPlatformIcon(item.name)}</span>
+                    <div class="social-auth-card-title">
+                      <strong>${item.name}</strong>
+                    </div>
+                  </div>
+                  <span class="social-auth-card-badge ${item.statusClass}">${badgeText}</span>
+                </div>
+                <div class="social-auth-card-divider"></div>
+                ${
+                  sizeClass === "expanded"
+                    ? `
+                      <div class="social-auth-card-subhead">
+                        <span>${accountCountText}</span>
+                        <button class="social-auth-card-details" data-action="toggle-social-auth-details" data-platform="${item.name}" type="button">账号详情 <i>${isCollapsed ? "⌄" : "⌃"}</i></button>
+                      </div>
+                      ${
+                        isCollapsed
+                          ? ""
+                          : `
+                            <div class="social-auth-account-list ${isPending ? "pending-space" : ""}">
+                              ${isVerified ? accountRows : ""}
+                            </div>
+                            ${
+                              isVerified || isPending
+                                ? `<button class="social-auth-card-action" data-action="open-social-auth" data-platform="${item.name}">+ 添加账号</button>`
+                                : ""
+                            }
+                          `
+                      }
+                    `
+                    : `
+                      <div class="social-auth-compact-footer">
+                        <span>暂无账号</span>
+                        <button class="social-auth-card-link" data-action="open-social-auth" data-platform="${item.name}">去认证 →</button>
+                      </div>
+                    `
+                }
+              </article>
+            `;
+          })
+          .join("")}
+      </section>
     </div>
   `;
 }
@@ -7042,6 +7393,7 @@ function renderAdminReviewQueue(pageKey, title, reviewType, pendingRows) {
   const showReviewTypeColumn = pageKey !== "creatorDeliverableReviewAdmin" && pageKey !== "creatorApplicationReviewAdmin" && pageKey !== "campaignReviewAdmin";
   const showQuoteColumn = pageKey === "creatorApplicationReviewAdmin";
   const showSubmittedAtColumn = pageKey === "creatorDeliverableReviewAdmin";
+  const showAdvertiserColumn = pageKey === "creatorDeliverableReviewAdmin";
   const targetHeader = pageKey === "creatorDeliverableReviewAdmin" ? "交付达人" : pageKey === "creatorApplicationReviewAdmin" ? "报名达人" : pageKey === "campaignReviewAdmin" ? "广告主信息" : "审核对象";
   const targets = ["全部", ...new Set(sourceRows.map((row) => row.target))];
   const filteredRows = sourceRows
@@ -7082,7 +7434,7 @@ function renderAdminReviewQueue(pageKey, title, reviewType, pendingRows) {
       <div class="table-head"><h2>${title}</h2><span class="muted">共 ${rows.length} 条</span></div>
       <div class="table-wrap sticky-cols">
         <table class="review-table">
-          <thead><tr><th>任务名称</th><th>${targetHeader}</th>${showSubmittedAtColumn ? "<th>提交时间</th>" : ""}${pageKey === "creatorApplicationReviewAdmin" ? "<th>报名理由</th>" : ""}${showQuoteColumn ? "<th>报价(USD)</th>" : ""}${showReviewTypeColumn ? "<th>审核类型</th>" : ""}<th>审核结果</th><th>审核人</th><th>审核时间</th><th>驳回 / 说明</th><th>操作</th></tr></thead>
+          <thead><tr><th>任务名称</th>${showAdvertiserColumn ? "<th>所属广告主</th>" : ""}<th>${targetHeader}</th>${showSubmittedAtColumn ? "<th>提交时间</th>" : ""}${pageKey === "creatorApplicationReviewAdmin" ? "<th>报名理由</th>" : ""}${showQuoteColumn ? "<th>报价(USD)</th>" : ""}${showReviewTypeColumn ? "<th>审核类型</th>" : ""}<th>审核结果</th><th>审核人</th><th>审核时间</th><th>驳回 / 说明</th><th>操作</th></tr></thead>
           <tbody>
             ${
               rows.length
@@ -7094,6 +7446,7 @@ function renderAdminReviewQueue(pageKey, title, reviewType, pendingRows) {
                         return `
                       <tr>
                         <td><strong>${row.taskName}</strong></td>
+                        ${showAdvertiserColumn ? `<td>${row.advertiser || "-"}</td>` : ""}
                         <td>${pageKey === "campaignReviewAdmin" ? (() => { const advName = adminAdvertiserCampaignRows.find((r) => r.name === row.taskName)?.advertiser || row.target; const advProfile = adminAdvertiserRows.find((a) => a.name === advName); return `<strong>${advName}</strong>${advProfile ? `<br><span class="muted">${advProfile.industry} · ${advProfile.contact}</span>` : ""}`; })() : pageKey === "creatorDeliverableReviewAdmin" ? parseReviewTargetName(row.target) : row.target}</td>
                         ${showSubmittedAtColumn ? `<td>${row.submittedAt || "-"}</td>` : ""}
                         ${pageKey === "creatorApplicationReviewAdmin" ? `<td class="reason-cell">${row.reason || "-"}</td>` : ""}
@@ -7122,7 +7475,7 @@ function renderAdminReviewQueue(pageKey, title, reviewType, pendingRows) {
                       },
                     )
                     .join("")
-                : emptyRow(pageKey === "creatorDeliverableReviewAdmin" ? 8 : pageKey === "creatorApplicationReviewAdmin" ? 8 : pageKey === "campaignReviewAdmin" ? 7 : showReviewTypeColumn ? 8 : 7)
+                : emptyRow(pageKey === "creatorDeliverableReviewAdmin" ? 9 : pageKey === "creatorApplicationReviewAdmin" ? 8 : pageKey === "campaignReviewAdmin" ? 7 : showReviewTypeColumn ? 8 : 7)
             }
           </tbody>
         </table>
@@ -7250,6 +7603,7 @@ function buildDeliverableQueueRows() {
       const submitCount = deliverableSubmissionCount(row.campaign, row.creator);
       return {
         taskName: row.campaign,
+        advertiser: row.advertiser,
         target: row.creator,
         submittedAt: latestSubmission?.submittedAt || "-",
         result,
@@ -7711,7 +8065,7 @@ function renderCampaignFulfillment() {
       <div class="table-head"><h2>${selectedCampaign}</h2><span class="muted">达人履单明细</span></div>
       <div class="table-wrap">
         <table>
-          <thead><tr><th>达人基本信息</th><th>合作状态</th><th>交付状态</th><th>平台审核</th>${isOfficialCampaign ? "" : "<th>广告主审核</th>"}<th>发布状态</th><th>效果追踪</th><th>结算状态</th><th>交付截止</th><th>操作</th></tr></thead>
+          <thead><tr><th>达人基本信息</th><th>合作状态</th><th>交付状态</th><th>发布状态</th><th>效果追踪</th><th>结算金额</th><th>结算状态</th><th>交付截止</th><th>操作</th></tr></thead>
           <tbody>
             ${
               displayRows.length
@@ -7729,10 +8083,9 @@ function renderCampaignFulfillment() {
                         </td>
                         <td>${status(row.cooperationStatus, row.cooperationStatus.includes("待") ? "pending" : "running")}</td>
                         <td>${row.deliverableStatus}</td>
-                        <td>${row.operationReview}</td>
-                        ${isOfficialCampaign ? "" : `<td>${row.brandReview}</td>`}
                         <td>${row.publishStatus}</td>
                         <td>${row.trackingStatus}</td>
+                        <td>${row.settlementAmount || "-"}</td>
                         <td>${row.settlementStatus}</td>
                         <td>${row.due}</td>
                         <td><div class="table-actions-inline"><button class="link-button" data-action="open-admin-fulfillment-drawer" data-campaign="${encodeURIComponent(row.campaign)}" data-creator="${encodeURIComponent(row.creatorId)}">查看详情</button></div></td>
@@ -7740,7 +8093,7 @@ function renderCampaignFulfillment() {
                     `,
                     )
                     .join("")
-                : emptyRow(isOfficialCampaign ? 9 : 10)
+                : emptyRow(9)
             }
           </tbody>
         </table>
@@ -8408,11 +8761,20 @@ function renderCreatorInvitationReviewAdmin() {
 
 function renderCreatorCertReviewAdmin() {
   const certRows = [
-    { nickname: "Mika Studio", account: "mika.studio@creator.com", platform: "TikTok", socailUrl: "https://tiktok.com/@mika_studio", screenshot: assets.talentAvatar1 },
-    { nickname: "Nova Plays", account: "nova.plays@creator.com", platform: "YouTube", socailUrl: "https://youtube.com/@novaplays", screenshot: assets.talentAvatar2 },
-    { nickname: "Daily Miki", account: "daily.miki@creator.com", platform: "TikTok", socailUrl: "https://tiktok.com/@dailymiki_home", screenshot: assets.talentAvatar3 },
-    { nickname: "Tech Otto", account: "tech.otto@creator.com", platform: "YouTube", socailUrl: "https://youtube.com/@tech_otto", screenshot: assets.talentAvatar4 },
+    { nickname: "Mika Studio", account: "mika.studio@creator.com", platform: "TikTok", socailUrl: "https://tiktok.com/@mika_studio" },
+    { nickname: "Nova Plays", account: "nova.plays@creator.com", platform: "YouTube", socailUrl: "https://youtube.com/@novaplays" },
+    { nickname: "Daily Miki", account: "daily.miki@creator.com", platform: "TikTok", socailUrl: "https://tiktok.com/@dailymiki_home" },
+    { nickname: "Tech Otto", account: "tech.otto@creator.com", platform: "YouTube", socailUrl: "https://youtube.com/@tech_otto" },
   ];
+  const screenshotPlaceholder = (row) => `
+    <button class="cert-screenshot-placeholder" data-action="open-cert-screenshot-preview" data-account="${encodeURIComponent(row.nickname)}" type="button" aria-label="查看 ${row.nickname} 主页截图">
+      <span class="cert-screenshot-browserbar"><i></i><i></i><i></i></span>
+      <span class="cert-screenshot-body">
+        <span class="cert-screenshot-avatar"></span>
+        <span class="cert-screenshot-lines"><i></i><i></i><i></i></span>
+      </span>
+    </button>
+  `;
   return `
     ${pageHeader("运营后台", "达人认证审核", "审核达人提交的社媒账号认证申请。")}
     <div class="table-card">
@@ -8429,7 +8791,7 @@ function renderCreatorCertReviewAdmin() {
                   <td><strong>${row.nickname}</strong></td>
                   <td>${row.platform}</td>
                   <td><a class="social-acct-link" href="${row.socailUrl}" target="_blank" rel="noopener">${row.socailUrl}</a></td>
-                  <td><img src="${row.screenshot}" alt="" style="width:80px;height:80px;object-fit:cover;border-radius:6px;cursor:pointer" onclick='openImagePreview("${row.screenshot}")' /></td>
+                  <td>${screenshotPlaceholder(row)}</td>
                   <td><div class="table-actions-inline"><button class="link-button" data-action="cert-pass" data-account="${encodeURIComponent(row.nickname)}">通过</button><button class="link-button" data-action="cert-reject" data-account="${encodeURIComponent(row.nickname)}">驳回</button></div></td>
                 </tr>
               `,
@@ -8896,7 +9258,7 @@ function openSocialAuthModal(platform = "TikTok") {
   openModal(
     `
     <div class="modal-head">
-      <div><h2>${screenshotOnly ? "平台认证" : "平台认证（二选一）"}</h2><p class="subcopy">${screenshotOnly ? `${platform} 当前仅支持主页截图认证。` : `选择一种方式完成 ${platform} 账号认证。`}</p></div>
+      <div><h2>平台认证</h2></div>
       <button class="close-button" data-action="close-overlay" aria-label="关闭">×</button>
     </div>
     <div class="modal-body">
@@ -8926,11 +9288,8 @@ function openSocialAuthModal(platform = "TikTok") {
             `
             : `
               <section class="auth-choice-card selected">
-                <div class="auth-choice-title">
-                  <span class="social-auth-icon">▧</span>
-                  <div><strong>主页截图认证</strong><p>通过账号主页链接和截图完成认证。</p></div>
-                </div>
                 <div class="form-grid compact-form">
+                  ${field("昵称", `<input class="input" placeholder="请输入账号昵称" />`, true, "full")}
                   ${field("主页链接", `<input class="input" placeholder="请输入账号主页链接" />`, true, "full")}
                   ${field("认证截图", `<button class="ghost-button upload-line" data-action="toast" data-message="截图已加入上传队列">+ 上传主页截图</button>`, true, "full")}
                 </div>
@@ -8938,7 +9297,6 @@ function openSocialAuthModal(platform = "TikTok") {
             `
         }
       </div>
-      <div class="note-box">同一平台可认证多个账号；提交后进入平台审核。</div>
     </div>
     ${
       method === "screenshot"
@@ -9003,11 +9361,13 @@ function openNotificationCenterDrawer() {
   `;
 }
 
-function openReasonModal(reason = "") {
+function openReasonModal(reason = "", options = {}) {
+  const title = options.title || "报名理由";
+  const copy = options.copy || "查看达人提交的报名说明。";
   openModal(
     `
     <div class="modal-head">
-      <div><h2>报名理由</h2><p class="subcopy">查看达人提交的报名说明。</p></div>
+      <div><h2>${title}</h2><p class="subcopy">${copy}</p></div>
       <button class="close-button" data-action="close-overlay" aria-label="关闭">×</button>
     </div>
     <div class="modal-body">
@@ -9248,10 +9608,11 @@ function openInviteModal() {
   const campaignDisplay = inviteCampaignDisplay(selectedCampaign);
   const matchedPlatforms = matchingInvitePlatforms(selectedCampaign, targetProfiles);
   const platformDisplay = matchedPlatforms.length ? matchedPlatforms.join(" / ") : campaignDisplay.platform;
+  const inviteSummaryPlatform = state.talentSearchFilters.platform || targetProfiles[0]?.platform || "";
   openModal(
     `
     <div class="modal-head">
-      <div><h2>邀请达人</h2><p class="subcopy">${isTalentSearchMode ? "当前页面已选定邀请对象，只需确认任务信息后发送邀约。" : "选择推广活动，并从推荐达人或收藏达人中定向发送合作邀请。"}</p></div>
+      <div><h2>邀请达人</h2></div>
       <button class="close-button" data-action="close-overlay" aria-label="关闭">×</button>
     </div>
     <div class="modal-body invite-talent-body">
@@ -9262,7 +9623,6 @@ function openInviteModal() {
               <div class="section-row">
                 <div>
                   <h3>已选邀约达人</h3>
-                  <p class="subcopy">当前入口已完成达人选择，这里仅展示本次将发送邀约的对象。</p>
                 </div>
                 <span class="muted">共 ${targetProfiles.length} 位</span>
               </div>
@@ -9273,7 +9633,7 @@ function openInviteModal() {
                       <div class="invite-target-chip-card">
                         <div class="row-title">
                           <img src="${profile.avatar || assets.creatorPreview}" alt="" />
-                          <span><strong>${profile.name}</strong><small>${profile.platform} · ${profile.category || profile.uid || "-"}</small></span>
+                          <span><strong>${profile.name}</strong><small>${inviteSummaryPlatform || profile.platform} · ${profile.category || profile.uid || "-"}</small></span>
                         </div>
                         <div class="invite-target-meta">${profile.fans || profile.followers || "-"} · ${profile.country || profile.region?.join(" / ") || "-"}</div>
                       </div>
@@ -9441,7 +9801,7 @@ function openApplyModal() {
     </div>
     <div class="modal-body">
       <div class="form-grid">
-        ${field("报名账号", `<select class="select" id="applyCreatorSelect"><option value="Mika Studio">Mika Studio · TikTok</option><option value="Nova Plays">Nova Plays · YouTube</option></select>`, true)}
+        ${field("报名账号", `<select class="select" id="applyCreatorSelect"><option value="@mika_studio">@mika_studio</option><option value="@mika_beauty">@mika_beauty（审核中）</option></select>`, true)}
         ${field(
           "报名报价",
           `<div class="money-single">
@@ -9876,13 +10236,24 @@ function openProductModal() {
   openModal(
     `
     <div class="modal-head">
-      <div><h2>添加产品</h2><p class="subcopy">补充产品名称、链接、描述和图片。</p></div>
+      <div><h2>添加产品</h2></div>
       <button class="close-button" data-action="close-overlay" aria-label="关闭">×</button>
     </div>
     <div class="modal-body">
       <div class="form-grid">
         ${field("产品名称", `<input class="input" placeholder="请输入产品名称" />`, true)}
-        ${field("产品链接", `<input class="input" placeholder="请输入产品链接" />`)}
+        ${field(
+          "产品类型",
+          `<input class="input" list="productTypeOptions" placeholder="请选择或输入产品类型" />
+          <datalist id="productTypeOptions">
+            <option value="实物商品"></option>
+            <option value="虚拟商品"></option>
+            <option value="应用/软件"></option>
+            <option value="服务体验"></option>
+            <option value="品牌活动"></option>
+          </datalist>`,
+        )}
+        ${field("产品链接", `<input class="input" placeholder="请输入产品链接" />`, false, "full")}
         ${field("产品描述", `<textarea class="textarea" placeholder="请输入产品描述"></textarea>`, false, "full")}
         ${field("产品图片", `<button class="ghost-button" data-action="toast" data-message="产品图片已加入上传队列">+ 上传文件</button><small class="muted">支持 PDF、PNG、JPG、JPEG，10M 以内</small>`, false, "full")}
       </div>
@@ -10497,7 +10868,7 @@ function handleAction(action, target) {
   }
   if (action === "toggle-language-menu") {
     state.topbarMenu.languageOpen = !state.topbarMenu.languageOpen;
-    state.topbarMenu.userOpen = false;
+    state.topbarMenu.userOpen = true;
     renderTopbar();
     return;
   }
@@ -10511,6 +10882,7 @@ function handleAction(action, target) {
     state.language = target.dataset.lang === "en" ? "en" : "zh";
     document.documentElement.lang = state.language === "en" ? "en" : "zh-CN";
     state.topbarMenu.languageOpen = false;
+    state.topbarMenu.userOpen = false;
     renderTopbar();
     toast(state.language === "en" ? "已切换为英文（演示）" : "已切换为中文");
     return;
@@ -11104,17 +11476,52 @@ function handleAction(action, target) {
   }
   if (action === "set-talent-category") {
     state.talentSearchFilters.category = target.dataset.category || "全部";
+    state.talentSearchFilters.categories = [];
+    render();
+    return;
+  }
+  if (action === "toggle-talent-category-menu") {
+    state.talentSearchFilters.categoryMenuOpen = !state.talentSearchFilters.categoryMenuOpen;
+    state.talentSearchFilters.rangeOpen = "";
+    render();
+    return;
+  }
+  if (action === "toggle-talent-category-option") {
+    const value = decodeURIComponent(target.dataset.value || "");
+    const next = new Set(state.talentSearchFilters.categories || []);
+    if (next.has(value)) next.delete(value);
+    else next.add(value);
+    state.talentSearchFilters.categories = [...next];
+    state.talentSearchFilters.category = "全部";
+    state.talentSearchFilters.categoryMenuOpen = true;
+    render();
+    return;
+  }
+  if (action === "remove-talent-category-option") {
+    const value = decodeURIComponent(target.dataset.value || "");
+    state.talentSearchFilters.categories = (state.talentSearchFilters.categories || []).filter((item) => item !== value);
+    state.talentSearchFilters.categoryMenuOpen = true;
     render();
     return;
   }
   if (action === "set-talent-platform") {
-    state.talentSearchFilters.platform = target.dataset.platform || "全部";
+    state.talentSearchFilters.platform = target.dataset.platform || "";
     render();
     return;
   }
   if (action === "set-talent-region") {
     state.talentSearchFilters.region = target.dataset.region || "全部";
     render();
+    return;
+  }
+  if (action === "talent-region-more") {
+    const regions = ["全部", "美国", "日本", "韩国", "英国", "加拿大", "澳大利亚", "德国", "法国", "意大利", "西班牙", "印尼", "泰国", "越南", "马来西亚", "新加坡", "菲律宾", "巴西", "墨西哥", "阿联酋"];
+    openModal(
+      `<div class="modal-head"><div><h2>选择国家/地区</h2></div><button class="close-button" data-action="close-overlay" aria-label="关闭">×</button></div>
+      <div class="modal-body"><div class="chips">${regions.map((r) => `<button class="chip ${state.talentSearchFilters.region === r ? "active" : ""}" data-action="set-talent-region" data-region="${r}">${r}</button>`).join("")}</div></div>
+      <div class="modal-foot"><button class="ghost-button" data-action="close-overlay">关闭</button></div>`,
+      false,
+    );
     return;
   }
   if (action === "set-talent-price") {
@@ -11124,6 +11531,26 @@ function handleAction(action, target) {
   }
   if (action === "set-talent-engagement") {
     state.talentSearchFilters.engagement = target.dataset.engagement || "全部";
+    render();
+    return;
+  }
+  if (action === "toggle-talent-range") {
+    const key = target.dataset.key || "";
+    state.talentSearchFilters.rangeOpen = state.talentSearchFilters.rangeOpen === key ? "" : key;
+    render();
+    return;
+  }
+  if (action === "apply-talent-range") {
+    state.talentSearchFilters.rangeOpen = "";
+    render();
+    return;
+  }
+  if (action === "clear-talent-range") {
+    const minField = target.dataset.minField || "";
+    const maxField = target.dataset.maxField || "";
+    if (minField) state.talentSearchFilters[minField] = "";
+    if (maxField) state.talentSearchFilters[maxField] = "";
+    state.talentSearchFilters.rangeOpen = "";
     render();
     return;
   }
@@ -11144,8 +11571,20 @@ function handleAction(action, target) {
   }
   if (action === "remove-talent-selected-filter") {
     const key = target.dataset.filterKey;
-    if (key && key in state.talentSearchFilters) {
-      state.talentSearchFilters[key] = "全部";
+    if (key === "followerRange") {
+      state.talentSearchFilters.followerMinK = "";
+      state.talentSearchFilters.followerMaxK = "";
+    } else if (key === "priceRangeCustom") {
+      state.talentSearchFilters.priceMin = "";
+      state.talentSearchFilters.priceMax = "";
+    } else if (key === "engagementRange") {
+      state.talentSearchFilters.engagementMin = "";
+      state.talentSearchFilters.engagementMax = "";
+    } else if (key === "categories") {
+      state.talentSearchFilters.categories = [];
+      state.talentSearchFilters.categoryMenuOpen = false;
+    } else if (key && key in state.talentSearchFilters) {
+      state.talentSearchFilters[key] = key === "platform" ? "" : "全部";
     }
     render();
     return;
@@ -11198,6 +11637,7 @@ function handleAction(action, target) {
   }
   if (action === "reset-promotion-filters") {
     state.promotionFilters = { name: "", status: "", startDate: "" };
+    state.promotionFocusTask = "";
     render();
     return;
   }
@@ -11272,6 +11712,16 @@ function handleAction(action, target) {
     const platform = target.dataset.platform || "TikTok";
     state.socialAuthDraft.method = socialAuthScreenshotOnly(platform) ? "screenshot" : "oauth";
     openSocialAuthModal(platform);
+    return;
+  }
+  if (action === "toggle-social-auth-details") {
+    const platform = target.dataset.platform || "TikTok";
+    const currentlyCollapsed = state.socialAuthDraft.collapsed?.[platform] !== false;
+    state.socialAuthDraft.collapsed = {
+      ...(state.socialAuthDraft.collapsed || {}),
+      [platform]: !currentlyCollapsed,
+    };
+    render();
     return;
   }
   if (action === "set-social-auth-method") {
@@ -11496,6 +11946,13 @@ function handleAction(action, target) {
     closeOverlay();
     if (state.role === "brand") {
       if (type === "campaign_submitted" || type === "campaign_approved" || type === "campaign_rejected") {
+        if (type === "campaign_rejected" && task) {
+          state.brandHasCampaigns = true;
+          state.promotionFilters = { name: task, status: "已驳回", startDate: "" };
+          state.promotionFocusTask = task;
+        } else {
+          state.promotionFocusTask = "";
+        }
         go("promotions");
         return;
       }
@@ -11532,7 +11989,10 @@ function handleAction(action, target) {
     return;
   }
   if (action === "open-reason") {
-    openReasonModal(decodeURIComponent(target.dataset.reason || ""));
+    openReasonModal(decodeURIComponent(target.dataset.reason || ""), {
+      title: target.dataset.reasonTitle || "报名理由",
+      copy: target.dataset.reasonCopy || "查看达人提交的报名说明。",
+    });
     return;
   }
   if (action === "confirm-invite") {
@@ -11679,6 +12139,29 @@ function handleAction(action, target) {
     closeOverlay();
     toast("已驳回达人 " + account + " 的认证申请，原因：" + reason);
   }
+  if (action === "open-cert-screenshot-preview") {
+    const account = decodeURIComponent(target.dataset.account || "达人");
+    modalRoot.innerHTML = `
+      <div class="modal-backdrop" data-action="close-overlay"></div>
+      <div class="modal small-modal" role="dialog" aria-modal="true">
+        <div class="modal-head">
+          <div><h2>主页截图预览</h2><p class="subcopy">${account}</p></div>
+          <button class="close-button" data-action="close-overlay" aria-label="关闭">×</button>
+        </div>
+        <div class="modal-body">
+          <div class="cert-screenshot-preview">
+            <span class="cert-screenshot-browserbar"><i></i><i></i><i></i></span>
+            <div class="cert-screenshot-preview-hero"></div>
+            <div class="cert-screenshot-preview-profile">
+              <span class="cert-screenshot-avatar"></span>
+              <span class="cert-screenshot-lines"><i></i><i></i><i></i></span>
+            </div>
+          </div>
+        </div>
+      </div>
+    `;
+    return;
+  }
   if (action === "modal-reject-reason") {
     const taskName = decodeURIComponent(target.dataset.task || "项目");
     const reason = decodeURIComponent(target.dataset.reason || "暂无被拒原因");
@@ -11706,6 +12189,11 @@ function handleAction(action, target) {
     toast(`已向 ${name} 发起合作邀约`);
     return;
   }
+  if (action === "set-revenue-tab") {
+    state.tabs.revenue = target.dataset.value || "pending";
+    render();
+    return;
+  }
   if (action === "set-my-talent-tab") {
     state.myTalentDetail.tab = target.dataset.tab || "ledger";
     if (state.page === "myTalentProfile") {
@@ -11718,12 +12206,71 @@ function handleAction(action, target) {
   if (action === "set-my-talent-filter") {
     const key = target.dataset.key || "";
     if (key) state.myTalentFilters[key] = target.dataset.value || "全部";
+    if (key === "category") state.myTalentFilters.categories = [];
+    render();
+    return;
+  }
+  if (action === "toggle-my-talent-category-menu") {
+    state.myTalentFilters.categoryMenuOpen = !state.myTalentFilters.categoryMenuOpen;
+    state.myTalentFilters.rangeOpen = "";
+    render();
+    return;
+  }
+  if (action === "toggle-my-talent-category-option") {
+    const value = decodeURIComponent(target.dataset.value || "");
+    const next = new Set(state.myTalentFilters.categories || []);
+    if (next.has(value)) next.delete(value);
+    else next.add(value);
+    state.myTalentFilters.categories = [...next];
+    state.myTalentFilters.category = "全部";
+    state.myTalentFilters.categoryMenuOpen = true;
+    render();
+    return;
+  }
+  if (action === "remove-my-talent-category-option") {
+    const value = decodeURIComponent(target.dataset.value || "");
+    state.myTalentFilters.categories = (state.myTalentFilters.categories || []).filter((item) => item !== value);
+    state.myTalentFilters.categoryMenuOpen = true;
+    render();
+    return;
+  }
+  if (action === "toggle-my-talent-range") {
+    const key = target.dataset.key || "";
+    state.myTalentFilters.rangeOpen = state.myTalentFilters.rangeOpen === key ? "" : key;
+    render();
+    return;
+  }
+  if (action === "apply-my-talent-range") {
+    state.myTalentFilters.rangeOpen = "";
+    render();
+    return;
+  }
+  if (action === "clear-my-talent-range") {
+    const minField = target.dataset.minField || "";
+    const maxField = target.dataset.maxField || "";
+    if (minField) state.myTalentFilters[minField] = "";
+    if (maxField) state.myTalentFilters[maxField] = "";
+    state.myTalentFilters.rangeOpen = "";
     render();
     return;
   }
   if (action === "remove-my-talent-filter") {
     const key = target.dataset.filterKey || "";
-    if (key && key in state.myTalentFilters) state.myTalentFilters[key] = "全部";
+    if (key === "followerRange") {
+      state.myTalentFilters.followerMinK = "";
+      state.myTalentFilters.followerMaxK = "";
+    } else if (key === "priceRangeCustom") {
+      state.myTalentFilters.priceMin = "";
+      state.myTalentFilters.priceMax = "";
+    } else if (key === "engagementRange") {
+      state.myTalentFilters.engagementMin = "";
+      state.myTalentFilters.engagementMax = "";
+    } else if (key === "categories") {
+      state.myTalentFilters.categories = [];
+      state.myTalentFilters.categoryMenuOpen = false;
+    } else if (key && key in state.myTalentFilters) {
+      state.myTalentFilters[key] = "全部";
+    }
     render();
     return;
   }
@@ -12088,14 +12635,19 @@ document.addEventListener("click", (event) => {
       state.publishDraft.countryMenuOpen ||
       state.publishDraft.areaMenuOpen ||
       state.publishDraft.creatorTypeMenuOpen ||
-      state.publishDraft.followerPopoverOpen
+      state.publishDraft.followerPopoverOpen ||
+      state.talentSearchFilters.categoryMenuOpen ||
+      state.myTalentFilters.categoryMenuOpen
     ) {
       state.publishDraft.platformMenuOpen = false;
       state.publishDraft.countryMenuOpen = false;
       state.publishDraft.areaMenuOpen = false;
       state.publishDraft.creatorTypeMenuOpen = false;
       state.publishDraft.followerPopoverOpen = false;
+      state.talentSearchFilters.categoryMenuOpen = false;
+      state.myTalentFilters.categoryMenuOpen = false;
       refreshPublishModal();
+      render();
     }
   }
 
@@ -12282,11 +12834,31 @@ document.addEventListener("input", (event) => {
 });
 
 document.addEventListener("input", (event) => {
+  const rangeTarget = event.target.closest("[data-talent-range-field]");
+  if (!rangeTarget) return;
+  const key = rangeTarget.dataset.talentRangeField;
+  if (key) state.talentSearchFilters[key] = rangeTarget.value;
+  if (key === "followerMinK" || key === "followerMaxK") state.talentSearchFilters.followerCount = "全部";
+  if (key === "priceMin" || key === "priceMax") state.talentSearchFilters.priceRange = "全部";
+  if (key === "engagementMin" || key === "engagementMax") state.talentSearchFilters.engagement = "全部";
+});
+
+document.addEventListener("input", (event) => {
   const filterTarget = event.target.closest("[data-my-talent-filter]");
   if (!filterTarget) return;
   const key = filterTarget.dataset.myTalentFilter;
   state.myTalentFilters[key] = filterTarget.value;
   render();
+});
+
+document.addEventListener("input", (event) => {
+  const rangeTarget = event.target.closest("[data-my-talent-range-field]");
+  if (!rangeTarget) return;
+  const key = rangeTarget.dataset.myTalentRangeField;
+  if (key) state.myTalentFilters[key] = rangeTarget.value;
+  if (key === "followerMinK" || key === "followerMaxK") state.myTalentFilters.followerCount = "全部";
+  if (key === "priceMin" || key === "priceMax") state.myTalentFilters.priceRange = "全部";
+  if (key === "engagementMin" || key === "engagementMax") state.myTalentFilters.engagement = "全部";
 });
 
 document.addEventListener("change", (event) => {
