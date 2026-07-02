@@ -147,6 +147,8 @@
     cooperationStatus: "全部",
     cooperationTimes: "全部",
     platform: "全部",
+    regions: [],
+    regionMenuOpen: false,
     category: "全部",
     categories: [],
     categoryMenuOpen: false,
@@ -168,6 +170,8 @@
     keyword: "",
     platform: "",
     region: "全部",
+    regions: [],
+    regionMenuOpen: false,
     followerCount: "全部",
     followerMinK: "",
     followerMaxK: "",
@@ -2546,6 +2550,7 @@ function countryCodeFromName(name) {
     美国: "US",
     日本: "JP",
     韩国: "KR",
+    印度尼西亚: "ID",
     印尼: "ID",
     泰国: "TH",
     越南: "VN",
@@ -2557,11 +2562,17 @@ function countryCodeFromName(name) {
     西班牙: "ES",
     加拿大: "CA",
     澳大利亚: "AU",
+    新西兰: "NZ",
     新加坡: "SG",
     菲律宾: "PH",
     巴西: "BR",
     墨西哥: "MX",
     阿联酋: "AE",
+    中国香港: "HK",
+    中国台湾: "TW",
+    印度: "IN",
+    南非: "ZA",
+    俄罗斯: "RU",
   };
   return map[name] || "";
 }
@@ -3314,7 +3325,8 @@ function creatorCampaignWorkflowState(taskName = "") {
 function filterCreators(list) {
   const f = state.talentSearchFilters;
   const keyword = f.keyword.trim().toLowerCase();
-  const regionCode = f.region === "全部" ? "" : countryCodeFromName(f.region);
+  const selectedRegions = f.regions?.length ? f.regions : f.region === "全部" ? [] : [f.region];
+  const selectedRegionCodes = selectedRegions.map((item) => countryCodeFromName(item) || item);
   const follower = (row) => parseCompactNumber(row.fans);
   const recent = (row) => parseCompactNumber(row.recent);
   const price = (row) => parseMoneyUSD(row.price);
@@ -3323,7 +3335,7 @@ function filterCreators(list) {
   return list
     .filter((row) => !keyword || row.name.toLowerCase().includes(keyword))
     .filter((row) => !f.platform || f.platform === "全部" || row.platform === f.platform)
-    .filter((row) => !regionCode || String(row.country || "").includes(regionCode))
+    .filter((row) => !selectedRegionCodes.length || selectedRegionCodes.some((code) => String(row.country || "").includes(code)))
     .filter((row) => {
       const selectedCategories = f.categories?.length ? f.categories : f.category === "全部" ? [] : [f.category];
       if (!selectedCategories.length) return true;
@@ -3410,6 +3422,8 @@ function resetTalentSearchFilters() {
     keyword: "",
     platform: "",
     region: "全部",
+    regions: [],
+    regionMenuOpen: false,
     followerCount: "全部",
     followerMinK: "",
     followerMaxK: "",
@@ -3435,6 +3449,7 @@ function renderTalentSelectedConditions() {
   const f = state.talentSearchFilters;
   const items = [
     ["platform", "推广平台", f.platform === "Twitter" ? "X" : f.platform],
+    ["regions", "国家/地区", (f.regions || []).join("、")],
     ["region", "国家/地区", f.region],
     ["followerRange", "粉丝数", myTalentRangeValue(f.followerMinK, f.followerMaxK, "K")],
     ["followerCount", "粉丝数", f.followerCount],
@@ -3688,11 +3703,14 @@ function talentRows(source = creators) {
       <tr>
         <td><input type="checkbox" aria-label="选择 ${row.name}" data-action="toggle-talent-invite-selection" data-name="${encodeURIComponent(row.name)}" ${selectedCreators.has(row.name) ? "checked" : ""} /></td>
         <td>
-          <div class="row-title">
+          <div class="row-title my-talent-title-line talent-search-title-line">
             <button class="avatar-button" data-action="drawer-creator" data-name="${row.name}" aria-label="查看 ${row.name} 达人档案">
               <img src="${row.avatar || assets.creatorPreview}" alt="" />
             </button>
-            <span><strong>${row.name}</strong><small>${row.platform} · ${row.category}</small></span>
+            <span class="my-talent-name-stack">
+              <span class="my-talent-name-row"><strong>${row.name}</strong><span class="my-talent-platform-icon">${socialPlatformIcon(row.platform)}</span><span class="my-talent-inline-tags">${simpleChips([row.category])}</span></span>
+              <small>${row.uid || `@${row.name.toLowerCase().replace(/\s+/g, "_")}`} · ${row.platform}</small>
+            </span>
           </div>
         </td>
         <td>${countryView(row.country)}</td>
@@ -5144,7 +5162,6 @@ function renderTalentSearch() {
     { value: "Twitch", label: "Twitch" },
     { value: "Twitter", label: "X" },
   ];
-  const regions = ["全部", "美国", "日本", "韩国", "英国", "加拿大", "澳大利亚", "德国", "法国", "意大利", "西班牙", "印尼", "泰国", "越南", "马来西亚", "新加坡", "菲律宾", "巴西", "墨西哥", "阿联酋"];
   const categories = ["购物与零售", "游戏", "美妆", "运动户外", "理财与投资", "软件与应用", "食品饮料", "科技数码", "生活方式", "测评"];
   const filteredCreators = filterCreators(creators);
   const allSelected = filteredCreators.length > 0 && filteredCreators.every((row) => (state.talentInviteSelections || []).includes(row.name));
@@ -5170,8 +5187,7 @@ function renderTalentSearch() {
       </div>
 
       <div class="panel talent-filter-panel">
-        <div class="filter-row">
-          <div class="filter-label">推广平台</div>
+        <div class="filter-row talent-platform-row">
           <div class="filter-content">
             <div class="chips chips-nowrap">
               ${platforms
@@ -5183,23 +5199,9 @@ function renderTalentSearch() {
             </div>
           </div>
         </div>
-        <div class="filter-row">
-          <div class="filter-label">国家/地区</div>
-          <div class="filter-content">
-            <div class="chips chips-nowrap">
-              ${regions
-                .slice(0, 6)
-                .map(
-                  (x) =>
-                    `<button class="chip ${state.talentSearchFilters.region === x ? "active" : ""}" data-action="set-talent-region" data-region="${x}">${x}</button>`,
-                )
-                .join("")}
-              <button class="chip" data-action="talent-region-more">更多国家</button>
-            </div>
-          </div>
-        </div>
         <div class="filter-row talent-select-row">
           <div class="filter-content filter-selects talent-compact-selects">
+            ${talentRegionMultiSelect()}
             ${talentRangeFilter("粉丝数", "followers", "followerMinK", "followerMaxK", "K")}
             ${talentRangeFilter("报价区间", "price", "priceMin", "priceMax", "USD")}
             ${talentRangeFilter("互动率", "engagement", "engagementMin", "engagementMax", "%", "0.00", "10.00")}
@@ -5230,12 +5232,14 @@ function renderTalentSearch() {
 function filterMyTalents(list = myTalentRows) {
   const f = state.myTalentFilters;
   const keyword = String(f.keyword || "").trim().toLowerCase();
+  const selectedRegionCodes = (f.regions || []).map((item) => countryCodeFromName(item) || item);
 
   return list
     .filter((row) => {
       if (!keyword) return true;
       return [row.name, row.uid, row.platform, ...(row.categories || []), ...(row.styleTags || [])].join(" ").toLowerCase().includes(keyword);
     })
+    .filter((row) => !selectedRegionCodes.length || selectedRegionCodes.some((code) => (row.region || []).includes(code)))
     .filter((row) => {
       const value = parseCompactNumber(row.followers);
       const minK = normalizeMoneyNumber(f.followerMinK);
@@ -5329,6 +5333,8 @@ function resetMyTalentFilters() {
     cooperationStatus: "全部",
     cooperationTimes: "全部",
     platform: "全部",
+    regions: [],
+    regionMenuOpen: false,
     category: "全部",
     categories: [],
     categoryMenuOpen: false,
@@ -5360,6 +5366,7 @@ function renderMyTalentSelectedConditions() {
     ["cooperationStatus", "合作状态", f.cooperationStatus],
     ["cooperationTimes", "合作次数", f.cooperationTimes],
     ["platform", "推广平台", f.platform],
+    ["regions", "国家/地区", (f.regions || []).join("、")],
     ["categories", "达人分类", (f.categories || []).join("、")],
     ["category", "达人分类", f.category],
     ["engagementRange", "平均互动率", myTalentRangeValue(f.engagementMin, f.engagementMax, "%")],
@@ -5454,15 +5461,10 @@ function renderMyTalents() {
         </div>
       </div>
       <div class="filter-row">
-        <div class="filter-label">合作状态</div>
-        <div class="filter-content"><div class="chips chips-nowrap">${["全部", "有进行中的任务", "历史合作"].map((item) => `<button class="chip ${state.myTalentFilters.cooperationStatus === item ? "active" : ""}" data-action="set-my-talent-filter" data-key="cooperationStatus" data-value="${item}">${item}</button>`).join("")}</div></div>
-      </div>
-      <div class="filter-row">
         <div class="filter-label">合作次数</div>
         <div class="filter-content"><div class="chips chips-nowrap">${["全部", "0次（仅收藏）", "1次", "2-3次", "4次及以上"].map((item) => `<button class="chip ${state.myTalentFilters.cooperationTimes === item ? "active" : ""}" data-action="set-my-talent-filter" data-key="cooperationTimes" data-value="${item}">${item}</button>`).join("")}</div></div>
       </div>
-      <div class="filter-row">
-      <div class="filter-label">推广平台</div>
+      <div class="filter-row my-talent-platform-row">
         <div class="filter-content"><div class="chips chips-nowrap">${platforms.map((item) => `<button class="chip ${state.myTalentFilters.platform === item ? "active" : ""}" data-action="set-my-talent-filter" data-key="platform" data-value="${item}">${item}</button>`).join("")}</div></div>
       </div>
       <div class="filter-row">
@@ -5496,7 +5498,10 @@ function renderMyTalents() {
       </div>
     </div>
     <div class="table-card my-talent-list-card">
-      <div class="table-head"><h2>达人总列表</h2><span class="muted">按达人聚合当前广告主全部历史合作与进行中任务</span></div>
+      <div class="table-head">
+        <h2>达人总列表</h2>
+        ${myTalentCooperationStatusFilter()}
+      </div>
       <div class="table-wrap">
         <table>
           <thead>
@@ -5546,7 +5551,7 @@ function renderMyTalents() {
                           <td>${row.totalBudget}</td>
                           <td>${row.pendingSettlement}</td>
                           <td>${myTalentStatusBadges(row.statusTags)}${row.weakWarning ? `<small class="weak-warning-inline">历史曾有中途放弃 / 多次驳回</small>` : ""}</td>
-                          <td><div class="table-actions-inline"><button class="link-button" data-action="open-my-talent-drawer" data-name="${encodeURIComponent(row.name)}">查看详情</button><button class="link-button" data-action="close-and-nav" data-page="collaborators">发起邀约</button><button class="link-button" data-action="toast" data-message="已取消收藏 ${row.name}">取消收藏</button></div></td>
+                          <td><div class="table-actions-inline"><button class="link-button" data-action="close-and-nav" data-page="collaborators">邀请</button><button class="link-button" data-action="toast" data-message="已取消收藏 ${row.name}">取消收藏</button><button class="link-button" data-action="open-my-talent-drawer" data-name="${encodeURIComponent(row.name)}">查看详情</button></div></td>
                         </tr>
                       `,
                     )
@@ -5567,6 +5572,7 @@ function renderMyTalentSelectedConditions() {
     ["cooperationStatus", "合作状态", f.cooperationStatus],
     ["cooperationTimes", "合作次数", f.cooperationTimes],
     ["platform", "推广平台", f.platform],
+    ["regions", "国家/地区", (f.regions || []).join("、")],
     ["categories", "达人分类", (f.categories || []).join("、")],
     ["category", "达人分类", f.category],
     ["engagementRange", "平均互动率", myTalentRangeValue(f.engagementMin, f.engagementMax, "%")],
@@ -5607,6 +5613,31 @@ function renderMyTalentSelectedConditions() {
         }
       </div>
       <button class="selected-filter-clear" data-action="clear-my-talent-selected-filters" ${items.length ? "" : "disabled"} type="button">清除全部</button>
+    </div>
+  `;
+}
+
+function myTalentCooperationStatusFilter() {
+  return `
+    <div class="my-talent-list-status-filter">
+      <span class="my-talent-list-filter-label">合作状态</span>
+      <div class="chips chips-nowrap">
+        ${["全部", "进行中", "已完成", "已终止"]
+          .map(
+            (item) => `
+            <button class="chip ${
+              state.myTalentFilters.cooperationStatus === item ||
+              (item === "进行中" && state.myTalentFilters.cooperationStatus === "有进行中的任务") ||
+              (item === "已完成" && state.myTalentFilters.cooperationStatus === "历史合作")
+                ? "active"
+                : ""
+            }" data-action="set-my-talent-filter" data-key="cooperationStatus" data-value="${
+              item === "进行中" ? "有进行中的任务" : item === "已完成" ? "历史合作" : item
+            }">${item}</button>
+          `,
+          )
+          .join("")}
+      </div>
     </div>
   `;
 }
@@ -5656,6 +5687,116 @@ function filterCategoryMultiSelect(label, selected = [], options = [], config = 
               <input type="checkbox" ${selectedSet.has(item) ? "checked" : ""} data-action="${config.optionAction}" data-value="${encodeURIComponent(item)}" />
               <span>${item}</span>
             </label>
+          `,
+          )
+          .join("")}
+      </div>
+    </div>
+  `;
+}
+
+function talentRegionMultiSelect() {
+  const filters = state.talentSearchFilters;
+  const selected = filters.regions || [];
+  const selectedSet = new Set(selected);
+  const selectedChips = selected.slice(0, 4);
+  const hiddenCount = Math.max(0, selected.length - selectedChips.length);
+  return `
+    <div class="multi-select-input filter-tag-select talent-region-select ${filters.regionMenuOpen ? "open" : ""}" data-ms-scope="talent-search-region">
+      <div class="ms-trigger" role="button" tabindex="0" data-action="toggle-talent-region-menu" aria-expanded="${filters.regionMenuOpen ? "true" : "false"}">
+        ${
+          selected.length
+            ? `<div class="ms-chips">
+                ${selectedChips
+                  .map(
+                    (item) => `
+                    <span class="ms-chip">
+                      <span>${item}</span>
+                      <span class="ms-chip-x" role="button" tabindex="0" data-action="remove-talent-region-option" data-value="${encodeURIComponent(item)}" aria-label="移除 ${item}">×</span>
+                    </span>
+                  `,
+                  )
+                  .join("")}
+                ${hiddenCount ? `<span class="ms-more">+${hiddenCount}</span>` : ""}
+              </div>`
+            : `<span class="ms-placeholder">国家/地区：全部</span>`
+        }
+        <span class="ms-caret" aria-hidden="true">▾</span>
+      </div>
+      <div class="dropdown-menu ms-menu filter-tag-menu talent-region-menu">
+        ${publishAreaGroups
+          .map(
+            (group) => `
+            <div class="publish-area-group">
+              <div class="publish-area-parent"><span>${group.area}</span></div>
+              <div class="publish-area-children">
+                ${group.countries
+                  .map(
+                    (country) => `
+                    <label class="dropdown-check publish-area-child">
+                      <input type="checkbox" ${selectedSet.has(country) ? "checked" : ""} data-action="toggle-talent-region-option" data-value="${encodeURIComponent(country)}" />
+                      <span>${country}</span>
+                    </label>
+                  `,
+                  )
+                  .join("")}
+              </div>
+            </div>
+          `,
+          )
+          .join("")}
+      </div>
+    </div>
+  `;
+}
+
+function myTalentRegionMultiSelect() {
+  const filters = state.myTalentFilters;
+  const selected = filters.regions || [];
+  const selectedSet = new Set(selected);
+  const selectedChips = selected.slice(0, 4);
+  const hiddenCount = Math.max(0, selected.length - selectedChips.length);
+  return `
+    <div class="multi-select-input filter-tag-select talent-region-select ${filters.regionMenuOpen ? "open" : ""}" data-ms-scope="my-talent-region">
+      <div class="ms-trigger" role="button" tabindex="0" data-action="toggle-my-talent-region-menu" aria-expanded="${filters.regionMenuOpen ? "true" : "false"}">
+        ${
+          selected.length
+            ? `<div class="ms-chips">
+                ${selectedChips
+                  .map(
+                    (item) => `
+                    <span class="ms-chip">
+                      <span>${item}</span>
+                      <span class="ms-chip-x" role="button" tabindex="0" data-action="remove-my-talent-region-option" data-value="${encodeURIComponent(item)}" aria-label="移除 ${item}">×</span>
+                    </span>
+                  `,
+                  )
+                  .join("")}
+                ${hiddenCount ? `<span class="ms-more">+${hiddenCount}</span>` : ""}
+              </div>`
+            : `<span class="ms-placeholder">国家/地区：全部</span>`
+        }
+        <span class="ms-caret" aria-hidden="true">▾</span>
+      </div>
+      <div class="dropdown-menu ms-menu filter-tag-menu talent-region-menu">
+        ${publishAreaGroups
+          .map(
+            (group) => `
+            <div class="publish-area-group">
+              <div class="publish-area-parent"><span>${group.area}</span></div>
+              <div class="publish-area-children">
+                ${group.countries
+                  .map(
+                    (country) => `
+                    <label class="dropdown-check publish-area-child">
+                      <input type="checkbox" ${selectedSet.has(country) ? "checked" : ""} data-action="toggle-my-talent-region-option" data-value="${encodeURIComponent(country)}" />
+                      <span>${country}</span>
+                    </label>
+                  `,
+                  )
+                  .join("")}
+              </div>
+            </div>
           `,
           )
           .join("")}
@@ -5747,15 +5888,11 @@ function renderMyTalents() {
         </div>
       </div>
       <div class="my-talent-filter-rows">
-        <div class="filter-row my-talent-chip-row">
-          <div class="filter-label">推广平台</div>
+        <div class="filter-row my-talent-chip-row my-talent-platform-row">
           <div class="filter-content"><div class="chips chips-nowrap">${platforms.map((item) => `<button class="chip ${state.myTalentFilters.platform === item || (item === "X" && state.myTalentFilters.platform === "Twitter") ? "active" : ""}" data-action="set-my-talent-filter" data-key="platform" data-value="${item === "X" ? "Twitter" : item}">${item}</button>`).join("")}</div></div>
         </div>
-        <div class="filter-row my-talent-chip-row">
-          <div class="filter-label">合作状态</div>
-          <div class="filter-content"><div class="chips chips-nowrap">${["全部", "进行中", "已完成", "已终止"].map((item) => `<button class="chip ${state.myTalentFilters.cooperationStatus === item || (item === "进行中" && state.myTalentFilters.cooperationStatus === "有进行中的任务") || (item === "已完成" && state.myTalentFilters.cooperationStatus === "历史合作") ? "active" : ""}" data-action="set-my-talent-filter" data-key="cooperationStatus" data-value="${item === "进行中" ? "有进行中的任务" : item === "已完成" ? "历史合作" : item}">${item}</button>`).join("")}</div></div>
-        </div>
         <div class="compact-filter-grid">
+          ${myTalentRegionMultiSelect()}
           ${myTalentRangeFilter("粉丝数", "followers", "followerMinK", "followerMaxK", "K")}
           ${myTalentRangeFilter("报价区间", "price", "priceMin", "priceMax", "USD")}
           ${myTalentRangeFilter("互动率", "engagement", "engagementMin", "engagementMax", "%", "0.00", "10.00")}
@@ -5774,8 +5911,8 @@ function renderMyTalents() {
       <div class="table-head">
         <div>
           <h2>达人总列表</h2>
-          <span class="muted">按达人聚合当前广告主全部历史合作与进行中任务</span>
         </div>
+        ${myTalentCooperationStatusFilter()}
         <button class="primary-button" data-action="modal-invite">批量邀请达人</button>
       </div>
       <div class="table-wrap my-talent-sticky-wrap">
@@ -5831,9 +5968,9 @@ function renderMyTalents() {
                           <td>${row.pendingSettlement}</td>
                           <td>
                             <div class="table-actions-inline my-talent-actions">
-                              <button class="link-button" data-action="open-my-talent-profile" data-name="${encodeURIComponent(row.name)}">查看详情</button>
-                              <button class="link-button" data-action="open-my-talent-invite" data-name="${encodeURIComponent(row.name)}">发起邀约</button>
+                              <button class="link-button" data-action="open-my-talent-invite" data-name="${encodeURIComponent(row.name)}">邀请</button>
                               <button class="icon-link-button active" data-action="toggle-talent-favorite" data-name="${encodeURIComponent(row.name)}" title="取消收藏" aria-label="取消收藏">♥</button>
+                              <button class="link-button" data-action="open-my-talent-profile" data-name="${encodeURIComponent(row.name)}">查看详情</button>
                             </div>
                           </td>
                         </tr>
@@ -11482,6 +11619,7 @@ function handleAction(action, target) {
   }
   if (action === "toggle-talent-category-menu") {
     state.talentSearchFilters.categoryMenuOpen = !state.talentSearchFilters.categoryMenuOpen;
+    state.talentSearchFilters.regionMenuOpen = false;
     state.talentSearchFilters.rangeOpen = "";
     render();
     return;
@@ -11511,6 +11649,32 @@ function handleAction(action, target) {
   }
   if (action === "set-talent-region") {
     state.talentSearchFilters.region = target.dataset.region || "全部";
+    state.talentSearchFilters.regions = [];
+    render();
+    return;
+  }
+  if (action === "toggle-talent-region-menu") {
+    state.talentSearchFilters.regionMenuOpen = !state.talentSearchFilters.regionMenuOpen;
+    state.talentSearchFilters.categoryMenuOpen = false;
+    state.talentSearchFilters.rangeOpen = "";
+    render();
+    return;
+  }
+  if (action === "toggle-talent-region-option") {
+    const value = decodeURIComponent(target.dataset.value || "");
+    const next = new Set(state.talentSearchFilters.regions || []);
+    if (next.has(value)) next.delete(value);
+    else next.add(value);
+    state.talentSearchFilters.regions = [...next];
+    state.talentSearchFilters.region = "全部";
+    state.talentSearchFilters.regionMenuOpen = true;
+    render();
+    return;
+  }
+  if (action === "remove-talent-region-option") {
+    const value = decodeURIComponent(target.dataset.value || "");
+    state.talentSearchFilters.regions = (state.talentSearchFilters.regions || []).filter((item) => item !== value);
+    state.talentSearchFilters.regionMenuOpen = true;
     render();
     return;
   }
@@ -11537,6 +11701,8 @@ function handleAction(action, target) {
   if (action === "toggle-talent-range") {
     const key = target.dataset.key || "";
     state.talentSearchFilters.rangeOpen = state.talentSearchFilters.rangeOpen === key ? "" : key;
+    state.talentSearchFilters.regionMenuOpen = false;
+    state.talentSearchFilters.categoryMenuOpen = false;
     render();
     return;
   }
@@ -11580,6 +11746,9 @@ function handleAction(action, target) {
     } else if (key === "engagementRange") {
       state.talentSearchFilters.engagementMin = "";
       state.talentSearchFilters.engagementMax = "";
+    } else if (key === "regions") {
+      state.talentSearchFilters.regions = [];
+      state.talentSearchFilters.regionMenuOpen = false;
     } else if (key === "categories") {
       state.talentSearchFilters.categories = [];
       state.talentSearchFilters.categoryMenuOpen = false;
@@ -12210,8 +12379,33 @@ function handleAction(action, target) {
     render();
     return;
   }
+  if (action === "toggle-my-talent-region-menu") {
+    state.myTalentFilters.regionMenuOpen = !state.myTalentFilters.regionMenuOpen;
+    state.myTalentFilters.categoryMenuOpen = false;
+    state.myTalentFilters.rangeOpen = "";
+    render();
+    return;
+  }
+  if (action === "toggle-my-talent-region-option") {
+    const value = decodeURIComponent(target.dataset.value || "");
+    const next = new Set(state.myTalentFilters.regions || []);
+    if (next.has(value)) next.delete(value);
+    else next.add(value);
+    state.myTalentFilters.regions = [...next];
+    state.myTalentFilters.regionMenuOpen = true;
+    render();
+    return;
+  }
+  if (action === "remove-my-talent-region-option") {
+    const value = decodeURIComponent(target.dataset.value || "");
+    state.myTalentFilters.regions = (state.myTalentFilters.regions || []).filter((item) => item !== value);
+    state.myTalentFilters.regionMenuOpen = true;
+    render();
+    return;
+  }
   if (action === "toggle-my-talent-category-menu") {
     state.myTalentFilters.categoryMenuOpen = !state.myTalentFilters.categoryMenuOpen;
+    state.myTalentFilters.regionMenuOpen = false;
     state.myTalentFilters.rangeOpen = "";
     render();
     return;
@@ -12237,6 +12431,8 @@ function handleAction(action, target) {
   if (action === "toggle-my-talent-range") {
     const key = target.dataset.key || "";
     state.myTalentFilters.rangeOpen = state.myTalentFilters.rangeOpen === key ? "" : key;
+    state.myTalentFilters.regionMenuOpen = false;
+    state.myTalentFilters.categoryMenuOpen = false;
     render();
     return;
   }
@@ -12265,6 +12461,9 @@ function handleAction(action, target) {
     } else if (key === "engagementRange") {
       state.myTalentFilters.engagementMin = "";
       state.myTalentFilters.engagementMax = "";
+    } else if (key === "regions") {
+      state.myTalentFilters.regions = [];
+      state.myTalentFilters.regionMenuOpen = false;
     } else if (key === "categories") {
       state.myTalentFilters.categories = [];
       state.myTalentFilters.categoryMenuOpen = false;
@@ -12636,7 +12835,9 @@ document.addEventListener("click", (event) => {
       state.publishDraft.areaMenuOpen ||
       state.publishDraft.creatorTypeMenuOpen ||
       state.publishDraft.followerPopoverOpen ||
+      state.talentSearchFilters.regionMenuOpen ||
       state.talentSearchFilters.categoryMenuOpen ||
+      state.myTalentFilters.regionMenuOpen ||
       state.myTalentFilters.categoryMenuOpen
     ) {
       state.publishDraft.platformMenuOpen = false;
@@ -12644,7 +12845,9 @@ document.addEventListener("click", (event) => {
       state.publishDraft.areaMenuOpen = false;
       state.publishDraft.creatorTypeMenuOpen = false;
       state.publishDraft.followerPopoverOpen = false;
+      state.talentSearchFilters.regionMenuOpen = false;
       state.talentSearchFilters.categoryMenuOpen = false;
+      state.myTalentFilters.regionMenuOpen = false;
       state.myTalentFilters.categoryMenuOpen = false;
       refreshPublishModal();
       render();

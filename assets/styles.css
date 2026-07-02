@@ -909,9 +909,13 @@ button {
   grid-column: 1 / -1;
 }
 
+.talent-platform-row .filter-content {
+  grid-column: 1 / -1;
+}
+
 .talent-compact-selects {
   display: grid;
-  grid-template-columns: repeat(4, minmax(150px, 1fr));
+  grid-template-columns: repeat(5, minmax(140px, 1fr));
   gap: 10px;
   overflow: visible;
 }
@@ -4593,6 +4597,28 @@ tr:last-child td {
   overflow-x: auto;
 }
 
+.my-talent-platform-row .filter-content {
+  grid-column: 1 / -1;
+}
+
+.my-talent-list-status-filter {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-left: auto;
+}
+
+.my-talent-list-filter-label {
+  color: #667085;
+  font-size: 13px;
+  font-weight: 800;
+  white-space: nowrap;
+}
+
+.my-talent-list-status-filter .chips {
+  gap: 8px;
+}
+
 .my-talent-sticky-wrap {
   position: relative;
 }
@@ -4992,7 +5018,7 @@ tr:last-child td {
 
 .compact-filter-grid {
   display: grid;
-  grid-template-columns: repeat(4, minmax(160px, 1fr));
+  grid-template-columns: repeat(5, minmax(140px, 1fr));
   gap: 10px;
 }
 
